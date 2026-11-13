@@ -129,6 +129,8 @@ Server tests use explicitly scripted models and HTTP contract tests use mocked t
 
 The [architecture report](docs/report.md) explains loading policies, event-time processing, transaction and snapshot boundaries, Actor/Critic feedback, and verified results with their limits. Its two-page explanation is followed by separate architecture and results appendices in the generated submission PDF.
 
+Use the [submission guide](docs/submission.md) to select the required logs, screenshots and report, then package them with an exact committed source revision. Review the evidence and its real-model limitations before submission; the packaging command only checks files and hashes and does not upload anything.
+
 ## Contributing
 
 `etl/` contains loaders/models, `streaming/` event processing, `data_access/` read-only queries/evidence types, `chat/` the interface and Actor/Critic, and `integration/` startup supervision. Course starter attribution and deterministic inputs remain tracked; generated run artifacts stay ignored. Instructor solutions are excluded from independent work.
