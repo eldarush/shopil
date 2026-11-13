@@ -511,10 +511,10 @@ def test_real_actor_and_critic_classes_correct_using_one_snapshot_with_mock_tran
     assert model.calls[1][0][2]["content"] == evidence
     assert model.calls[2][0][3]["content"] == evidence
     assert model.calls[3][0][2]["content"] == evidence
-    correction = json.loads(model.calls[2][0][-1]["content"])
+    correction = json.loads(model.calls[2][0][-2]["content"])
     assert correction["previous_draft"] == "ההכנסה היא 99 ש״ח"
     assert correction["feedback"] == "ההכנסה בראיות היא אפס, לא 99"
-    assert model.calls[1][1]["required"] == ["is_acceptable", "feedback"]
+    assert model.calls[1][1]["required"] == ["feedback", "is_acceptable"]
     assert events[-1]["attempts"] == 2
     assert result.history[-1]["content"] == result.answer
 

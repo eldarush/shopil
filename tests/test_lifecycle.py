@@ -43,6 +43,34 @@ def test_failed_batch_never_starts_stream_or_chat(tmp_path, monkeypatch):
     assert not marker.exists() and not (tmp_path / "stream.db").exists()
 
 
+def test_stop_file_drains_stream_and_stops_chat_without_signals(tmp_path, monkeypatch):
+    children = track_children(monkeypatch)
+    stop_file, stopped = tmp_path / "stop", tmp_path / "chat-stopped"
+    database = tmp_path / "stream.db"
+    chat = python("""
+from pathlib import Path
+import sys
+Path(sys.argv[1]).touch()
+sys.stdin.readline()
+Path(sys.argv[2]).touch()
+""", stop_file, stopped)
+    run.run_stack(python("pass"), chat, stream_db=database, stop_file=stop_file)
+    assert stopped.is_file()
+    assert len(children) == 3 and all(child.poll() == 0 for child in children)
+    with closing(sqlite3.connect(database)) as connection:
+        assert connection.execute("SELECT checkpoint FROM stream_meta").fetchone()[0] >= 0
+        assert connection.execute("SELECT finalized FROM stream_meta").fetchone()[0] == 0
+
+
+def test_existing_stop_file_does_not_start_any_process(tmp_path, monkeypatch):
+    children = track_children(monkeypatch)
+    stop_file = tmp_path / "stop"
+    stop_file.touch()
+    with pytest.raises(ValueError, match="Stop file already exists"):
+        run.run_stack(python("pass"), python("pass"), stream_db=tmp_path / "stream.db", stop_file=stop_file)
+    assert not children
+
+
 @pytest.mark.parametrize("mode", ["live", "microbatch"])
 def test_batch_finishes_then_stream_advances_while_chat_runs(tmp_path, monkeypatch, mode):
     children = track_children(monkeypatch)

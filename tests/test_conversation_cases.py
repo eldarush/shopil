@@ -77,12 +77,12 @@ class InspectingScriptedModel:
             question = messages[2]["content"]
             evidence_json = messages[3]["content"]
             history = json.loads(messages[1]["content"])["approved_history"]
-            correction = json.loads(messages[4]["content"]) if len(messages) == 5 else None
+            correction = json.loads(messages[4]["content"]) if len(messages) == 6 else None
             self.actor_calls.append((question, evidence_json, history, correction))
             if self.bad_missing_draft and len(self.actor_calls) == 1:
                 return "ממוצע הדירוג הוא 0."
         else:
-            assert schema["required"] == ["is_acceptable", "feedback"]
+            assert schema["required"] == ["feedback", "is_acceptable"]
             question = json.loads(messages[1]["content"])["question"]
             evidence_json = messages[2]["content"]
             draft = json.loads(messages[3]["content"])["candidate_answer"]

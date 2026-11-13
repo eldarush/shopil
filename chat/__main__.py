@@ -17,6 +17,8 @@ def add_arguments(parser):
         parser.add_argument("--" + name, type=kind, default=value, required=not value)
     parser.add_argument("--stream-db", type=Path, default=os.environ.get("SHOPIL_STREAM_DB", "runs/stream.db"))
     parser.add_argument("--ollama-url", default=os.environ.get("SHOPIL_OLLAMA_URL", "http://127.0.0.1:11434"))
+    parser.add_argument("--thinking", action=argparse.BooleanOptionalAction, default=None,
+                        help="Override thinking for models that support it; otherwise keep the model default")
     parser.add_argument("--audit-dir", type=Path, default=os.environ.get("SHOPIL_AUDIT_DIR", "runs/audit"))
     parser.add_argument("--latest-windows", type=int, default=3)
     parser.add_argument("--port", type=int, default=7860)
@@ -33,7 +35,7 @@ def main(argv=None):
         if not path.is_file():
             parser.error(f"Database does not exist: {path}")
     try:
-        model = OllamaModel(args.model, args.ollama_url)
+        model = OllamaModel(args.model, args.ollama_url, think=args.thinking)
         capture = build_capture(args.warehouse, args.stream_db, start=args.history_start,
                                 end=args.history_end, latest_windows=args.latest_windows)
         if not 1 <= args.port <= 65535:

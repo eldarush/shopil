@@ -50,7 +50,7 @@ def test_actor_request_is_local_text_only_and_bounded(monkeypatch):
     assert payload == {
         "model": "qwen3:4b-instruct", "messages": original, "stream": False,
         "truncate": False, "shift": False,
-        "options": {"temperature": 0, "num_predict": 1024, "num_ctx": 8192},
+        "options": {"num_predict": 4096, "num_ctx": 16384},
     }
     assert "authorization" not in requests[0].headers
     assert MESSAGES == original
@@ -64,11 +64,32 @@ def test_critic_schema_is_sent_as_format_and_output_is_not_reinterpreted():
 
     def handler(request):
         assert json.loads(request.content)["format"] == original
+        payload = json.loads(request.content)
+        assert "think" not in payload
+        assert "temperature" not in payload["options"]
         return httpx.Response(200, json={**VALID, "message": {"role": "assistant", "content": content}})
 
     model = OllamaModel("qwen3:4b-instruct", transport=model_transport(handler))
     assert asyncio.run(model.complete(MESSAGES, schema=schema)) == content
     assert schema == original
+
+
+@pytest.mark.parametrize("think", [True, False])
+def test_explicit_thinking_setting_preserves_sampling_defaults(think):
+    def handler(request):
+        payload = json.loads(request.content)
+        assert payload["think"] is think
+        assert "temperature" not in payload["options"]
+        return httpx.Response(200, json=VALID)
+
+    model = OllamaModel("qwen3:1.7b", think=think, transport=model_transport(handler))
+    assert asyncio.run(model.complete(MESSAGES)) == VALID["message"]["content"]
+
+
+@pytest.mark.parametrize("think", [0, 1, "false"])
+def test_invalid_thinking_override_is_rejected(think):
+    with pytest.raises(ValueError, match="think"):
+        OllamaModel("qwen3", think=think)
 
 
 @pytest.mark.parametrize("url", [

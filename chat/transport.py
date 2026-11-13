@@ -26,8 +26,9 @@ class OllamaModel:
         self,
         model: str,
         base_url: str = "http://127.0.0.1:11434",
-        timeout: float = 120,
+        timeout: float = 240,
         *,
+        think: bool | None = None,
         transport: httpx.AsyncBaseTransport | None = None,
     ) -> None:
         if not isinstance(model, str) or not model.strip():
@@ -59,6 +60,9 @@ class OllamaModel:
         self.model = model.strip()
         self.base_url = base_url.rstrip("/")
         self.timeout = timeout
+        if think is not None and type(think) is not bool:
+            raise ValueError("think must be a boolean or None")
+        self.think = think
         # Injection exists for HTTP contract tests, not an alternate model provider.
         self._transport = transport
 
@@ -81,10 +85,14 @@ class OllamaModel:
             "stream": False,
             "truncate": False,
             "shift": False,
-            "options": {"temperature": 0, "num_predict": 1024, "num_ctx": 8192},
+            # Keep the installed model's sampling/thinking defaults. Greedy decoding
+            # breaks some small reasoners; leave room for reasoning plus the answer.
+            "options": {"num_predict": 4096, "num_ctx": 16384},
         }
         if schema is not None:
             payload["format"] = schema
+        if self.think is not None:
+            payload["think"] = self.think
         try:
             async with asyncio.timeout(self.timeout):
                 async with httpx.AsyncClient(

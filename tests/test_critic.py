@@ -29,7 +29,8 @@ def test_critic_returns_strict_decision_with_original_evidence(approved):
     messages, schema = model.calls[0]
     assert messages[2]["content"] == evidence
     assert json.loads(messages[3]["content"])["candidate_answer"] == "ההכנסה אינה זמינה"
-    assert schema["required"] == ["is_acceptable", "feedback"]
+    assert schema["required"] == ["feedback", "is_acceptable"]
+    assert list(schema["properties"]) == ["feedback", "is_acceptable"]
     assert schema["additionalProperties"] is False
 
 
@@ -57,9 +58,30 @@ def test_transport_failure_propagates_without_fabricating_a_decision():
     assert len(model.calls) == 1
 
 
+def test_time_index_keeps_independent_source_ranges_and_original_evidence():
+    evidence = (
+        '{"batch":{"time_end":"2027-01-01"},"sources":['
+        '{"table":"marts.fct_orders","time_start":"2026-01-01","time_end":"2027-01-01","rows":[]},'
+        '{"table":"marts.mart_product_reviews","time_start":"2026-01-01","time_end":"2026-10-09","rows":[]},'
+        '{"table":"empty","time_start":null,"time_end":null,"time_coverage":"no_observed_history"}]}'
+    )
+    model = FakeModel('{"is_acceptable":false,"feedback":"Wrong product coverage"}')
+    asyncio.run(Critic(model).evaluate("Product revenue?", evidence, "A candidate"))
+    messages, _ = model.calls[0]
+    assert messages[2]["content"] is evidence
+    ranges = json.loads(messages[-2]["content"])["source_time_ranges"]
+    assert messages[-1] == messages[3]
+    assert [row["time_end"] for row in ranges] == ["2027-01-01", "2026-10-09", None]
+    assert [row["table"] for row in ranges] == ["marts.fct_orders", "marts.mart_product_reviews", "empty"]
+    assert ranges[-1]["time_coverage"] == "no_observed_history"
+    assert all("rows" not in row for row in ranges)
+
+
 @pytest.mark.parametrize("question,evidence,draft", [
     (" ", '{}', "answer"), ("question", '[]', "answer"),
     ("question", 'bad json', "answer"), ("question", '{}', ""),
+    ("question", '{"sources":null}', "answer"),
+    ("question", '{"sources":["invalid"]}', "answer"),
 ])
 def test_invalid_input_does_not_call_model(question, evidence, draft):
     model = FakeModel('{"is_acceptable":true,"feedback":"OK"}')

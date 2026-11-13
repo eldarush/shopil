@@ -20,7 +20,8 @@ def arguments(tmp_path, monkeypatch):
             "--history-end", "2027-01-01", "--model", "installed-test-model"]
 
 
-def test_standalone_passes_explicit_capture_model_and_managed_lifecycle(arguments, monkeypatch):
+@pytest.mark.parametrize("thinking", [None, True, False])
+def test_standalone_passes_explicit_capture_model_and_managed_lifecycle(arguments, monkeypatch, thinking):
     from chat import capture
     received = {}
     callback = object()
@@ -31,16 +32,18 @@ def test_standalone_passes_explicit_capture_model_and_managed_lifecycle(argument
 
     def launch(actual_capture, model, audit, **options):
         assert actual_capture is callback
-        received.update(model=model.model, audit=audit, **options)
+        received.update(model=model.model, thinking=model.think, audit=audit, **options)
 
     monkeypatch.setattr(capture, "build_capture", build)
     monkeypatch.setattr(cli, "run_app", launch)
-    cli.main(arguments + ["--managed", "--port", "7862", "--latest-windows", "2"])
+    override = [] if thinking is None else ["--thinking" if thinking else "--no-thinking"]
+    cli.main(arguments + ["--managed", "--port", "7862", "--latest-windows", "2"] + override)
     assert received["warehouse"] == Path(arguments[1])
     assert received["database"] == Path(arguments[3])
     assert received["start"] == date(2026, 1, 1) and received["end"] == date(2027, 1, 1)
     assert received["latest_windows"] == 2 and received["managed"] is True
     assert received["port"] == 7862 and received["model"] == "installed-test-model"
+    assert received["thinking"] is thinking
 
 
 def test_missing_database_never_launches_or_creates_it(arguments, monkeypatch):
@@ -67,17 +70,24 @@ def test_environment_config_has_no_implicit_model_or_date_fallback(arguments, mo
     assert caught.value.code == 2 and len(received) == 1
 
 
-def test_stack_builds_shell_free_commands_for_same_warehouse_and_stream(arguments, tmp_path, monkeypatch):
+@pytest.mark.parametrize("thinking_flag", [None, "--thinking", "--no-thinking"])
+def test_stack_builds_shell_free_commands_for_same_warehouse_and_stream(arguments, tmp_path, monkeypatch, thinking_flag):
     calls = []
+    stop_file = tmp_path / "stop.request"
     monkeypatch.setattr(run, "run_stack", lambda *args, **kwargs: calls.append((args, kwargs)))
     run.main(arguments + ["--lab-dir", str(tmp_path), "--etl-python", str(tmp_path / "etl-python"),
-                          "--batch-run-dir", str(tmp_path / "new-run"), "--mode", "microbatch"])
+                          "--batch-run-dir", str(tmp_path / "new-run"), "--mode", "microbatch",
+                          "--stop-file", str(stop_file)]
+             + ([thinking_flag] if thinking_flag else []))
     (batch, chat), options = calls[0]
     assert batch[1:3] == ["-m", "integration.batch"]
     assert chat[1:4] == ["-m", "chat", "--managed"]
     assert chat[chat.index("--warehouse") + 1] == arguments[1]
     assert chat[chat.index("--stream-db") + 1] == arguments[3]
     assert options["stream_db"] == Path(arguments[3]) and options["mode"] == "microbatch"
+    assert options["stop_file"] == stop_file
+    assert ("--thinking" in chat) is (thinking_flag == "--thinking")
+    assert ("--no-thinking" in chat) is (thinking_flag == "--no-thinking")
 
 
 def test_stack_rejects_mismatched_warehouse_before_any_process(arguments, tmp_path, monkeypatch):

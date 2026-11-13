@@ -62,7 +62,7 @@ def test_experiment_requires_rejection_then_actual_correction_call(tmp_path, sna
             if schema:
                 return json.dumps({"is_acceptable": approve_bad_draft or len(self.calls) > 1,
                                    "feedback": "Correct the accepted amount to 122 ILS"})
-            correction = json.loads(messages[-1]["content"])
+            correction = json.loads(messages[-2]["content"])
             assert correction["previous_draft"] == BAD_DRAFT
             assert "122" in correction["feedback"]
             return "הסכום שהתקבל לצבירה הוא 122 ש״ח."

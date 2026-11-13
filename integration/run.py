@@ -128,12 +128,15 @@ def run_stack(
     mode: str = "live",
     startup_timeout: float = 20,
     shutdown_timeout: float = 15,
+    stop_file: Path | None = None,
 ) -> None:
     """The chat command must honor stdin EOF as a graceful shutdown request.
 
     Commands run without a shell and inherit visible stdout/stderr. The caller
     supplies the real batch command and a chat command using its managed mode.
     Databases, including finalized ones, are never reset or silently replaced.
+    An optional initially absent stop file requests the same cooperative shutdown;
+    a request during Batch takes effect only after Batch completes.
     """
     if mode not in {"live", "microbatch"}:
         raise ValueError("mode must be live or microbatch")
@@ -146,6 +149,9 @@ def run_stack(
     if not stream_python.is_file():
         raise StackError("Run uv sync --project streaming --locked before starting the stack")
     database = Path(stream_db).resolve()
+    stop_file = Path(stop_file).resolve() if stop_file is not None else None
+    if stop_file is not None and stop_file.exists():
+        raise ValueError("Stop file already exists; use a fresh session path")
     batch = stream = chat = None
     try:
         batch = _launch(batch_command)
@@ -153,6 +159,8 @@ def run_stack(
             raise StackError(f"Batch failed with code {batch.returncode}; streaming and chat were not started")
         if _kill_group(batch):
             raise StackError("Batch left descendants requiring forced termination")
+        if stop_file is not None and stop_file.exists():
+            return
         initial_checkpoint = _checkpoint(database)
         if initial_checkpoint is None:
             raise StackError("Stream database is locked; cannot establish the starting checkpoint")
@@ -160,6 +168,8 @@ def run_stack(
                           "--db", str(database), "--mode", mode], controlled=True)
         deadline = time.monotonic() + startup_timeout
         while True:
+            if stop_file is not None and stop_file.exists():
+                return
             if stream.poll() is not None:
                 raise StackError(f"Streaming exited before readiness with code {stream.returncode}")
             checkpoint = _checkpoint(database)
@@ -172,6 +182,8 @@ def run_stack(
         while chat.poll() is None:
             if stream.poll() is not None:
                 raise StackError(f"Streaming stopped while chat was running (code {stream.returncode})")
+            if stop_file is not None and stop_file.exists():
+                return
             time.sleep(0.05)
         if stream.poll() is not None:
             raise StackError(f"Streaming stopped unexpectedly (code {stream.returncode})")
@@ -207,13 +219,17 @@ def main(argv=None):
     parser.add_argument("--etl-python", type=Path, required=True)
     parser.add_argument("--batch-run-dir", type=Path, required=True)
     parser.add_argument("--mode", choices=("live", "microbatch"), default="live")
+    parser.add_argument("--stop-file", type=Path,
+                        help="Create this initially absent file to request graceful shutdown")
     args = parser.parse_args(argv)
     if args.warehouse.resolve() != (args.lab_dir / "warehouse.duckdb").resolve():
         parser.error("--warehouse must name warehouse.duckdb in --lab-dir")
     if args.history_start >= args.history_end or args.latest_windows < 1 or not 1 <= args.port <= 65535:
         parser.error("Use ordered history dates, positive latest-windows and port 1–65535")
     try:
-        OllamaModel(args.model, args.ollama_url)
+        OllamaModel(args.model, args.ollama_url, think=args.thinking)
+        if args.stop_file is not None and args.stop_file.exists():
+            raise ValueError("Stop file already exists; use a fresh session path")
     except ValueError as error:
         parser.error(str(error))
     batch = [sys.executable, "-m", "integration.batch", "--lab-dir", str(args.lab_dir.resolve()),
@@ -223,8 +239,10 @@ def main(argv=None):
             "--history-end", args.history_end.isoformat(), "--model", args.model,
             "--ollama-url", args.ollama_url, "--audit-dir", str(args.audit_dir.resolve()),
             "--latest-windows", str(args.latest_windows), "--port", str(args.port)]
+    if args.thinking is not None:
+        chat.append("--thinking" if args.thinking else "--no-thinking")
     try:
-        run_stack(batch, chat, stream_db=args.stream_db, mode=args.mode)
+        run_stack(batch, chat, stream_db=args.stream_db, mode=args.mode, stop_file=args.stop_file)
     except KeyboardInterrupt:
         pass  # run_stack closes both children before propagating the interrupt.
     except (StackError, OSError, subprocess.SubprocessError) as error:
