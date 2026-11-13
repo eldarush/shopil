@@ -1,0 +1,2020 @@
+{
+  "backpressure": {
+    "samples": [
+      {
+        "backpressure_waits": 2,
+        "checkpoint": 0,
+        "consumed": 1,
+        "depth": 4,
+        "maxsize": 4,
+        "produced": 5,
+        "revenue": "698.00",
+        "t_s": 0.054
+      },
+      {
+        "backpressure_waits": 3,
+        "checkpoint": 1,
+        "consumed": 2,
+        "depth": 4,
+        "maxsize": 4,
+        "produced": 6,
+        "revenue": "747.90",
+        "t_s": 0.085
+      },
+      {
+        "backpressure_waits": 4,
+        "checkpoint": 2,
+        "consumed": 3,
+        "depth": 4,
+        "maxsize": 4,
+        "produced": 7,
+        "revenue": "837.80",
+        "t_s": 0.116
+      },
+      {
+        "backpressure_waits": 5,
+        "checkpoint": 3,
+        "consumed": 4,
+        "depth": 4,
+        "maxsize": 4,
+        "produced": 8,
+        "revenue": "837.80",
+        "t_s": 0.147
+      },
+      {
+        "backpressure_waits": 6,
+        "checkpoint": 4,
+        "consumed": 5,
+        "depth": 4,
+        "maxsize": 4,
+        "produced": 9,
+        "revenue": "956.80",
+        "t_s": 0.18
+      },
+      {
+        "backpressure_waits": 7,
+        "checkpoint": 5,
+        "consumed": 6,
+        "depth": 4,
+        "maxsize": 4,
+        "produced": 10,
+        "revenue": "1,415.80",
+        "t_s": 0.211
+      },
+      {
+        "backpressure_waits": 8,
+        "checkpoint": 6,
+        "consumed": 7,
+        "depth": 4,
+        "maxsize": 4,
+        "produced": 11,
+        "revenue": "1,614.80",
+        "t_s": 0.242
+      },
+      {
+        "backpressure_waits": 9,
+        "checkpoint": 7,
+        "consumed": 8,
+        "depth": 4,
+        "maxsize": 4,
+        "produced": 12,
+        "revenue": "1,614.80",
+        "t_s": 0.272
+      },
+      {
+        "backpressure_waits": 10,
+        "checkpoint": 8,
+        "consumed": 9,
+        "depth": 4,
+        "maxsize": 4,
+        "produced": 13,
+        "revenue": "1,963.80",
+        "t_s": 0.304
+      },
+      {
+        "backpressure_waits": 11,
+        "checkpoint": 9,
+        "consumed": 10,
+        "depth": 4,
+        "maxsize": 4,
+        "produced": 14,
+        "revenue": "2,013.70",
+        "t_s": 0.333
+      },
+      {
+        "backpressure_waits": 12,
+        "checkpoint": 10,
+        "consumed": 11,
+        "depth": 4,
+        "maxsize": 4,
+        "produced": 15,
+        "revenue": "2,103.60",
+        "t_s": 0.365
+      },
+      {
+        "backpressure_waits": 13,
+        "checkpoint": 11,
+        "consumed": 12,
+        "depth": 4,
+        "maxsize": 4,
+        "produced": 16,
+        "revenue": "2,103.60",
+        "t_s": 0.398
+      },
+      {
+        "backpressure_waits": 14,
+        "checkpoint": 12,
+        "consumed": 13,
+        "depth": 4,
+        "maxsize": 4,
+        "produced": 17,
+        "revenue": "2,103.60",
+        "t_s": 0.429
+      },
+      {
+        "backpressure_waits": 15,
+        "checkpoint": 13,
+        "consumed": 14,
+        "depth": 4,
+        "maxsize": 4,
+        "produced": 18,
+        "revenue": "2,562.60",
+        "t_s": 0.46
+      },
+      {
+        "backpressure_waits": 16,
+        "checkpoint": 14,
+        "consumed": 15,
+        "depth": 4,
+        "maxsize": 4,
+        "produced": 19,
+        "revenue": "2,960.60",
+        "t_s": 0.493
+      },
+      {
+        "backpressure_waits": 17,
+        "checkpoint": 15,
+        "consumed": 16,
+        "depth": 4,
+        "maxsize": 4,
+        "produced": 20,
+        "revenue": "2,960.60",
+        "t_s": 0.521
+      },
+      {
+        "backpressure_waits": 18,
+        "checkpoint": 16,
+        "consumed": 17,
+        "depth": 4,
+        "maxsize": 4,
+        "produced": 21,
+        "revenue": "3,309.60",
+        "t_s": 0.553
+      },
+      {
+        "backpressure_waits": 19,
+        "checkpoint": 17,
+        "consumed": 18,
+        "depth": 4,
+        "maxsize": 4,
+        "produced": 22,
+        "revenue": "3,359.50",
+        "t_s": 0.583
+      },
+      {
+        "backpressure_waits": 20,
+        "checkpoint": 18,
+        "consumed": 19,
+        "depth": 4,
+        "maxsize": 4,
+        "produced": 23,
+        "revenue": "3,359.50",
+        "t_s": 0.613
+      },
+      {
+        "backpressure_waits": 21,
+        "checkpoint": 19,
+        "consumed": 20,
+        "depth": 4,
+        "maxsize": 4,
+        "produced": 24,
+        "revenue": "3,359.50",
+        "t_s": 0.645
+      },
+      {
+        "backpressure_waits": 22,
+        "checkpoint": 20,
+        "consumed": 21,
+        "depth": 4,
+        "maxsize": 4,
+        "produced": 25,
+        "revenue": "3,478.50",
+        "t_s": 0.679
+      },
+      {
+        "backpressure_waits": 23,
+        "checkpoint": 21,
+        "consumed": 22,
+        "depth": 4,
+        "maxsize": 4,
+        "produced": 26,
+        "revenue": "4,396.50",
+        "t_s": 0.709
+      },
+      {
+        "backpressure_waits": 24,
+        "checkpoint": 22,
+        "consumed": 23,
+        "depth": 4,
+        "maxsize": 4,
+        "produced": 27,
+        "revenue": "4,595.50",
+        "t_s": 0.739
+      },
+      {
+        "backpressure_waits": 25,
+        "checkpoint": 23,
+        "consumed": 24,
+        "depth": 4,
+        "maxsize": 4,
+        "produced": 28,
+        "revenue": "4,595.50",
+        "t_s": 0.77
+      },
+      {
+        "backpressure_waits": 26,
+        "checkpoint": 24,
+        "consumed": 25,
+        "depth": 4,
+        "maxsize": 4,
+        "produced": 29,
+        "revenue": "4,944.50",
+        "t_s": 0.803
+      },
+      {
+        "backpressure_waits": 27,
+        "checkpoint": 25,
+        "consumed": 26,
+        "depth": 4,
+        "maxsize": 4,
+        "produced": 30,
+        "revenue": "4,944.50",
+        "t_s": 0.834
+      },
+      {
+        "backpressure_waits": 28,
+        "checkpoint": 26,
+        "consumed": 27,
+        "depth": 4,
+        "maxsize": 4,
+        "produced": 31,
+        "revenue": "5,034.40",
+        "t_s": 0.864
+      },
+      {
+        "backpressure_waits": 29,
+        "checkpoint": 27,
+        "consumed": 28,
+        "depth": 4,
+        "maxsize": 4,
+        "produced": 32,
+        "revenue": "5,034.40",
+        "t_s": 0.897
+      },
+      {
+        "backpressure_waits": 30,
+        "checkpoint": 28,
+        "consumed": 29,
+        "depth": 4,
+        "maxsize": 4,
+        "produced": 33,
+        "revenue": "5,272.40",
+        "t_s": 0.932
+      },
+      {
+        "backpressure_waits": 31,
+        "checkpoint": 29,
+        "consumed": 30,
+        "depth": 4,
+        "maxsize": 4,
+        "produced": 34,
+        "revenue": "5,731.40",
+        "t_s": 0.958
+      },
+      {
+        "backpressure_waits": 32,
+        "checkpoint": 30,
+        "consumed": 31,
+        "depth": 4,
+        "maxsize": 4,
+        "produced": 35,
+        "revenue": "5,930.40",
+        "t_s": 0.987
+      },
+      {
+        "backpressure_waits": 33,
+        "checkpoint": 31,
+        "consumed": 32,
+        "depth": 4,
+        "maxsize": 4,
+        "produced": 36,
+        "revenue": "5,930.40",
+        "t_s": 1.018
+      },
+      {
+        "backpressure_waits": 34,
+        "checkpoint": 32,
+        "consumed": 33,
+        "depth": 4,
+        "maxsize": 4,
+        "produced": 37,
+        "revenue": "6,279.40",
+        "t_s": 1.051
+      },
+      {
+        "backpressure_waits": 35,
+        "checkpoint": 33,
+        "consumed": 34,
+        "depth": 4,
+        "maxsize": 4,
+        "produced": 38,
+        "revenue": "6,329.30",
+        "t_s": 1.081
+      },
+      {
+        "backpressure_waits": 36,
+        "checkpoint": 34,
+        "consumed": 35,
+        "depth": 4,
+        "maxsize": 4,
+        "produced": 39,
+        "revenue": "6,419.20",
+        "t_s": 1.114
+      },
+      {
+        "backpressure_waits": 37,
+        "checkpoint": 35,
+        "consumed": 36,
+        "depth": 4,
+        "maxsize": 4,
+        "produced": 40,
+        "revenue": "6,419.20",
+        "t_s": 1.148
+      },
+      {
+        "backpressure_waits": 38,
+        "checkpoint": 36,
+        "consumed": 37,
+        "depth": 4,
+        "maxsize": 4,
+        "produced": 41,
+        "revenue": "6,538.20",
+        "t_s": 1.177
+      },
+      {
+        "backpressure_waits": 39,
+        "checkpoint": 37,
+        "consumed": 38,
+        "depth": 4,
+        "maxsize": 4,
+        "produced": 42,
+        "revenue": "6,538.20",
+        "t_s": 1.209
+      },
+      {
+        "backpressure_waits": 40,
+        "checkpoint": 38,
+        "consumed": 39,
+        "depth": 4,
+        "maxsize": 4,
+        "produced": 43,
+        "revenue": "6,538.20",
+        "t_s": 1.239
+      },
+      {
+        "backpressure_waits": 41,
+        "checkpoint": 39,
+        "consumed": 40,
+        "depth": 4,
+        "maxsize": 4,
+        "produced": 44,
+        "revenue": "6,538.20",
+        "t_s": 1.269
+      },
+      {
+        "backpressure_waits": 42,
+        "checkpoint": 40,
+        "consumed": 41,
+        "depth": 4,
+        "maxsize": 4,
+        "produced": 45,
+        "revenue": "6,887.20",
+        "t_s": 1.301
+      },
+      {
+        "backpressure_waits": 43,
+        "checkpoint": 41,
+        "consumed": 42,
+        "depth": 4,
+        "maxsize": 4,
+        "produced": 46,
+        "revenue": "6,937.10",
+        "t_s": 1.333
+      },
+      {
+        "backpressure_waits": 44,
+        "checkpoint": 42,
+        "consumed": 43,
+        "depth": 4,
+        "maxsize": 4,
+        "produced": 47,
+        "revenue": "7,116.90",
+        "t_s": 1.364
+      },
+      {
+        "backpressure_waits": 45,
+        "checkpoint": 43,
+        "consumed": 44,
+        "depth": 4,
+        "maxsize": 4,
+        "produced": 48,
+        "revenue": "7,116.90",
+        "t_s": 1.397
+      },
+      {
+        "backpressure_waits": 46,
+        "checkpoint": 44,
+        "consumed": 45,
+        "depth": 4,
+        "maxsize": 4,
+        "produced": 49,
+        "revenue": "7,235.90",
+        "t_s": 1.428
+      },
+      {
+        "backpressure_waits": 47,
+        "checkpoint": 45,
+        "consumed": 46,
+        "depth": 4,
+        "maxsize": 4,
+        "produced": 50,
+        "revenue": "7,694.90",
+        "t_s": 1.459
+      },
+      {
+        "backpressure_waits": 48,
+        "checkpoint": 46,
+        "consumed": 47,
+        "depth": 4,
+        "maxsize": 4,
+        "produced": 51,
+        "revenue": "7,893.90",
+        "t_s": 1.488
+      },
+      {
+        "backpressure_waits": 49,
+        "checkpoint": 47,
+        "consumed": 48,
+        "depth": 4,
+        "maxsize": 4,
+        "produced": 52,
+        "revenue": "7,893.90",
+        "t_s": 1.519
+      },
+      {
+        "backpressure_waits": 50,
+        "checkpoint": 48,
+        "consumed": 49,
+        "depth": 4,
+        "maxsize": 4,
+        "produced": 53,
+        "revenue": "8,242.90",
+        "t_s": 1.55
+      },
+      {
+        "backpressure_waits": 51,
+        "checkpoint": 49,
+        "consumed": 50,
+        "depth": 4,
+        "maxsize": 4,
+        "produced": 54,
+        "revenue": "8,342.70",
+        "t_s": 1.582
+      },
+      {
+        "backpressure_waits": 52,
+        "checkpoint": 50,
+        "consumed": 51,
+        "depth": 4,
+        "maxsize": 4,
+        "produced": 55,
+        "revenue": "8,432.60",
+        "t_s": 1.614
+      },
+      {
+        "backpressure_waits": 53,
+        "checkpoint": 51,
+        "consumed": 52,
+        "depth": 4,
+        "maxsize": 4,
+        "produced": 56,
+        "revenue": "8,432.60",
+        "t_s": 1.645
+      },
+      {
+        "backpressure_waits": 54,
+        "checkpoint": 52,
+        "consumed": 53,
+        "depth": 4,
+        "maxsize": 4,
+        "produced": 57,
+        "revenue": "8,551.60",
+        "t_s": 1.679
+      },
+      {
+        "backpressure_waits": 55,
+        "checkpoint": 53,
+        "consumed": 54,
+        "depth": 4,
+        "maxsize": 4,
+        "produced": 58,
+        "revenue": "9,010.60",
+        "t_s": 1.707
+      },
+      {
+        "backpressure_waits": 56,
+        "checkpoint": 54,
+        "consumed": 55,
+        "depth": 4,
+        "maxsize": 4,
+        "produced": 59,
+        "revenue": "9,209.60",
+        "t_s": 1.738
+      },
+      {
+        "backpressure_waits": 57,
+        "checkpoint": 55,
+        "consumed": 56,
+        "depth": 4,
+        "maxsize": 4,
+        "produced": 60,
+        "revenue": "9,209.60",
+        "t_s": 1.768
+      },
+      {
+        "backpressure_waits": 58,
+        "checkpoint": 56,
+        "consumed": 57,
+        "depth": 4,
+        "maxsize": 4,
+        "produced": 61,
+        "revenue": "9,209.60",
+        "t_s": 1.801
+      },
+      {
+        "backpressure_waits": 59,
+        "checkpoint": 57,
+        "consumed": 58,
+        "depth": 4,
+        "maxsize": 4,
+        "produced": 62,
+        "revenue": "9,259.50",
+        "t_s": 1.832
+      },
+      {
+        "backpressure_waits": 60,
+        "checkpoint": 58,
+        "consumed": 59,
+        "depth": 4,
+        "maxsize": 4,
+        "produced": 63,
+        "revenue": "9,349.40",
+        "t_s": 1.864
+      },
+      {
+        "backpressure_waits": 61,
+        "checkpoint": 59,
+        "consumed": 60,
+        "depth": 4,
+        "maxsize": 4,
+        "produced": 64,
+        "revenue": "9,349.40",
+        "t_s": 1.898
+      },
+      {
+        "backpressure_waits": 62,
+        "checkpoint": 60,
+        "consumed": 61,
+        "depth": 4,
+        "maxsize": 4,
+        "produced": 65,
+        "revenue": "9,468.40",
+        "t_s": 1.928
+      },
+      {
+        "backpressure_waits": 63,
+        "checkpoint": 61,
+        "consumed": 62,
+        "depth": 4,
+        "maxsize": 4,
+        "produced": 66,
+        "revenue": "9,927.40",
+        "t_s": 1.956
+      },
+      {
+        "backpressure_waits": 64,
+        "checkpoint": 62,
+        "consumed": 63,
+        "depth": 4,
+        "maxsize": 4,
+        "produced": 67,
+        "revenue": "10,126.40",
+        "t_s": 1.986
+      },
+      {
+        "backpressure_waits": 65,
+        "checkpoint": 63,
+        "consumed": 64,
+        "depth": 4,
+        "maxsize": 4,
+        "produced": 68,
+        "revenue": "10,126.40",
+        "t_s": 2.016
+      },
+      {
+        "backpressure_waits": 66,
+        "checkpoint": 64,
+        "consumed": 65,
+        "depth": 4,
+        "maxsize": 4,
+        "produced": 69,
+        "revenue": "10,126.40",
+        "t_s": 2.047
+      },
+      {
+        "backpressure_waits": 66,
+        "checkpoint": 65,
+        "consumed": 66,
+        "depth": 3,
+        "maxsize": 4,
+        "produced": 69,
+        "revenue": "10,176.30",
+        "t_s": 2.078
+      },
+      {
+        "backpressure_waits": 66,
+        "checkpoint": 66,
+        "consumed": 67,
+        "depth": 2,
+        "maxsize": 4,
+        "produced": 69,
+        "revenue": "10,266.20",
+        "t_s": 2.11
+      },
+      {
+        "backpressure_waits": 66,
+        "checkpoint": 67,
+        "consumed": 68,
+        "depth": 1,
+        "maxsize": 4,
+        "produced": 69,
+        "revenue": "10,266.20",
+        "t_s": 2.141
+      },
+      {
+        "backpressure_waits": 66,
+        "checkpoint": 68,
+        "consumed": 69,
+        "depth": 0,
+        "maxsize": 4,
+        "produced": 69,
+        "revenue": "10,385.20",
+        "t_s": 2.171
+      }
+    ],
+    "state": {
+      "backpressure_waits": 66,
+      "consumed": 69,
+      "elapsed_s": 2.1433,
+      "event_time_clock": "fixture",
+      "max_queue_depth": 4,
+      "produced": 69,
+      "producer_wait_s": 1.997,
+      "queue_maxsize": 4,
+      "stop_reason": "duration"
+    }
+  },
+  "checks": {
+    "A: consumed advanced across many observations during production": true,
+    "A: first record consumed while producer was still admitting (produced kept rising afterwards)": true,
+    "A: graceful stop drained the queue (produced == consumed)": true,
+    "B: bounded queue never exceeded maxsize": true,
+    "B: graceful stop drained the queue (produced == consumed)": true,
+    "B: producer experienced backpressure (waits > 0)": true
+  },
+  "normal": {
+    "samples": [
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 0,
+        "consumed": 1,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 1,
+        "revenue": "698.00",
+        "t_s": 0.036
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 1,
+        "consumed": 2,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 2,
+        "revenue": "747.90",
+        "t_s": 0.059
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 2,
+        "consumed": 3,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 3,
+        "revenue": "837.80",
+        "t_s": 0.076
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 3,
+        "consumed": 4,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 4,
+        "revenue": "837.80",
+        "t_s": 0.091
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 4,
+        "consumed": 5,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 5,
+        "revenue": "956.80",
+        "t_s": 0.106
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 5,
+        "consumed": 6,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 6,
+        "revenue": "1,415.80",
+        "t_s": 0.121
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 6,
+        "consumed": 7,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 7,
+        "revenue": "1,614.80",
+        "t_s": 0.135
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 7,
+        "consumed": 8,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 8,
+        "revenue": "1,614.80",
+        "t_s": 0.151
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 8,
+        "consumed": 9,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 9,
+        "revenue": "1,963.80",
+        "t_s": 0.166
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 9,
+        "consumed": 10,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 10,
+        "revenue": "2,013.70",
+        "t_s": 0.18
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 10,
+        "consumed": 11,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 11,
+        "revenue": "2,103.60",
+        "t_s": 0.196
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 11,
+        "consumed": 12,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 12,
+        "revenue": "2,103.60",
+        "t_s": 0.212
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 12,
+        "consumed": 13,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 13,
+        "revenue": "2,103.60",
+        "t_s": 0.228
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 13,
+        "consumed": 14,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 14,
+        "revenue": "2,562.60",
+        "t_s": 0.243
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 14,
+        "consumed": 15,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 15,
+        "revenue": "2,960.60",
+        "t_s": 0.259
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 15,
+        "consumed": 16,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 16,
+        "revenue": "2,960.60",
+        "t_s": 0.276
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 16,
+        "consumed": 17,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 17,
+        "revenue": "3,309.60",
+        "t_s": 0.287
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 17,
+        "consumed": 18,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 18,
+        "revenue": "3,359.50",
+        "t_s": 0.304
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 18,
+        "consumed": 19,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 19,
+        "revenue": "3,359.50",
+        "t_s": 0.321
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 19,
+        "consumed": 20,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 20,
+        "revenue": "3,359.50",
+        "t_s": 0.337
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 20,
+        "consumed": 21,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 21,
+        "revenue": "3,478.50",
+        "t_s": 0.354
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 21,
+        "consumed": 22,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 22,
+        "revenue": "4,396.50",
+        "t_s": 0.368
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 22,
+        "consumed": 23,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 23,
+        "revenue": "4,595.50",
+        "t_s": 0.384
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 23,
+        "consumed": 24,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 24,
+        "revenue": "4,595.50",
+        "t_s": 0.398
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 24,
+        "consumed": 25,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 25,
+        "revenue": "4,944.50",
+        "t_s": 0.415
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 25,
+        "consumed": 26,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 26,
+        "revenue": "4,944.50",
+        "t_s": 0.43
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 26,
+        "consumed": 27,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 27,
+        "revenue": "5,034.40",
+        "t_s": 0.448
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 27,
+        "consumed": 28,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 28,
+        "revenue": "5,034.40",
+        "t_s": 0.461
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 28,
+        "consumed": 29,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 29,
+        "revenue": "5,272.40",
+        "t_s": 0.476
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 29,
+        "consumed": 30,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 30,
+        "revenue": "5,731.40",
+        "t_s": 0.492
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 30,
+        "consumed": 31,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 31,
+        "revenue": "5,930.40",
+        "t_s": 0.508
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 31,
+        "consumed": 32,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 32,
+        "revenue": "5,930.40",
+        "t_s": 0.523
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 32,
+        "consumed": 33,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 33,
+        "revenue": "6,279.40",
+        "t_s": 0.537
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 33,
+        "consumed": 34,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 34,
+        "revenue": "6,329.30",
+        "t_s": 0.554
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 34,
+        "consumed": 35,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 35,
+        "revenue": "6,419.20",
+        "t_s": 0.568
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 35,
+        "consumed": 36,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 36,
+        "revenue": "6,419.20",
+        "t_s": 0.585
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 36,
+        "consumed": 37,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 37,
+        "revenue": "6,538.20",
+        "t_s": 0.6
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 37,
+        "consumed": 38,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 38,
+        "revenue": "6,538.20",
+        "t_s": 0.615
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 38,
+        "consumed": 39,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 39,
+        "revenue": "6,538.20",
+        "t_s": 0.629
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 39,
+        "consumed": 40,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 40,
+        "revenue": "6,538.20",
+        "t_s": 0.647
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 40,
+        "consumed": 41,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 41,
+        "revenue": "6,887.20",
+        "t_s": 0.661
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 41,
+        "consumed": 42,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 42,
+        "revenue": "6,937.10",
+        "t_s": 0.679
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 42,
+        "consumed": 43,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 43,
+        "revenue": "7,116.90",
+        "t_s": 0.691
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 43,
+        "consumed": 44,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 44,
+        "revenue": "7,116.90",
+        "t_s": 0.709
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 44,
+        "consumed": 45,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 45,
+        "revenue": "7,235.90",
+        "t_s": 0.722
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 45,
+        "consumed": 46,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 46,
+        "revenue": "7,694.90",
+        "t_s": 0.74
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 46,
+        "consumed": 47,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 47,
+        "revenue": "7,893.90",
+        "t_s": 0.752
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 47,
+        "consumed": 48,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 48,
+        "revenue": "7,893.90",
+        "t_s": 0.768
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 48,
+        "consumed": 49,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 49,
+        "revenue": "8,242.90",
+        "t_s": 0.785
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 49,
+        "consumed": 50,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 50,
+        "revenue": "8,342.70",
+        "t_s": 0.8
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 50,
+        "consumed": 51,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 51,
+        "revenue": "8,432.60",
+        "t_s": 0.815
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 51,
+        "consumed": 52,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 52,
+        "revenue": "8,432.60",
+        "t_s": 0.829
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 52,
+        "consumed": 53,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 53,
+        "revenue": "8,551.60",
+        "t_s": 0.847
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 53,
+        "consumed": 54,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 54,
+        "revenue": "9,010.60",
+        "t_s": 0.861
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 54,
+        "consumed": 55,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 55,
+        "revenue": "9,209.60",
+        "t_s": 0.88
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 55,
+        "consumed": 56,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 56,
+        "revenue": "9,209.60",
+        "t_s": 0.894
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 56,
+        "consumed": 57,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 57,
+        "revenue": "9,209.60",
+        "t_s": 0.91
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 57,
+        "consumed": 58,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 58,
+        "revenue": "9,259.50",
+        "t_s": 0.926
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 58,
+        "consumed": 59,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 59,
+        "revenue": "9,349.40",
+        "t_s": 0.942
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 59,
+        "consumed": 60,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 60,
+        "revenue": "9,349.40",
+        "t_s": 0.956
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 60,
+        "consumed": 61,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 61,
+        "revenue": "9,468.40",
+        "t_s": 0.97
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 61,
+        "consumed": 62,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 62,
+        "revenue": "9,927.40",
+        "t_s": 0.986
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 62,
+        "consumed": 63,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 63,
+        "revenue": "10,126.40",
+        "t_s": 1.001
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 63,
+        "consumed": 64,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 64,
+        "revenue": "10,126.40",
+        "t_s": 1.018
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 64,
+        "consumed": 65,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 65,
+        "revenue": "10,126.40",
+        "t_s": 1.033
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 65,
+        "consumed": 66,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 66,
+        "revenue": "10,176.30",
+        "t_s": 1.049
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 66,
+        "consumed": 67,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 67,
+        "revenue": "10,266.20",
+        "t_s": 1.065
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 67,
+        "consumed": 68,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 68,
+        "revenue": "10,266.20",
+        "t_s": 1.08
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 68,
+        "consumed": 69,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 69,
+        "revenue": "10,385.20",
+        "t_s": 1.095
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 69,
+        "consumed": 70,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 70,
+        "revenue": "10,844.20",
+        "t_s": 1.109
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 70,
+        "consumed": 71,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 71,
+        "revenue": "11,242.20",
+        "t_s": 1.127
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 71,
+        "consumed": 72,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 72,
+        "revenue": "11,242.20",
+        "t_s": 1.145
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 72,
+        "consumed": 73,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 73,
+        "revenue": "11,591.20",
+        "t_s": 1.156
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 73,
+        "consumed": 74,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 74,
+        "revenue": "11,641.10",
+        "t_s": 1.174
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 74,
+        "consumed": 75,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 75,
+        "revenue": "11,731.00",
+        "t_s": 1.185
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 75,
+        "consumed": 76,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 76,
+        "revenue": "11,731.00",
+        "t_s": 1.202
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 76,
+        "consumed": 77,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 77,
+        "revenue": "11,850.00",
+        "t_s": 1.218
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 77,
+        "consumed": 78,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 78,
+        "revenue": "11,850.00",
+        "t_s": 1.235
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 78,
+        "consumed": 79,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 79,
+        "revenue": "12,049.00",
+        "t_s": 1.25
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 79,
+        "consumed": 80,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 80,
+        "revenue": "12,049.00",
+        "t_s": 1.265
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 80,
+        "consumed": 81,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 81,
+        "revenue": "12,398.00",
+        "t_s": 1.281
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 81,
+        "consumed": 82,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 82,
+        "revenue": "12,447.90",
+        "t_s": 1.295
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 82,
+        "consumed": 83,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 83,
+        "revenue": "12,537.80",
+        "t_s": 1.312
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 83,
+        "consumed": 84,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 84,
+        "revenue": "12,537.80",
+        "t_s": 1.328
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 84,
+        "consumed": 85,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 85,
+        "revenue": "12,775.80",
+        "t_s": 1.344
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 85,
+        "consumed": 86,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 86,
+        "revenue": "13,234.80",
+        "t_s": 1.359
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 86,
+        "consumed": 87,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 87,
+        "revenue": "13,433.80",
+        "t_s": 1.378
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 87,
+        "consumed": 88,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 88,
+        "revenue": "13,433.80",
+        "t_s": 1.388
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 88,
+        "consumed": 89,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 89,
+        "revenue": "13,782.80",
+        "t_s": 1.405
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 89,
+        "consumed": 90,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 90,
+        "revenue": "13,832.70",
+        "t_s": 1.423
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 90,
+        "consumed": 91,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 91,
+        "revenue": "13,832.70",
+        "t_s": 1.436
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 91,
+        "consumed": 92,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 92,
+        "revenue": "13,832.70",
+        "t_s": 1.454
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 92,
+        "consumed": 93,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 93,
+        "revenue": "13,951.70",
+        "t_s": 1.469
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 93,
+        "consumed": 94,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 94,
+        "revenue": "14,410.70",
+        "t_s": 1.485
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 94,
+        "consumed": 95,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 95,
+        "revenue": "14,410.70",
+        "t_s": 1.501
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 95,
+        "consumed": 96,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 96,
+        "revenue": "14,410.70",
+        "t_s": 1.515
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 96,
+        "consumed": 97,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 97,
+        "revenue": "14,759.70",
+        "t_s": 1.53
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 97,
+        "consumed": 98,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 98,
+        "revenue": "14,809.60",
+        "t_s": 1.547
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 98,
+        "consumed": 99,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 99,
+        "revenue": "14,989.40",
+        "t_s": 1.561
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 99,
+        "consumed": 100,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 100,
+        "revenue": "14,989.40",
+        "t_s": 1.58
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 100,
+        "consumed": 101,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 101,
+        "revenue": "15,108.40",
+        "t_s": 1.592
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 101,
+        "consumed": 102,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 102,
+        "revenue": "15,567.40",
+        "t_s": 1.61
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 102,
+        "consumed": 103,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 103,
+        "revenue": "15,766.40",
+        "t_s": 1.625
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 103,
+        "consumed": 104,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 104,
+        "revenue": "15,766.40",
+        "t_s": 1.642
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 104,
+        "consumed": 105,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 105,
+        "revenue": "16,115.40",
+        "t_s": 1.656
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 105,
+        "consumed": 106,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 106,
+        "revenue": "16,215.20",
+        "t_s": 1.674
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 106,
+        "consumed": 107,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 107,
+        "revenue": "16,305.10",
+        "t_s": 1.685
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 107,
+        "consumed": 108,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 108,
+        "revenue": "16,305.10",
+        "t_s": 1.701
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 108,
+        "consumed": 109,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 109,
+        "revenue": "16,424.10",
+        "t_s": 1.716
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 109,
+        "consumed": 110,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 110,
+        "revenue": "16,883.10",
+        "t_s": 1.732
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 110,
+        "consumed": 111,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 111,
+        "revenue": "17,082.10",
+        "t_s": 1.747
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 111,
+        "consumed": 112,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 112,
+        "revenue": "17,082.10",
+        "t_s": 1.762
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 112,
+        "consumed": 113,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 113,
+        "revenue": "17,780.10",
+        "t_s": 1.778
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 113,
+        "consumed": 114,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 114,
+        "revenue": "17,780.10",
+        "t_s": 1.794
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 114,
+        "consumed": 115,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 115,
+        "revenue": "17,870.00",
+        "t_s": 1.809
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 115,
+        "consumed": 116,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 116,
+        "revenue": "17,870.00",
+        "t_s": 1.827
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 116,
+        "consumed": 117,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 117,
+        "revenue": "17,870.00",
+        "t_s": 1.844
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 117,
+        "consumed": 118,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 118,
+        "revenue": "18,329.00",
+        "t_s": 1.855
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 118,
+        "consumed": 119,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 119,
+        "revenue": "18,528.00",
+        "t_s": 1.87
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 119,
+        "consumed": 120,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 120,
+        "revenue": "18,528.00",
+        "t_s": 1.884
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 120,
+        "consumed": 121,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 121,
+        "revenue": "18,877.00",
+        "t_s": 1.901
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 121,
+        "consumed": 122,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 122,
+        "revenue": "18,926.90",
+        "t_s": 1.916
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 122,
+        "consumed": 123,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 123,
+        "revenue": "19,016.80",
+        "t_s": 1.933
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 123,
+        "consumed": 124,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 124,
+        "revenue": "19,016.80",
+        "t_s": 1.948
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 124,
+        "consumed": 125,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 125,
+        "revenue": "19,135.80",
+        "t_s": 1.963
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 125,
+        "consumed": 126,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 126,
+        "revenue": "19,594.80",
+        "t_s": 1.979
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 126,
+        "consumed": 127,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 127,
+        "revenue": "19,992.80",
+        "t_s": 1.994
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 127,
+        "consumed": 128,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 128,
+        "revenue": "19,992.80",
+        "t_s": 2.011
+      },
+      {
+        "backpressure_waits": 0,
+        "checkpoint": 128,
+        "consumed": 129,
+        "depth": 0,
+        "maxsize": 8,
+        "produced": 129,
+        "revenue": "20,341.80",
+        "t_s": 2.026
+      }
+    ],
+    "state": {
+      "backpressure_waits": 0,
+      "consumed": 129,
+      "elapsed_s": 2.0077,
+      "event_time_clock": "fixture",
+      "max_queue_depth": 1,
+      "produced": 129,
+      "producer_wait_s": 0.0073,
+      "queue_maxsize": 8,
+      "stop_reason": "duration"
+    }
+  }
+}
