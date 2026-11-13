@@ -95,7 +95,7 @@ Use `--mode microbatch` for the other runner and a distinct stream path for comp
 
 Ctrl+C in the supervisor closes chat and drains the stream. Enter controls a managed component directly, not the supervisor's own stdin. Forced termination or a failed component is reported as an error, not a successful drain. Batch does not run concurrently with chat's historical reads. [Lifecycle details](integration/README.md).
 
-Chat stops accepting questions during shutdown and waits up to five seconds for active questions to record a cancellation/error terminal event before closing the server. A failed audit or shutdown deadline makes the process fail. A failed or blank question leaves the last approved answer's source and snapshot fields unchanged.
+Chat stops accepting questions during shutdown and waits up to five seconds for active questions to record a cancellation/error terminal event before closing the server. A terminal publication already in progress finishes before shutdown takes ownership; its audit and reply are serialized with shutdown. The deadline includes waiting for that publication, and a failed audit or shutdown deadline makes the process fail. A failed or blank question leaves the last approved answer's source and snapshot fields unchanged.
 
 ## Evidence scope and configuration
 

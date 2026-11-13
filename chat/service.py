@@ -8,6 +8,7 @@ from datetime import datetime, timezone
 import json
 import math
 from threading import Condition
+from time import monotonic
 from typing import TYPE_CHECKING, Literal
 from uuid import uuid4
 
@@ -81,21 +82,27 @@ class ChatService:
         """Stop admission and await cancellation audits from the server's main thread.
 
         Call outside the event loops handling answers, before closing the server.
+        A terminal publication already holding the lock completes first.
         A timeout or unavailable audit sink must produce an unsuccessful shutdown.
         """
         if (isinstance(timeout, bool) or not isinstance(timeout, (int, float))
                 or not math.isfinite(timeout) or timeout <= 0):
             raise ValueError("Shutdown timeout must be positive and finite")
-        with self._condition:
+        deadline = monotonic() + timeout
+        if not self._condition.acquire(timeout=timeout):
+            raise RuntimeError("Chat shutdown timed out waiting for terminal publication")
+        try:
             self._closing = True
             active = list(self._active.items())
-        for task, loop in active:
-            loop.call_soon_threadsafe(task.cancel)
-        with self._condition:
-            if not self._condition.wait_for(lambda: not self._active, timeout=timeout):
+            for task, loop in active:
+                loop.call_soon_threadsafe(task.cancel)
+            if not self._condition.wait_for(lambda: not self._active,
+                                            timeout=max(0, deadline - monotonic())):
                 raise RuntimeError("Chat shutdown timed out waiting for question audits")
             if self._shutdown_audit_failed:
                 raise RuntimeError("Chat shutdown could not persist a cancellation audit")
+        finally:
+            self._condition.release()
 
     async def answer(self, question: str, history: list[dict[str, str]]) -> Reply:
         task = asyncio.current_task()
@@ -164,14 +171,20 @@ class ChatService:
                 record("attempt", attempt=attempt, draft=draft,
                        is_acceptable=evaluation.is_acceptable, feedback=feedback)
                 if evaluation.is_acceptable:
-                    stage = "audit_terminal"
-                    record("terminal", status="approved", attempts=attempt)
-                    updated = approved + [{"role": "user", "content": question},
-                                          {"role": "assistant", "content": draft}]
-                    return reply("approved", draft, "התשובה אושרה על סמך הנתונים.", updated)
-            stage = "audit_terminal"
-            record("terminal", status="rejected", attempts=attempt)
-            return reply("rejected", None, "לא התקבלה תשובה מאושרת לאחר שלושה ניסיונות.")
+                    with self._condition:
+                        if self._closing:
+                            raise asyncio.CancelledError
+                        stage = "audit_terminal"
+                        record("terminal", status="approved", attempts=attempt)
+                        updated = approved + [{"role": "user", "content": question},
+                                              {"role": "assistant", "content": draft}]
+                        return reply("approved", draft, "התשובה אושרה על סמך הנתונים.", updated)
+            with self._condition:
+                if self._closing:
+                    raise asyncio.CancelledError
+                stage = "audit_terminal"
+                record("terminal", status="rejected", attempts=attempt)
+                return reply("rejected", None, "לא התקבלה תשובה מאושרת לאחר שלושה ניסיונות.")
         except asyncio.CancelledError:
             failed = False
             if stage in ("actor", "critic"):

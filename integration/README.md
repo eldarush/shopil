@@ -39,7 +39,7 @@ Press Enter or Ctrl+C to stop admission and drain accepted queue entries. EOF on
 
 Orderly shutdown closes chat, then stops streaming admission and waits for its producer/consumer drain. It does not call `finalize_demo`: open event-time windows remain resumable. A deadline that forces termination is reported as an error, never as successful draining. SQLite's committed checkpoint remains the restart boundary.
 
-Before closing Gradio, chat rejects new admission, cancels active questions and waits up to five seconds for their terminal audit records. Cancellation preserves approved-only history. If a request ignores cancellation or its audit cannot be written, shutdown fails visibly.
+Before closing Gradio, chat rejects new admission, cancels active questions and waits up to five seconds for their terminal audit records. A terminal write and its reply are serialized with shutdown: an already-started publication completes first, while shutdown wins over later publications. The same deadline includes waiting for a slow terminal write. Cancellation preserves approved-only history. If a request ignores cancellation or its audit cannot be written, shutdown fails visibly.
 
 Windows commands run inside a Job Object, joining before they can start descendants; the supervisor retains the job handle and terminates remaining members during cleanup. POSIX commands use a new process group. Cleanup also runs when the original leader has already exited, and completed groups are not signaled again. Batch ownership is released before starting streaming or chat. These controls cover normal component descendants, not programs deliberately escaping their POSIX process group.
 

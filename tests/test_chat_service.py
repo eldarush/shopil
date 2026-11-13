@@ -1,8 +1,11 @@
 """Loop tests use explicit fake models; they do not validate LLM factual quality."""
 
 import asyncio
+from concurrent.futures import ThreadPoolExecutor, TimeoutError as FutureTimeout
 from copy import deepcopy
 import json
+from threading import Event
+from time import monotonic, sleep
 from types import SimpleNamespace
 
 import pytest
@@ -17,6 +20,92 @@ def snapshot():
     return {"snapshot_id": "s1", "captured_at": "2026-11-13T10:00:00+00:00",
             "sources": [{"table": "marts.fct_orders", "units": "ILS"}],
             "rows": [{"paid_revenue": "0.00", "average_rating": None}]}
+
+
+@pytest.mark.parametrize("accepted", [True, False])
+def test_terminal_publication_and_shutdown_are_serialized(accepted):
+    entered, release, stopping = Event(), Event(), Event()
+    events, closing_during_commit = [], []
+
+    def audit(event):
+        if event["event"] == "terminal":
+            entered.set()
+            assert release.wait(5)
+            closing_during_commit.append(instance._closing)
+        events.append(event)
+
+    instance, _, _, _, _ = service(critic=Critic([accepted] * 3), audit=audit)
+
+    def stop():
+        stopping.set()
+        instance.shutdown()
+
+    with ThreadPoolExecutor(2) as pool:
+        answer = pool.submit(lambda: asyncio.run(instance.answer("question", [])))
+        try:
+            assert entered.wait(5)
+            shutdown = pool.submit(stop)
+            assert stopping.wait(5)
+            with pytest.raises(FutureTimeout):
+                shutdown.result(timeout=.05)
+        finally:
+            release.set()
+        reply = answer.result(timeout=5)
+        shutdown.result(timeout=5)
+    assert closing_during_commit == [False]
+    status = "approved" if accepted else "rejected"
+    assert reply.status == status and len(reply.history) == (2 if accepted else 0)
+    assert [event["status"] for event in events if event["event"] == "terminal"] == [status]
+
+
+def test_shutdown_deadline_includes_slow_terminal_publication():
+    entered, release = Event(), Event()
+
+    def audit(event):
+        if event["event"] == "terminal":
+            entered.set()
+            assert release.wait(5)
+
+    instance, _, _, _, _ = service(audit=audit)
+    with ThreadPoolExecutor(2) as pool:
+        answer = pool.submit(lambda: asyncio.run(instance.answer("question", [])))
+        try:
+            assert entered.wait(5)
+            shutdown = pool.submit(instance.shutdown, .02)
+            with pytest.raises(RuntimeError, match="timed out.*terminal publication"):
+                shutdown.result(timeout=1)
+        finally:
+            release.set()
+        assert answer.result(timeout=5).status == "approved"
+    instance.shutdown()
+
+
+def test_shutdown_during_attempt_audit_prevents_terminal_approval():
+    entered, release = Event(), Event()
+    events = []
+
+    def audit(event):
+        if event["event"] == "attempt":
+            entered.set()
+            assert release.wait(5)
+        events.append(event)
+
+    instance, _, _, _, _ = service(audit=audit)
+    with ThreadPoolExecutor(2) as pool:
+        answer = pool.submit(lambda: asyncio.run(instance.answer("question", [])))
+        try:
+            assert entered.wait(5)
+            shutdown = pool.submit(instance.shutdown)
+            deadline = monotonic() + 2
+            while not instance._closing and monotonic() < deadline:
+                sleep(.001)
+            assert instance._closing
+        finally:
+            release.set()
+        with pytest.raises(asyncio.CancelledError):
+            answer.result(timeout=5)
+        shutdown.result(timeout=5)
+    assert [event["status"] for event in events if event["event"] == "terminal"] == ["error"]
 
 
 @pytest.mark.parametrize("stage", ["capture", "actor", "critic"])
