@@ -9,11 +9,11 @@ Run with ``uv run pytest tests/test_conversation_cases.py``; no credentials need
 import asyncio
 from contextlib import closing
 from copy import deepcopy
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 import json
 import re
 import sqlite3
-from uuid import uuid4
+from uuid import UUID
 
 import pytest
 
@@ -46,7 +46,8 @@ class SqlEvidenceFixture:
             rows = [dict(row) for row in connection.execute(
                 "SELECT * FROM product_metrics WHERE product_id = ?", (product,)
             )]
-        return {"snapshot_id": uuid4().hex, "captured_at": datetime.now(timezone.utc).isoformat(),
+        captured_at = datetime(2026, 11, 1, 12, tzinfo=timezone.utc) + timedelta(seconds=len(self.calls))
+        return {"snapshot_id": UUID(int=len(self.calls)).hex, "captured_at": captured_at.isoformat(),
                 "question": question, "product_id": product,
                 "sources": [{"table": "product_metrics", "units": "ILS, count, rating 1-5",
                              "time_range": "test fixture snapshot"}], "rows": rows}
