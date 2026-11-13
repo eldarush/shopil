@@ -1,0 +1,6565 @@
+{
+  "checks": {
+    "mb(5,0.2s) on orders300 released mostly by size": true,
+    "mb(50,0.01s) used the timer (max_wait) at least once on every fixture": true,
+    "orders300 / live: canonical_results == reference": true,
+    "orders300 / live: produced == consumed == 317, batch sizes sum to consumed": true,
+    "orders300 / mb(1,0.2s): canonical_results == reference": true,
+    "orders300 / mb(1,0.2s): produced == consumed == 317, batch sizes sum to consumed": true,
+    "orders300 / mb(5,0.2s): canonical_results == reference": true,
+    "orders300 / mb(5,0.2s): produced == consumed == 317, batch sizes sum to consumed": true,
+    "orders300 / mb(50,0.01s): canonical_results == reference": true,
+    "orders300 / mb(50,0.01s): produced == consumed == 317, batch sizes sum to consumed": true,
+    "reviews / live: canonical_results == reference": true,
+    "reviews / live: produced == consumed == 6, batch sizes sum to consumed": true,
+    "reviews / mb(1,0.2s): canonical_results == reference": true,
+    "reviews / mb(1,0.2s): produced == consumed == 6, batch sizes sum to consumed": true,
+    "reviews / mb(5,0.2s): canonical_results == reference": true,
+    "reviews / mb(5,0.2s): produced == consumed == 6, batch sizes sum to consumed": true,
+    "reviews / mb(50,0.01s): canonical_results == reference": true,
+    "reviews / mb(50,0.01s): produced == consumed == 6, batch sizes sum to consumed": true,
+    "teaching / live: canonical_results == reference": true,
+    "teaching / live: produced == consumed == 17, batch sizes sum to consumed": true,
+    "teaching / mb(1,0.2s): canonical_results == reference": true,
+    "teaching / mb(1,0.2s): produced == consumed == 17, batch sizes sum to consumed": true,
+    "teaching / mb(5,0.2s): canonical_results == reference": true,
+    "teaching / mb(5,0.2s): produced == consumed == 17, batch sizes sum to consumed": true,
+    "teaching / mb(50,0.01s): canonical_results == reference": true,
+    "teaching / mb(50,0.01s): produced == consumed == 17, batch sizes sum to consumed": true
+  },
+  "runs": {
+    "orders300": {
+      "live": {
+        "batch_details": null,
+        "batch_sizes": null,
+        "canonical_equal": true,
+        "consumed": 317,
+        "flush_counts": null,
+        "produced": 317
+      },
+      "mb(1,0.2s)": {
+        "batch_details": [
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 0,
+            "flush_reason": "max_size",
+            "index": 1,
+            "last_offset": 0,
+            "processing_s": 0.001098,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 1,
+            "flush_reason": "max_size",
+            "index": 2,
+            "last_offset": 1,
+            "processing_s": 0.000862,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 2,
+            "flush_reason": "max_size",
+            "index": 3,
+            "last_offset": 2,
+            "processing_s": 0.000866,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 3,
+            "flush_reason": "max_size",
+            "index": 4,
+            "last_offset": 3,
+            "processing_s": 0.000791,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 4,
+            "flush_reason": "max_size",
+            "index": 5,
+            "last_offset": 4,
+            "processing_s": 0.000906,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 5,
+            "flush_reason": "max_size",
+            "index": 6,
+            "last_offset": 5,
+            "processing_s": 0.000775,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 6,
+            "flush_reason": "max_size",
+            "index": 7,
+            "last_offset": 6,
+            "processing_s": 0.001295,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 7,
+            "flush_reason": "max_size",
+            "index": 8,
+            "last_offset": 7,
+            "processing_s": 0.000942,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 8,
+            "flush_reason": "max_size",
+            "index": 9,
+            "last_offset": 8,
+            "processing_s": 0.000802,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 9,
+            "flush_reason": "max_size",
+            "index": 10,
+            "last_offset": 9,
+            "processing_s": 0.000763,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 10,
+            "flush_reason": "max_size",
+            "index": 11,
+            "last_offset": 10,
+            "processing_s": 0.000832,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 11,
+            "flush_reason": "max_size",
+            "index": 12,
+            "last_offset": 11,
+            "processing_s": 0.000747,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 12,
+            "flush_reason": "max_size",
+            "index": 13,
+            "last_offset": 12,
+            "processing_s": 0.000861,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 13,
+            "flush_reason": "max_size",
+            "index": 14,
+            "last_offset": 13,
+            "processing_s": 0.000909,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 14,
+            "flush_reason": "max_size",
+            "index": 15,
+            "last_offset": 14,
+            "processing_s": 0.000775,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 15,
+            "flush_reason": "max_size",
+            "index": 16,
+            "last_offset": 15,
+            "processing_s": 0.000758,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 16,
+            "flush_reason": "max_size",
+            "index": 17,
+            "last_offset": 16,
+            "processing_s": 0.001106,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 17,
+            "flush_reason": "max_size",
+            "index": 18,
+            "last_offset": 17,
+            "processing_s": 0.000997,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 18,
+            "flush_reason": "max_size",
+            "index": 19,
+            "last_offset": 18,
+            "processing_s": 0.000879,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 19,
+            "flush_reason": "max_size",
+            "index": 20,
+            "last_offset": 19,
+            "processing_s": 0.000895,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 20,
+            "flush_reason": "max_size",
+            "index": 21,
+            "last_offset": 20,
+            "processing_s": 0.000851,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 21,
+            "flush_reason": "max_size",
+            "index": 22,
+            "last_offset": 21,
+            "processing_s": 0.000775,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 22,
+            "flush_reason": "max_size",
+            "index": 23,
+            "last_offset": 22,
+            "processing_s": 0.000817,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 23,
+            "flush_reason": "max_size",
+            "index": 24,
+            "last_offset": 23,
+            "processing_s": 0.000978,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 24,
+            "flush_reason": "max_size",
+            "index": 25,
+            "last_offset": 24,
+            "processing_s": 0.000895,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 25,
+            "flush_reason": "max_size",
+            "index": 26,
+            "last_offset": 25,
+            "processing_s": 0.001146,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 26,
+            "flush_reason": "max_size",
+            "index": 27,
+            "last_offset": 26,
+            "processing_s": 0.000851,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 27,
+            "flush_reason": "max_size",
+            "index": 28,
+            "last_offset": 27,
+            "processing_s": 0.001063,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 28,
+            "flush_reason": "max_size",
+            "index": 29,
+            "last_offset": 28,
+            "processing_s": 0.001053,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 29,
+            "flush_reason": "max_size",
+            "index": 30,
+            "last_offset": 29,
+            "processing_s": 0.000891,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 30,
+            "flush_reason": "max_size",
+            "index": 31,
+            "last_offset": 30,
+            "processing_s": 0.000943,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 31,
+            "flush_reason": "max_size",
+            "index": 32,
+            "last_offset": 31,
+            "processing_s": 0.001012,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 32,
+            "flush_reason": "max_size",
+            "index": 33,
+            "last_offset": 32,
+            "processing_s": 0.001018,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 33,
+            "flush_reason": "max_size",
+            "index": 34,
+            "last_offset": 33,
+            "processing_s": 0.000879,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 34,
+            "flush_reason": "max_size",
+            "index": 35,
+            "last_offset": 34,
+            "processing_s": 0.000993,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 35,
+            "flush_reason": "max_size",
+            "index": 36,
+            "last_offset": 35,
+            "processing_s": 0.00085,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 36,
+            "flush_reason": "max_size",
+            "index": 37,
+            "last_offset": 36,
+            "processing_s": 0.000862,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 37,
+            "flush_reason": "max_size",
+            "index": 38,
+            "last_offset": 37,
+            "processing_s": 0.000787,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 38,
+            "flush_reason": "max_size",
+            "index": 39,
+            "last_offset": 38,
+            "processing_s": 0.000714,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 39,
+            "flush_reason": "max_size",
+            "index": 40,
+            "last_offset": 39,
+            "processing_s": 0.00066,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 40,
+            "flush_reason": "max_size",
+            "index": 41,
+            "last_offset": 40,
+            "processing_s": 0.000778,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 41,
+            "flush_reason": "max_size",
+            "index": 42,
+            "last_offset": 41,
+            "processing_s": 0.001052,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 42,
+            "flush_reason": "max_size",
+            "index": 43,
+            "last_offset": 42,
+            "processing_s": 0.000997,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 43,
+            "flush_reason": "max_size",
+            "index": 44,
+            "last_offset": 43,
+            "processing_s": 0.001058,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 44,
+            "flush_reason": "max_size",
+            "index": 45,
+            "last_offset": 44,
+            "processing_s": 0.000728,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 45,
+            "flush_reason": "max_size",
+            "index": 46,
+            "last_offset": 45,
+            "processing_s": 0.000758,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 46,
+            "flush_reason": "max_size",
+            "index": 47,
+            "last_offset": 46,
+            "processing_s": 0.000638,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 47,
+            "flush_reason": "max_size",
+            "index": 48,
+            "last_offset": 47,
+            "processing_s": 0.000956,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 48,
+            "flush_reason": "max_size",
+            "index": 49,
+            "last_offset": 48,
+            "processing_s": 0.0009,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 49,
+            "flush_reason": "max_size",
+            "index": 50,
+            "last_offset": 49,
+            "processing_s": 0.001005,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 50,
+            "flush_reason": "max_size",
+            "index": 51,
+            "last_offset": 50,
+            "processing_s": 0.001168,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 51,
+            "flush_reason": "max_size",
+            "index": 52,
+            "last_offset": 51,
+            "processing_s": 0.001059,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 52,
+            "flush_reason": "max_size",
+            "index": 53,
+            "last_offset": 52,
+            "processing_s": 0.000754,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 53,
+            "flush_reason": "max_size",
+            "index": 54,
+            "last_offset": 53,
+            "processing_s": 0.000811,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 54,
+            "flush_reason": "max_size",
+            "index": 55,
+            "last_offset": 54,
+            "processing_s": 0.000789,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 55,
+            "flush_reason": "max_size",
+            "index": 56,
+            "last_offset": 55,
+            "processing_s": 0.000551,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 56,
+            "flush_reason": "max_size",
+            "index": 57,
+            "last_offset": 56,
+            "processing_s": 0.000879,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 57,
+            "flush_reason": "max_size",
+            "index": 58,
+            "last_offset": 57,
+            "processing_s": 0.000649,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 58,
+            "flush_reason": "max_size",
+            "index": 59,
+            "last_offset": 58,
+            "processing_s": 0.000704,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 59,
+            "flush_reason": "max_size",
+            "index": 60,
+            "last_offset": 59,
+            "processing_s": 0.000628,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 60,
+            "flush_reason": "max_size",
+            "index": 61,
+            "last_offset": 60,
+            "processing_s": 0.000676,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 61,
+            "flush_reason": "max_size",
+            "index": 62,
+            "last_offset": 61,
+            "processing_s": 0.000696,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 62,
+            "flush_reason": "max_size",
+            "index": 63,
+            "last_offset": 62,
+            "processing_s": 0.000735,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 63,
+            "flush_reason": "max_size",
+            "index": 64,
+            "last_offset": 63,
+            "processing_s": 0.000442,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 64,
+            "flush_reason": "max_size",
+            "index": 65,
+            "last_offset": 64,
+            "processing_s": 0.000844,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 65,
+            "flush_reason": "max_size",
+            "index": 66,
+            "last_offset": 65,
+            "processing_s": 0.00071,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 66,
+            "flush_reason": "max_size",
+            "index": 67,
+            "last_offset": 66,
+            "processing_s": 0.000832,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 67,
+            "flush_reason": "max_size",
+            "index": 68,
+            "last_offset": 67,
+            "processing_s": 0.00063,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 68,
+            "flush_reason": "max_size",
+            "index": 69,
+            "last_offset": 68,
+            "processing_s": 0.001109,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 69,
+            "flush_reason": "max_size",
+            "index": 70,
+            "last_offset": 69,
+            "processing_s": 0.000885,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 70,
+            "flush_reason": "max_size",
+            "index": 71,
+            "last_offset": 70,
+            "processing_s": 0.001007,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 71,
+            "flush_reason": "max_size",
+            "index": 72,
+            "last_offset": 71,
+            "processing_s": 0.000822,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 72,
+            "flush_reason": "max_size",
+            "index": 73,
+            "last_offset": 72,
+            "processing_s": 0.000931,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 73,
+            "flush_reason": "max_size",
+            "index": 74,
+            "last_offset": 73,
+            "processing_s": 0.000802,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 74,
+            "flush_reason": "max_size",
+            "index": 75,
+            "last_offset": 74,
+            "processing_s": 0.000917,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 75,
+            "flush_reason": "max_size",
+            "index": 76,
+            "last_offset": 75,
+            "processing_s": 0.000734,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 76,
+            "flush_reason": "max_size",
+            "index": 77,
+            "last_offset": 76,
+            "processing_s": 0.000733,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 77,
+            "flush_reason": "max_size",
+            "index": 78,
+            "last_offset": 77,
+            "processing_s": 0.000745,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 78,
+            "flush_reason": "max_size",
+            "index": 79,
+            "last_offset": 78,
+            "processing_s": 0.000683,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 79,
+            "flush_reason": "max_size",
+            "index": 80,
+            "last_offset": 79,
+            "processing_s": 0.000618,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 80,
+            "flush_reason": "max_size",
+            "index": 81,
+            "last_offset": 80,
+            "processing_s": 0.0007,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 81,
+            "flush_reason": "max_size",
+            "index": 82,
+            "last_offset": 81,
+            "processing_s": 0.000638,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 82,
+            "flush_reason": "max_size",
+            "index": 83,
+            "last_offset": 82,
+            "processing_s": 0.000849,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 83,
+            "flush_reason": "max_size",
+            "index": 84,
+            "last_offset": 83,
+            "processing_s": 0.000763,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 84,
+            "flush_reason": "max_size",
+            "index": 85,
+            "last_offset": 84,
+            "processing_s": 0.000735,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 85,
+            "flush_reason": "max_size",
+            "index": 86,
+            "last_offset": 85,
+            "processing_s": 0.000636,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 86,
+            "flush_reason": "max_size",
+            "index": 87,
+            "last_offset": 86,
+            "processing_s": 0.000589,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 87,
+            "flush_reason": "max_size",
+            "index": 88,
+            "last_offset": 87,
+            "processing_s": 0.000668,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 88,
+            "flush_reason": "max_size",
+            "index": 89,
+            "last_offset": 88,
+            "processing_s": 0.000704,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 89,
+            "flush_reason": "max_size",
+            "index": 90,
+            "last_offset": 89,
+            "processing_s": 0.000838,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 90,
+            "flush_reason": "max_size",
+            "index": 91,
+            "last_offset": 90,
+            "processing_s": 0.000694,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 91,
+            "flush_reason": "max_size",
+            "index": 92,
+            "last_offset": 91,
+            "processing_s": 0.000789,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 92,
+            "flush_reason": "max_size",
+            "index": 93,
+            "last_offset": 92,
+            "processing_s": 0.000849,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 93,
+            "flush_reason": "max_size",
+            "index": 94,
+            "last_offset": 93,
+            "processing_s": 0.000724,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 94,
+            "flush_reason": "max_size",
+            "index": 95,
+            "last_offset": 94,
+            "processing_s": 0.000989,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 95,
+            "flush_reason": "max_size",
+            "index": 96,
+            "last_offset": 95,
+            "processing_s": 0.00078,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 96,
+            "flush_reason": "max_size",
+            "index": 97,
+            "last_offset": 96,
+            "processing_s": 0.000686,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 97,
+            "flush_reason": "max_size",
+            "index": 98,
+            "last_offset": 97,
+            "processing_s": 0.000775,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 98,
+            "flush_reason": "max_size",
+            "index": 99,
+            "last_offset": 98,
+            "processing_s": 0.000752,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 99,
+            "flush_reason": "max_size",
+            "index": 100,
+            "last_offset": 99,
+            "processing_s": 0.000858,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 100,
+            "flush_reason": "max_size",
+            "index": 101,
+            "last_offset": 100,
+            "processing_s": 0.00088,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 101,
+            "flush_reason": "max_size",
+            "index": 102,
+            "last_offset": 101,
+            "processing_s": 0.000759,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 102,
+            "flush_reason": "max_size",
+            "index": 103,
+            "last_offset": 102,
+            "processing_s": 0.000748,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 103,
+            "flush_reason": "max_size",
+            "index": 104,
+            "last_offset": 103,
+            "processing_s": 0.000766,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 104,
+            "flush_reason": "max_size",
+            "index": 105,
+            "last_offset": 104,
+            "processing_s": 0.000745,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 105,
+            "flush_reason": "max_size",
+            "index": 106,
+            "last_offset": 105,
+            "processing_s": 0.000808,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 106,
+            "flush_reason": "max_size",
+            "index": 107,
+            "last_offset": 106,
+            "processing_s": 0.00091,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 107,
+            "flush_reason": "max_size",
+            "index": 108,
+            "last_offset": 107,
+            "processing_s": 0.000828,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 108,
+            "flush_reason": "max_size",
+            "index": 109,
+            "last_offset": 108,
+            "processing_s": 0.000721,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 109,
+            "flush_reason": "max_size",
+            "index": 110,
+            "last_offset": 109,
+            "processing_s": 0.000656,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 110,
+            "flush_reason": "max_size",
+            "index": 111,
+            "last_offset": 110,
+            "processing_s": 0.00067,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 111,
+            "flush_reason": "max_size",
+            "index": 112,
+            "last_offset": 111,
+            "processing_s": 0.000778,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 112,
+            "flush_reason": "max_size",
+            "index": 113,
+            "last_offset": 112,
+            "processing_s": 0.00066,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 113,
+            "flush_reason": "max_size",
+            "index": 114,
+            "last_offset": 113,
+            "processing_s": 0.000794,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 114,
+            "flush_reason": "max_size",
+            "index": 115,
+            "last_offset": 114,
+            "processing_s": 0.000828,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 115,
+            "flush_reason": "max_size",
+            "index": 116,
+            "last_offset": 115,
+            "processing_s": 0.000595,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 116,
+            "flush_reason": "max_size",
+            "index": 117,
+            "last_offset": 116,
+            "processing_s": 0.001087,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 117,
+            "flush_reason": "max_size",
+            "index": 118,
+            "last_offset": 117,
+            "processing_s": 0.001114,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 118,
+            "flush_reason": "max_size",
+            "index": 119,
+            "last_offset": 118,
+            "processing_s": 0.000878,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 119,
+            "flush_reason": "max_size",
+            "index": 120,
+            "last_offset": 119,
+            "processing_s": 0.000601,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 120,
+            "flush_reason": "max_size",
+            "index": 121,
+            "last_offset": 120,
+            "processing_s": 0.000889,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 121,
+            "flush_reason": "max_size",
+            "index": 122,
+            "last_offset": 121,
+            "processing_s": 0.000775,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 122,
+            "flush_reason": "max_size",
+            "index": 123,
+            "last_offset": 122,
+            "processing_s": 0.000775,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 123,
+            "flush_reason": "max_size",
+            "index": 124,
+            "last_offset": 123,
+            "processing_s": 0.000571,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 124,
+            "flush_reason": "max_size",
+            "index": 125,
+            "last_offset": 124,
+            "processing_s": 0.0008,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 125,
+            "flush_reason": "max_size",
+            "index": 126,
+            "last_offset": 125,
+            "processing_s": 0.000882,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 126,
+            "flush_reason": "max_size",
+            "index": 127,
+            "last_offset": 126,
+            "processing_s": 0.000777,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 127,
+            "flush_reason": "max_size",
+            "index": 128,
+            "last_offset": 127,
+            "processing_s": 0.000607,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 128,
+            "flush_reason": "max_size",
+            "index": 129,
+            "last_offset": 128,
+            "processing_s": 0.000746,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 129,
+            "flush_reason": "max_size",
+            "index": 130,
+            "last_offset": 129,
+            "processing_s": 0.000821,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 130,
+            "flush_reason": "max_size",
+            "index": 131,
+            "last_offset": 130,
+            "processing_s": 0.000999,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 131,
+            "flush_reason": "max_size",
+            "index": 132,
+            "last_offset": 131,
+            "processing_s": 0.000842,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 132,
+            "flush_reason": "max_size",
+            "index": 133,
+            "last_offset": 132,
+            "processing_s": 0.000708,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 133,
+            "flush_reason": "max_size",
+            "index": 134,
+            "last_offset": 133,
+            "processing_s": 0.000557,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 134,
+            "flush_reason": "max_size",
+            "index": 135,
+            "last_offset": 134,
+            "processing_s": 0.000619,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 135,
+            "flush_reason": "max_size",
+            "index": 136,
+            "last_offset": 135,
+            "processing_s": 0.000791,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 136,
+            "flush_reason": "max_size",
+            "index": 137,
+            "last_offset": 136,
+            "processing_s": 0.001213,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 137,
+            "flush_reason": "max_size",
+            "index": 138,
+            "last_offset": 137,
+            "processing_s": 0.000928,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 138,
+            "flush_reason": "max_size",
+            "index": 139,
+            "last_offset": 138,
+            "processing_s": 0.000832,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 139,
+            "flush_reason": "max_size",
+            "index": 140,
+            "last_offset": 139,
+            "processing_s": 0.000734,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 140,
+            "flush_reason": "max_size",
+            "index": 141,
+            "last_offset": 140,
+            "processing_s": 0.000862,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 141,
+            "flush_reason": "max_size",
+            "index": 142,
+            "last_offset": 141,
+            "processing_s": 0.000997,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 142,
+            "flush_reason": "max_size",
+            "index": 143,
+            "last_offset": 142,
+            "processing_s": 0.000765,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 143,
+            "flush_reason": "max_size",
+            "index": 144,
+            "last_offset": 143,
+            "processing_s": 0.000791,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 144,
+            "flush_reason": "max_size",
+            "index": 145,
+            "last_offset": 144,
+            "processing_s": 0.000622,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 145,
+            "flush_reason": "max_size",
+            "index": 146,
+            "last_offset": 145,
+            "processing_s": 0.000737,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 146,
+            "flush_reason": "max_size",
+            "index": 147,
+            "last_offset": 146,
+            "processing_s": 0.00103,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 147,
+            "flush_reason": "max_size",
+            "index": 148,
+            "last_offset": 147,
+            "processing_s": 0.000723,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 148,
+            "flush_reason": "max_size",
+            "index": 149,
+            "last_offset": 148,
+            "processing_s": 0.000819,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 149,
+            "flush_reason": "max_size",
+            "index": 150,
+            "last_offset": 149,
+            "processing_s": 0.000821,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 150,
+            "flush_reason": "max_size",
+            "index": 151,
+            "last_offset": 150,
+            "processing_s": 0.000817,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 151,
+            "flush_reason": "max_size",
+            "index": 152,
+            "last_offset": 151,
+            "processing_s": 0.00087,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 152,
+            "flush_reason": "max_size",
+            "index": 153,
+            "last_offset": 152,
+            "processing_s": 0.000735,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 153,
+            "flush_reason": "max_size",
+            "index": 154,
+            "last_offset": 153,
+            "processing_s": 0.000785,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 3e-06,
+            "first_offset": 154,
+            "flush_reason": "max_size",
+            "index": 155,
+            "last_offset": 154,
+            "processing_s": 0.000779,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 155,
+            "flush_reason": "max_size",
+            "index": 156,
+            "last_offset": 155,
+            "processing_s": 0.000861,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 156,
+            "flush_reason": "max_size",
+            "index": 157,
+            "last_offset": 156,
+            "processing_s": 0.001578,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 157,
+            "flush_reason": "max_size",
+            "index": 158,
+            "last_offset": 157,
+            "processing_s": 0.000987,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 158,
+            "flush_reason": "max_size",
+            "index": 159,
+            "last_offset": 158,
+            "processing_s": 0.000788,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 159,
+            "flush_reason": "max_size",
+            "index": 160,
+            "last_offset": 159,
+            "processing_s": 0.000871,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 160,
+            "flush_reason": "max_size",
+            "index": 161,
+            "last_offset": 160,
+            "processing_s": 0.000886,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 161,
+            "flush_reason": "max_size",
+            "index": 162,
+            "last_offset": 161,
+            "processing_s": 0.000607,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 162,
+            "flush_reason": "max_size",
+            "index": 163,
+            "last_offset": 162,
+            "processing_s": 0.000881,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 163,
+            "flush_reason": "max_size",
+            "index": 164,
+            "last_offset": 163,
+            "processing_s": 0.001162,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 164,
+            "flush_reason": "max_size",
+            "index": 165,
+            "last_offset": 164,
+            "processing_s": 0.000723,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 165,
+            "flush_reason": "max_size",
+            "index": 166,
+            "last_offset": 165,
+            "processing_s": 0.000752,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 166,
+            "flush_reason": "max_size",
+            "index": 167,
+            "last_offset": 166,
+            "processing_s": 0.000528,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 167,
+            "flush_reason": "max_size",
+            "index": 168,
+            "last_offset": 167,
+            "processing_s": 0.000879,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 168,
+            "flush_reason": "max_size",
+            "index": 169,
+            "last_offset": 168,
+            "processing_s": 0.000592,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 169,
+            "flush_reason": "max_size",
+            "index": 170,
+            "last_offset": 169,
+            "processing_s": 0.000861,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 170,
+            "flush_reason": "max_size",
+            "index": 171,
+            "last_offset": 170,
+            "processing_s": 0.000733,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 171,
+            "flush_reason": "max_size",
+            "index": 172,
+            "last_offset": 171,
+            "processing_s": 0.000814,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 172,
+            "flush_reason": "max_size",
+            "index": 173,
+            "last_offset": 172,
+            "processing_s": 0.000761,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 173,
+            "flush_reason": "max_size",
+            "index": 174,
+            "last_offset": 173,
+            "processing_s": 0.000764,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 174,
+            "flush_reason": "max_size",
+            "index": 175,
+            "last_offset": 174,
+            "processing_s": 0.000704,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 175,
+            "flush_reason": "max_size",
+            "index": 176,
+            "last_offset": 175,
+            "processing_s": 0.001067,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 176,
+            "flush_reason": "max_size",
+            "index": 177,
+            "last_offset": 176,
+            "processing_s": 0.000788,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 177,
+            "flush_reason": "max_size",
+            "index": 178,
+            "last_offset": 177,
+            "processing_s": 0.000878,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 178,
+            "flush_reason": "max_size",
+            "index": 179,
+            "last_offset": 178,
+            "processing_s": 0.000714,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 179,
+            "flush_reason": "max_size",
+            "index": 180,
+            "last_offset": 179,
+            "processing_s": 0.000836,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 180,
+            "flush_reason": "max_size",
+            "index": 181,
+            "last_offset": 180,
+            "processing_s": 0.000893,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 181,
+            "flush_reason": "max_size",
+            "index": 182,
+            "last_offset": 181,
+            "processing_s": 0.000914,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 182,
+            "flush_reason": "max_size",
+            "index": 183,
+            "last_offset": 182,
+            "processing_s": 0.000917,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 183,
+            "flush_reason": "max_size",
+            "index": 184,
+            "last_offset": 183,
+            "processing_s": 0.000716,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 184,
+            "flush_reason": "max_size",
+            "index": 185,
+            "last_offset": 184,
+            "processing_s": 0.000789,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 185,
+            "flush_reason": "max_size",
+            "index": 186,
+            "last_offset": 185,
+            "processing_s": 0.000997,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 186,
+            "flush_reason": "max_size",
+            "index": 187,
+            "last_offset": 186,
+            "processing_s": 0.000922,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 187,
+            "flush_reason": "max_size",
+            "index": 188,
+            "last_offset": 187,
+            "processing_s": 0.001,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 188,
+            "flush_reason": "max_size",
+            "index": 189,
+            "last_offset": 188,
+            "processing_s": 0.000963,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 189,
+            "flush_reason": "max_size",
+            "index": 190,
+            "last_offset": 189,
+            "processing_s": 0.000806,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 190,
+            "flush_reason": "max_size",
+            "index": 191,
+            "last_offset": 190,
+            "processing_s": 0.000707,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 191,
+            "flush_reason": "max_size",
+            "index": 192,
+            "last_offset": 191,
+            "processing_s": 0.000878,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 192,
+            "flush_reason": "max_size",
+            "index": 193,
+            "last_offset": 192,
+            "processing_s": 0.000824,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 193,
+            "flush_reason": "max_size",
+            "index": 194,
+            "last_offset": 193,
+            "processing_s": 0.000783,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 194,
+            "flush_reason": "max_size",
+            "index": 195,
+            "last_offset": 194,
+            "processing_s": 0.003208,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 195,
+            "flush_reason": "max_size",
+            "index": 196,
+            "last_offset": 195,
+            "processing_s": 0.001518,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 196,
+            "flush_reason": "max_size",
+            "index": 197,
+            "last_offset": 196,
+            "processing_s": 0.00079,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 197,
+            "flush_reason": "max_size",
+            "index": 198,
+            "last_offset": 197,
+            "processing_s": 0.000753,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 198,
+            "flush_reason": "max_size",
+            "index": 199,
+            "last_offset": 198,
+            "processing_s": 0.000684,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 199,
+            "flush_reason": "max_size",
+            "index": 200,
+            "last_offset": 199,
+            "processing_s": 0.000907,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 200,
+            "flush_reason": "max_size",
+            "index": 201,
+            "last_offset": 200,
+            "processing_s": 0.000808,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 201,
+            "flush_reason": "max_size",
+            "index": 202,
+            "last_offset": 201,
+            "processing_s": 0.000846,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 202,
+            "flush_reason": "max_size",
+            "index": 203,
+            "last_offset": 202,
+            "processing_s": 0.000681,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 203,
+            "flush_reason": "max_size",
+            "index": 204,
+            "last_offset": 203,
+            "processing_s": 0.000778,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 204,
+            "flush_reason": "max_size",
+            "index": 205,
+            "last_offset": 204,
+            "processing_s": 0.00069,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 205,
+            "flush_reason": "max_size",
+            "index": 206,
+            "last_offset": 205,
+            "processing_s": 0.000728,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 206,
+            "flush_reason": "max_size",
+            "index": 207,
+            "last_offset": 206,
+            "processing_s": 0.000741,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 207,
+            "flush_reason": "max_size",
+            "index": 208,
+            "last_offset": 207,
+            "processing_s": 0.000821,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 208,
+            "flush_reason": "max_size",
+            "index": 209,
+            "last_offset": 208,
+            "processing_s": 0.000684,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 209,
+            "flush_reason": "max_size",
+            "index": 210,
+            "last_offset": 209,
+            "processing_s": 0.000885,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 210,
+            "flush_reason": "max_size",
+            "index": 211,
+            "last_offset": 210,
+            "processing_s": 0.000723,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 211,
+            "flush_reason": "max_size",
+            "index": 212,
+            "last_offset": 211,
+            "processing_s": 0.000746,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 212,
+            "flush_reason": "max_size",
+            "index": 213,
+            "last_offset": 212,
+            "processing_s": 0.001142,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 213,
+            "flush_reason": "max_size",
+            "index": 214,
+            "last_offset": 213,
+            "processing_s": 0.000956,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 214,
+            "flush_reason": "max_size",
+            "index": 215,
+            "last_offset": 214,
+            "processing_s": 0.000786,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 215,
+            "flush_reason": "max_size",
+            "index": 216,
+            "last_offset": 215,
+            "processing_s": 0.000815,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 216,
+            "flush_reason": "max_size",
+            "index": 217,
+            "last_offset": 216,
+            "processing_s": 0.000766,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 217,
+            "flush_reason": "max_size",
+            "index": 218,
+            "last_offset": 217,
+            "processing_s": 0.000737,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 218,
+            "flush_reason": "max_size",
+            "index": 219,
+            "last_offset": 218,
+            "processing_s": 0.000844,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 219,
+            "flush_reason": "max_size",
+            "index": 220,
+            "last_offset": 219,
+            "processing_s": 0.000841,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 220,
+            "flush_reason": "max_size",
+            "index": 221,
+            "last_offset": 220,
+            "processing_s": 0.000775,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 221,
+            "flush_reason": "max_size",
+            "index": 222,
+            "last_offset": 221,
+            "processing_s": 0.000779,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 222,
+            "flush_reason": "max_size",
+            "index": 223,
+            "last_offset": 222,
+            "processing_s": 0.000602,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 223,
+            "flush_reason": "max_size",
+            "index": 224,
+            "last_offset": 223,
+            "processing_s": 0.000757,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 224,
+            "flush_reason": "max_size",
+            "index": 225,
+            "last_offset": 224,
+            "processing_s": 0.000715,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 225,
+            "flush_reason": "max_size",
+            "index": 226,
+            "last_offset": 225,
+            "processing_s": 0.000742,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 226,
+            "flush_reason": "max_size",
+            "index": 227,
+            "last_offset": 226,
+            "processing_s": 0.000706,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 227,
+            "flush_reason": "max_size",
+            "index": 228,
+            "last_offset": 227,
+            "processing_s": 0.00078,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 228,
+            "flush_reason": "max_size",
+            "index": 229,
+            "last_offset": 228,
+            "processing_s": 0.000868,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 229,
+            "flush_reason": "max_size",
+            "index": 230,
+            "last_offset": 229,
+            "processing_s": 0.000794,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 230,
+            "flush_reason": "max_size",
+            "index": 231,
+            "last_offset": 230,
+            "processing_s": 0.00074,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 231,
+            "flush_reason": "max_size",
+            "index": 232,
+            "last_offset": 231,
+            "processing_s": 0.000812,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 232,
+            "flush_reason": "max_size",
+            "index": 233,
+            "last_offset": 232,
+            "processing_s": 0.001407,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 233,
+            "flush_reason": "max_size",
+            "index": 234,
+            "last_offset": 233,
+            "processing_s": 0.000975,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 234,
+            "flush_reason": "max_size",
+            "index": 235,
+            "last_offset": 234,
+            "processing_s": 0.00086,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 235,
+            "flush_reason": "max_size",
+            "index": 236,
+            "last_offset": 235,
+            "processing_s": 0.000777,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 236,
+            "flush_reason": "max_size",
+            "index": 237,
+            "last_offset": 236,
+            "processing_s": 0.000725,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 237,
+            "flush_reason": "max_size",
+            "index": 238,
+            "last_offset": 237,
+            "processing_s": 0.000814,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 238,
+            "flush_reason": "max_size",
+            "index": 239,
+            "last_offset": 238,
+            "processing_s": 0.000799,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 239,
+            "flush_reason": "max_size",
+            "index": 240,
+            "last_offset": 239,
+            "processing_s": 0.000854,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 240,
+            "flush_reason": "max_size",
+            "index": 241,
+            "last_offset": 240,
+            "processing_s": 0.000874,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 241,
+            "flush_reason": "max_size",
+            "index": 242,
+            "last_offset": 241,
+            "processing_s": 0.000839,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 242,
+            "flush_reason": "max_size",
+            "index": 243,
+            "last_offset": 242,
+            "processing_s": 0.000851,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 243,
+            "flush_reason": "max_size",
+            "index": 244,
+            "last_offset": 243,
+            "processing_s": 0.000861,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 244,
+            "flush_reason": "max_size",
+            "index": 245,
+            "last_offset": 244,
+            "processing_s": 0.000822,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 245,
+            "flush_reason": "max_size",
+            "index": 246,
+            "last_offset": 245,
+            "processing_s": 0.000836,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 246,
+            "flush_reason": "max_size",
+            "index": 247,
+            "last_offset": 246,
+            "processing_s": 0.000763,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 247,
+            "flush_reason": "max_size",
+            "index": 248,
+            "last_offset": 247,
+            "processing_s": 0.000718,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 248,
+            "flush_reason": "max_size",
+            "index": 249,
+            "last_offset": 248,
+            "processing_s": 0.000772,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 249,
+            "flush_reason": "max_size",
+            "index": 250,
+            "last_offset": 249,
+            "processing_s": 0.000743,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 250,
+            "flush_reason": "max_size",
+            "index": 251,
+            "last_offset": 250,
+            "processing_s": 0.000788,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 251,
+            "flush_reason": "max_size",
+            "index": 252,
+            "last_offset": 251,
+            "processing_s": 0.000857,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 252,
+            "flush_reason": "max_size",
+            "index": 253,
+            "last_offset": 252,
+            "processing_s": 0.0013,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 253,
+            "flush_reason": "max_size",
+            "index": 254,
+            "last_offset": 253,
+            "processing_s": 0.000947,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 254,
+            "flush_reason": "max_size",
+            "index": 255,
+            "last_offset": 254,
+            "processing_s": 0.000888,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 255,
+            "flush_reason": "max_size",
+            "index": 256,
+            "last_offset": 255,
+            "processing_s": 0.000976,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 256,
+            "flush_reason": "max_size",
+            "index": 257,
+            "last_offset": 256,
+            "processing_s": 0.000902,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 257,
+            "flush_reason": "max_size",
+            "index": 258,
+            "last_offset": 257,
+            "processing_s": 0.00079,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 258,
+            "flush_reason": "max_size",
+            "index": 259,
+            "last_offset": 258,
+            "processing_s": 0.00085,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 259,
+            "flush_reason": "max_size",
+            "index": 260,
+            "last_offset": 259,
+            "processing_s": 0.00068,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 260,
+            "flush_reason": "max_size",
+            "index": 261,
+            "last_offset": 260,
+            "processing_s": 0.00078,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 261,
+            "flush_reason": "max_size",
+            "index": 262,
+            "last_offset": 261,
+            "processing_s": 0.000697,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 262,
+            "flush_reason": "max_size",
+            "index": 263,
+            "last_offset": 262,
+            "processing_s": 0.000744,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 263,
+            "flush_reason": "max_size",
+            "index": 264,
+            "last_offset": 263,
+            "processing_s": 0.000745,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 264,
+            "flush_reason": "max_size",
+            "index": 265,
+            "last_offset": 264,
+            "processing_s": 0.000742,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 265,
+            "flush_reason": "max_size",
+            "index": 266,
+            "last_offset": 265,
+            "processing_s": 0.000708,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 266,
+            "flush_reason": "max_size",
+            "index": 267,
+            "last_offset": 266,
+            "processing_s": 0.000704,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 267,
+            "flush_reason": "max_size",
+            "index": 268,
+            "last_offset": 267,
+            "processing_s": 0.000511,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 268,
+            "flush_reason": "max_size",
+            "index": 269,
+            "last_offset": 268,
+            "processing_s": 0.000791,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 269,
+            "flush_reason": "max_size",
+            "index": 270,
+            "last_offset": 269,
+            "processing_s": 0.000874,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 270,
+            "flush_reason": "max_size",
+            "index": 271,
+            "last_offset": 270,
+            "processing_s": 0.000806,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 271,
+            "flush_reason": "max_size",
+            "index": 272,
+            "last_offset": 271,
+            "processing_s": 0.000896,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 272,
+            "flush_reason": "max_size",
+            "index": 273,
+            "last_offset": 272,
+            "processing_s": 0.001864,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 273,
+            "flush_reason": "max_size",
+            "index": 274,
+            "last_offset": 273,
+            "processing_s": 0.001009,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 274,
+            "flush_reason": "max_size",
+            "index": 275,
+            "last_offset": 274,
+            "processing_s": 0.000894,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 275,
+            "flush_reason": "max_size",
+            "index": 276,
+            "last_offset": 275,
+            "processing_s": 0.000761,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 276,
+            "flush_reason": "max_size",
+            "index": 277,
+            "last_offset": 276,
+            "processing_s": 0.000817,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 277,
+            "flush_reason": "max_size",
+            "index": 278,
+            "last_offset": 277,
+            "processing_s": 0.000732,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 278,
+            "flush_reason": "max_size",
+            "index": 279,
+            "last_offset": 278,
+            "processing_s": 0.000872,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 279,
+            "flush_reason": "max_size",
+            "index": 280,
+            "last_offset": 279,
+            "processing_s": 0.000857,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 280,
+            "flush_reason": "max_size",
+            "index": 281,
+            "last_offset": 280,
+            "processing_s": 0.000609,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 281,
+            "flush_reason": "max_size",
+            "index": 282,
+            "last_offset": 281,
+            "processing_s": 0.000796,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 282,
+            "flush_reason": "max_size",
+            "index": 283,
+            "last_offset": 282,
+            "processing_s": 0.000755,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 283,
+            "flush_reason": "max_size",
+            "index": 284,
+            "last_offset": 283,
+            "processing_s": 0.00074,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 284,
+            "flush_reason": "max_size",
+            "index": 285,
+            "last_offset": 284,
+            "processing_s": 0.00076,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 285,
+            "flush_reason": "max_size",
+            "index": 286,
+            "last_offset": 285,
+            "processing_s": 0.000727,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 286,
+            "flush_reason": "max_size",
+            "index": 287,
+            "last_offset": 286,
+            "processing_s": 0.000765,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 287,
+            "flush_reason": "max_size",
+            "index": 288,
+            "last_offset": 287,
+            "processing_s": 0.000905,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 288,
+            "flush_reason": "max_size",
+            "index": 289,
+            "last_offset": 288,
+            "processing_s": 0.000831,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 289,
+            "flush_reason": "max_size",
+            "index": 290,
+            "last_offset": 289,
+            "processing_s": 0.000877,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 290,
+            "flush_reason": "max_size",
+            "index": 291,
+            "last_offset": 290,
+            "processing_s": 0.001619,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 291,
+            "flush_reason": "max_size",
+            "index": 292,
+            "last_offset": 291,
+            "processing_s": 0.00079,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 292,
+            "flush_reason": "max_size",
+            "index": 293,
+            "last_offset": 292,
+            "processing_s": 0.000845,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 293,
+            "flush_reason": "max_size",
+            "index": 294,
+            "last_offset": 293,
+            "processing_s": 0.000941,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 294,
+            "flush_reason": "max_size",
+            "index": 295,
+            "last_offset": 294,
+            "processing_s": 0.00101,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 295,
+            "flush_reason": "max_size",
+            "index": 296,
+            "last_offset": 295,
+            "processing_s": 0.000966,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 296,
+            "flush_reason": "max_size",
+            "index": 297,
+            "last_offset": 296,
+            "processing_s": 0.000998,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 297,
+            "flush_reason": "max_size",
+            "index": 298,
+            "last_offset": 297,
+            "processing_s": 0.000741,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 298,
+            "flush_reason": "max_size",
+            "index": 299,
+            "last_offset": 298,
+            "processing_s": 0.000808,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 299,
+            "flush_reason": "max_size",
+            "index": 300,
+            "last_offset": 299,
+            "processing_s": 0.000781,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 300,
+            "flush_reason": "max_size",
+            "index": 301,
+            "last_offset": 300,
+            "processing_s": 0.000823,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 301,
+            "flush_reason": "max_size",
+            "index": 302,
+            "last_offset": 301,
+            "processing_s": 0.00083,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 302,
+            "flush_reason": "max_size",
+            "index": 303,
+            "last_offset": 302,
+            "processing_s": 0.000677,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 303,
+            "flush_reason": "max_size",
+            "index": 304,
+            "last_offset": 303,
+            "processing_s": 0.000774,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 304,
+            "flush_reason": "max_size",
+            "index": 305,
+            "last_offset": 304,
+            "processing_s": 0.000765,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 305,
+            "flush_reason": "max_size",
+            "index": 306,
+            "last_offset": 305,
+            "processing_s": 0.000714,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 306,
+            "flush_reason": "max_size",
+            "index": 307,
+            "last_offset": 306,
+            "processing_s": 0.000672,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 307,
+            "flush_reason": "max_size",
+            "index": 308,
+            "last_offset": 307,
+            "processing_s": 0.000791,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 308,
+            "flush_reason": "max_size",
+            "index": 309,
+            "last_offset": 308,
+            "processing_s": 0.000733,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 309,
+            "flush_reason": "max_size",
+            "index": 310,
+            "last_offset": 309,
+            "processing_s": 0.002662,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 310,
+            "flush_reason": "max_size",
+            "index": 311,
+            "last_offset": 310,
+            "processing_s": 0.000748,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 311,
+            "flush_reason": "max_size",
+            "index": 312,
+            "last_offset": 311,
+            "processing_s": 0.000627,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 312,
+            "flush_reason": "max_size",
+            "index": 313,
+            "last_offset": 312,
+            "processing_s": 0.000718,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 313,
+            "flush_reason": "max_size",
+            "index": 314,
+            "last_offset": 313,
+            "processing_s": 0.000726,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 314,
+            "flush_reason": "max_size",
+            "index": 315,
+            "last_offset": 314,
+            "processing_s": 0.000773,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 315,
+            "flush_reason": "max_size",
+            "index": 316,
+            "last_offset": 315,
+            "processing_s": 0.000622,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 316,
+            "flush_reason": "max_size",
+            "index": 317,
+            "last_offset": 316,
+            "processing_s": 0.000786,
+            "size": 1
+          }
+        ],
+        "batch_sizes": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "canonical_equal": true,
+        "consumed": 317,
+        "flush_counts": {
+          "final_drain": 0,
+          "max_size": 317,
+          "max_wait": 0
+        },
+        "produced": 317
+      },
+      "mb(5,0.2s)": {
+        "batch_details": [
+          {
+            "collection_wait_s": 3.4e-05,
+            "first_offset": 0,
+            "flush_reason": "max_size",
+            "index": 1,
+            "last_offset": 4,
+            "processing_s": 0.004315,
+            "size": 5
+          },
+          {
+            "collection_wait_s": 9.6e-05,
+            "first_offset": 5,
+            "flush_reason": "max_size",
+            "index": 2,
+            "last_offset": 9,
+            "processing_s": 0.003974,
+            "size": 5
+          },
+          {
+            "collection_wait_s": 3.5e-05,
+            "first_offset": 10,
+            "flush_reason": "max_size",
+            "index": 3,
+            "last_offset": 14,
+            "processing_s": 0.003966,
+            "size": 5
+          },
+          {
+            "collection_wait_s": 9.7e-05,
+            "first_offset": 15,
+            "flush_reason": "max_size",
+            "index": 4,
+            "last_offset": 19,
+            "processing_s": 0.005704,
+            "size": 5
+          },
+          {
+            "collection_wait_s": 0.000103,
+            "first_offset": 20,
+            "flush_reason": "max_size",
+            "index": 5,
+            "last_offset": 24,
+            "processing_s": 0.00445,
+            "size": 5
+          },
+          {
+            "collection_wait_s": 4.5e-05,
+            "first_offset": 25,
+            "flush_reason": "max_size",
+            "index": 6,
+            "last_offset": 29,
+            "processing_s": 0.004015,
+            "size": 5
+          },
+          {
+            "collection_wait_s": 0.000109,
+            "first_offset": 30,
+            "flush_reason": "max_size",
+            "index": 7,
+            "last_offset": 34,
+            "processing_s": 0.003986,
+            "size": 5
+          },
+          {
+            "collection_wait_s": 4.5e-05,
+            "first_offset": 35,
+            "flush_reason": "max_size",
+            "index": 8,
+            "last_offset": 39,
+            "processing_s": 0.004527,
+            "size": 5
+          },
+          {
+            "collection_wait_s": 3.1e-05,
+            "first_offset": 40,
+            "flush_reason": "max_size",
+            "index": 9,
+            "last_offset": 44,
+            "processing_s": 0.004471,
+            "size": 5
+          },
+          {
+            "collection_wait_s": 0.000102,
+            "first_offset": 45,
+            "flush_reason": "max_size",
+            "index": 10,
+            "last_offset": 49,
+            "processing_s": 0.003958,
+            "size": 5
+          },
+          {
+            "collection_wait_s": 3.6e-05,
+            "first_offset": 50,
+            "flush_reason": "max_size",
+            "index": 11,
+            "last_offset": 54,
+            "processing_s": 0.005004,
+            "size": 5
+          },
+          {
+            "collection_wait_s": 0.0001,
+            "first_offset": 55,
+            "flush_reason": "max_size",
+            "index": 12,
+            "last_offset": 59,
+            "processing_s": 0.003954,
+            "size": 5
+          },
+          {
+            "collection_wait_s": 9.2e-05,
+            "first_offset": 60,
+            "flush_reason": "max_size",
+            "index": 13,
+            "last_offset": 64,
+            "processing_s": 0.003674,
+            "size": 5
+          },
+          {
+            "collection_wait_s": 3.5e-05,
+            "first_offset": 65,
+            "flush_reason": "max_size",
+            "index": 14,
+            "last_offset": 69,
+            "processing_s": 0.003672,
+            "size": 5
+          },
+          {
+            "collection_wait_s": 9.2e-05,
+            "first_offset": 70,
+            "flush_reason": "max_size",
+            "index": 15,
+            "last_offset": 74,
+            "processing_s": 0.005032,
+            "size": 5
+          },
+          {
+            "collection_wait_s": 3.8e-05,
+            "first_offset": 75,
+            "flush_reason": "max_size",
+            "index": 16,
+            "last_offset": 79,
+            "processing_s": 0.004215,
+            "size": 5
+          },
+          {
+            "collection_wait_s": 2.8e-05,
+            "first_offset": 80,
+            "flush_reason": "max_size",
+            "index": 17,
+            "last_offset": 84,
+            "processing_s": 0.004203,
+            "size": 5
+          },
+          {
+            "collection_wait_s": 0.000116,
+            "first_offset": 85,
+            "flush_reason": "max_size",
+            "index": 18,
+            "last_offset": 89,
+            "processing_s": 0.003927,
+            "size": 5
+          },
+          {
+            "collection_wait_s": 3.1e-05,
+            "first_offset": 90,
+            "flush_reason": "max_size",
+            "index": 19,
+            "last_offset": 94,
+            "processing_s": 0.004674,
+            "size": 5
+          },
+          {
+            "collection_wait_s": 0.000108,
+            "first_offset": 95,
+            "flush_reason": "max_size",
+            "index": 20,
+            "last_offset": 99,
+            "processing_s": 0.004068,
+            "size": 5
+          },
+          {
+            "collection_wait_s": 9.7e-05,
+            "first_offset": 100,
+            "flush_reason": "max_size",
+            "index": 21,
+            "last_offset": 104,
+            "processing_s": 0.003662,
+            "size": 5
+          },
+          {
+            "collection_wait_s": 3.1e-05,
+            "first_offset": 105,
+            "flush_reason": "max_size",
+            "index": 22,
+            "last_offset": 109,
+            "processing_s": 0.00355,
+            "size": 5
+          },
+          {
+            "collection_wait_s": 0.000138,
+            "first_offset": 110,
+            "flush_reason": "max_size",
+            "index": 23,
+            "last_offset": 114,
+            "processing_s": 0.004771,
+            "size": 5
+          },
+          {
+            "collection_wait_s": 3.7e-05,
+            "first_offset": 115,
+            "flush_reason": "max_size",
+            "index": 24,
+            "last_offset": 119,
+            "processing_s": 0.003695,
+            "size": 5
+          },
+          {
+            "collection_wait_s": 3e-05,
+            "first_offset": 120,
+            "flush_reason": "max_size",
+            "index": 25,
+            "last_offset": 124,
+            "processing_s": 0.004513,
+            "size": 5
+          },
+          {
+            "collection_wait_s": 8.7e-05,
+            "first_offset": 125,
+            "flush_reason": "max_size",
+            "index": 26,
+            "last_offset": 129,
+            "processing_s": 0.003732,
+            "size": 5
+          },
+          {
+            "collection_wait_s": 3.5e-05,
+            "first_offset": 130,
+            "flush_reason": "max_size",
+            "index": 27,
+            "last_offset": 134,
+            "processing_s": 0.005226,
+            "size": 5
+          },
+          {
+            "collection_wait_s": 0.000111,
+            "first_offset": 135,
+            "flush_reason": "max_size",
+            "index": 28,
+            "last_offset": 139,
+            "processing_s": 0.004127,
+            "size": 5
+          },
+          {
+            "collection_wait_s": 9.9e-05,
+            "first_offset": 140,
+            "flush_reason": "max_size",
+            "index": 29,
+            "last_offset": 144,
+            "processing_s": 0.004064,
+            "size": 5
+          },
+          {
+            "collection_wait_s": 3.8e-05,
+            "first_offset": 145,
+            "flush_reason": "max_size",
+            "index": 30,
+            "last_offset": 149,
+            "processing_s": 0.003846,
+            "size": 5
+          },
+          {
+            "collection_wait_s": 9.3e-05,
+            "first_offset": 150,
+            "flush_reason": "max_size",
+            "index": 31,
+            "last_offset": 154,
+            "processing_s": 0.004685,
+            "size": 5
+          },
+          {
+            "collection_wait_s": 3.5e-05,
+            "first_offset": 155,
+            "flush_reason": "max_size",
+            "index": 32,
+            "last_offset": 159,
+            "processing_s": 0.003974,
+            "size": 5
+          },
+          {
+            "collection_wait_s": 2.9e-05,
+            "first_offset": 160,
+            "flush_reason": "max_size",
+            "index": 33,
+            "last_offset": 164,
+            "processing_s": 0.003852,
+            "size": 5
+          },
+          {
+            "collection_wait_s": 9.4e-05,
+            "first_offset": 165,
+            "flush_reason": "max_size",
+            "index": 34,
+            "last_offset": 169,
+            "processing_s": 0.003731,
+            "size": 5
+          },
+          {
+            "collection_wait_s": 3.4e-05,
+            "first_offset": 170,
+            "flush_reason": "max_size",
+            "index": 35,
+            "last_offset": 174,
+            "processing_s": 0.004975,
+            "size": 5
+          },
+          {
+            "collection_wait_s": 0.000107,
+            "first_offset": 175,
+            "flush_reason": "max_size",
+            "index": 36,
+            "last_offset": 179,
+            "processing_s": 0.003834,
+            "size": 5
+          },
+          {
+            "collection_wait_s": 9.3e-05,
+            "first_offset": 180,
+            "flush_reason": "max_size",
+            "index": 37,
+            "last_offset": 184,
+            "processing_s": 0.003598,
+            "size": 5
+          },
+          {
+            "collection_wait_s": 3.7e-05,
+            "first_offset": 185,
+            "flush_reason": "max_size",
+            "index": 38,
+            "last_offset": 189,
+            "processing_s": 0.00446,
+            "size": 5
+          },
+          {
+            "collection_wait_s": 0.000112,
+            "first_offset": 190,
+            "flush_reason": "max_size",
+            "index": 39,
+            "last_offset": 194,
+            "processing_s": 0.00704,
+            "size": 5
+          },
+          {
+            "collection_wait_s": 3.6e-05,
+            "first_offset": 195,
+            "flush_reason": "max_size",
+            "index": 40,
+            "last_offset": 199,
+            "processing_s": 0.004261,
+            "size": 5
+          },
+          {
+            "collection_wait_s": 2.9e-05,
+            "first_offset": 200,
+            "flush_reason": "max_size",
+            "index": 41,
+            "last_offset": 204,
+            "processing_s": 0.004122,
+            "size": 5
+          },
+          {
+            "collection_wait_s": 9.6e-05,
+            "first_offset": 205,
+            "flush_reason": "max_size",
+            "index": 42,
+            "last_offset": 209,
+            "processing_s": 0.004606,
+            "size": 5
+          },
+          {
+            "collection_wait_s": 3.6e-05,
+            "first_offset": 210,
+            "flush_reason": "max_size",
+            "index": 43,
+            "last_offset": 214,
+            "processing_s": 0.003799,
+            "size": 5
+          },
+          {
+            "collection_wait_s": 0.000101,
+            "first_offset": 215,
+            "flush_reason": "max_size",
+            "index": 44,
+            "last_offset": 219,
+            "processing_s": 0.00359,
+            "size": 5
+          },
+          {
+            "collection_wait_s": 9.1e-05,
+            "first_offset": 220,
+            "flush_reason": "max_size",
+            "index": 45,
+            "last_offset": 224,
+            "processing_s": 0.004252,
+            "size": 5
+          },
+          {
+            "collection_wait_s": 5.6e-05,
+            "first_offset": 225,
+            "flush_reason": "max_size",
+            "index": 46,
+            "last_offset": 229,
+            "processing_s": 0.005407,
+            "size": 5
+          },
+          {
+            "collection_wait_s": 0.000103,
+            "first_offset": 230,
+            "flush_reason": "max_size",
+            "index": 47,
+            "last_offset": 234,
+            "processing_s": 0.003943,
+            "size": 5
+          },
+          {
+            "collection_wait_s": 3.5e-05,
+            "first_offset": 235,
+            "flush_reason": "max_size",
+            "index": 48,
+            "last_offset": 239,
+            "processing_s": 0.003759,
+            "size": 5
+          },
+          {
+            "collection_wait_s": 2.8e-05,
+            "first_offset": 240,
+            "flush_reason": "max_size",
+            "index": 49,
+            "last_offset": 244,
+            "processing_s": 0.003498,
+            "size": 5
+          },
+          {
+            "collection_wait_s": 9.4e-05,
+            "first_offset": 245,
+            "flush_reason": "max_size",
+            "index": 50,
+            "last_offset": 249,
+            "processing_s": 0.006332,
+            "size": 5
+          },
+          {
+            "collection_wait_s": 4.1e-05,
+            "first_offset": 250,
+            "flush_reason": "max_size",
+            "index": 51,
+            "last_offset": 254,
+            "processing_s": 0.003644,
+            "size": 5
+          },
+          {
+            "collection_wait_s": 0.000166,
+            "first_offset": 255,
+            "flush_reason": "max_size",
+            "index": 52,
+            "last_offset": 259,
+            "processing_s": 0.004134,
+            "size": 5
+          },
+          {
+            "collection_wait_s": 8.9e-05,
+            "first_offset": 260,
+            "flush_reason": "max_size",
+            "index": 53,
+            "last_offset": 264,
+            "processing_s": 0.004971,
+            "size": 5
+          },
+          {
+            "collection_wait_s": 0.000124,
+            "first_offset": 265,
+            "flush_reason": "max_size",
+            "index": 54,
+            "last_offset": 269,
+            "processing_s": 0.00404,
+            "size": 5
+          },
+          {
+            "collection_wait_s": 0.000101,
+            "first_offset": 270,
+            "flush_reason": "max_size",
+            "index": 55,
+            "last_offset": 274,
+            "processing_s": 0.003773,
+            "size": 5
+          },
+          {
+            "collection_wait_s": 3.1e-05,
+            "first_offset": 275,
+            "flush_reason": "max_size",
+            "index": 56,
+            "last_offset": 279,
+            "processing_s": 0.003649,
+            "size": 5
+          },
+          {
+            "collection_wait_s": 2.9e-05,
+            "first_offset": 280,
+            "flush_reason": "max_size",
+            "index": 57,
+            "last_offset": 284,
+            "processing_s": 0.004355,
+            "size": 5
+          },
+          {
+            "collection_wait_s": 0.000149,
+            "first_offset": 285,
+            "flush_reason": "max_size",
+            "index": 58,
+            "last_offset": 289,
+            "processing_s": 0.003831,
+            "size": 5
+          },
+          {
+            "collection_wait_s": 3.6e-05,
+            "first_offset": 290,
+            "flush_reason": "max_size",
+            "index": 59,
+            "last_offset": 294,
+            "processing_s": 0.003877,
+            "size": 5
+          },
+          {
+            "collection_wait_s": 9.7e-05,
+            "first_offset": 295,
+            "flush_reason": "max_size",
+            "index": 60,
+            "last_offset": 299,
+            "processing_s": 0.003872,
+            "size": 5
+          },
+          {
+            "collection_wait_s": 8.9e-05,
+            "first_offset": 300,
+            "flush_reason": "max_size",
+            "index": 61,
+            "last_offset": 304,
+            "processing_s": 0.00451,
+            "size": 5
+          },
+          {
+            "collection_wait_s": 0.000268,
+            "first_offset": 305,
+            "flush_reason": "max_size",
+            "index": 62,
+            "last_offset": 309,
+            "processing_s": 0.003948,
+            "size": 5
+          },
+          {
+            "collection_wait_s": 9.7e-05,
+            "first_offset": 310,
+            "flush_reason": "max_size",
+            "index": 63,
+            "last_offset": 314,
+            "processing_s": 0.003649,
+            "size": 5
+          },
+          {
+            "collection_wait_s": 2.5e-05,
+            "first_offset": 315,
+            "flush_reason": "final_drain",
+            "index": 64,
+            "last_offset": 316,
+            "processing_s": 0.001515,
+            "size": 2
+          }
+        ],
+        "batch_sizes": [
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          2
+        ],
+        "canonical_equal": true,
+        "consumed": 317,
+        "flush_counts": {
+          "final_drain": 1,
+          "max_size": 63,
+          "max_wait": 0
+        },
+        "produced": 317
+      },
+      "mb(50,0.01s)": {
+        "batch_details": [
+          {
+            "collection_wait_s": 0.014722,
+            "first_offset": 0,
+            "flush_reason": "max_wait",
+            "index": 1,
+            "last_offset": 0,
+            "processing_s": 0.002356,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.013727,
+            "first_offset": 1,
+            "flush_reason": "max_wait",
+            "index": 2,
+            "last_offset": 1,
+            "processing_s": 0.003174,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.011864,
+            "first_offset": 2,
+            "flush_reason": "max_wait",
+            "index": 3,
+            "last_offset": 3,
+            "processing_s": 0.003607,
+            "size": 2
+          },
+          {
+            "collection_wait_s": 0.011824,
+            "first_offset": 4,
+            "flush_reason": "max_wait",
+            "index": 4,
+            "last_offset": 5,
+            "processing_s": 0.003152,
+            "size": 2
+          },
+          {
+            "collection_wait_s": 0.012289,
+            "first_offset": 6,
+            "flush_reason": "max_wait",
+            "index": 5,
+            "last_offset": 7,
+            "processing_s": 0.004218,
+            "size": 2
+          },
+          {
+            "collection_wait_s": 0.011683,
+            "first_offset": 8,
+            "flush_reason": "max_wait",
+            "index": 6,
+            "last_offset": 9,
+            "processing_s": 0.003352,
+            "size": 2
+          },
+          {
+            "collection_wait_s": 0.012093,
+            "first_offset": 10,
+            "flush_reason": "max_wait",
+            "index": 7,
+            "last_offset": 11,
+            "processing_s": 0.00407,
+            "size": 2
+          },
+          {
+            "collection_wait_s": 0.011403,
+            "first_offset": 12,
+            "flush_reason": "max_wait",
+            "index": 8,
+            "last_offset": 13,
+            "processing_s": 0.00387,
+            "size": 2
+          },
+          {
+            "collection_wait_s": 0.011393,
+            "first_offset": 14,
+            "flush_reason": "max_wait",
+            "index": 9,
+            "last_offset": 15,
+            "processing_s": 0.003418,
+            "size": 2
+          },
+          {
+            "collection_wait_s": 0.012251,
+            "first_offset": 16,
+            "flush_reason": "max_wait",
+            "index": 10,
+            "last_offset": 17,
+            "processing_s": 0.003463,
+            "size": 2
+          },
+          {
+            "collection_wait_s": 0.014129,
+            "first_offset": 18,
+            "flush_reason": "max_wait",
+            "index": 11,
+            "last_offset": 19,
+            "processing_s": 0.003582,
+            "size": 2
+          },
+          {
+            "collection_wait_s": 0.010699,
+            "first_offset": 20,
+            "flush_reason": "max_wait",
+            "index": 12,
+            "last_offset": 21,
+            "processing_s": 0.0035,
+            "size": 2
+          },
+          {
+            "collection_wait_s": 0.01394,
+            "first_offset": 22,
+            "flush_reason": "max_wait",
+            "index": 13,
+            "last_offset": 23,
+            "processing_s": 0.003832,
+            "size": 2
+          },
+          {
+            "collection_wait_s": 0.024859,
+            "first_offset": 24,
+            "flush_reason": "max_wait",
+            "index": 14,
+            "last_offset": 26,
+            "processing_s": 0.00554,
+            "size": 3
+          },
+          {
+            "collection_wait_s": 0.025695,
+            "first_offset": 27,
+            "flush_reason": "max_wait",
+            "index": 15,
+            "last_offset": 28,
+            "processing_s": 0.005886,
+            "size": 2
+          },
+          {
+            "collection_wait_s": 0.01047,
+            "first_offset": 29,
+            "flush_reason": "max_wait",
+            "index": 16,
+            "last_offset": 29,
+            "processing_s": 0.001357,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.014744,
+            "first_offset": 30,
+            "flush_reason": "max_wait",
+            "index": 17,
+            "last_offset": 30,
+            "processing_s": 0.002584,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.013318,
+            "first_offset": 31,
+            "flush_reason": "max_wait",
+            "index": 18,
+            "last_offset": 31,
+            "processing_s": 0.002052,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.013368,
+            "first_offset": 32,
+            "flush_reason": "max_wait",
+            "index": 19,
+            "last_offset": 32,
+            "processing_s": 0.002841,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.012673,
+            "first_offset": 33,
+            "flush_reason": "max_wait",
+            "index": 20,
+            "last_offset": 34,
+            "processing_s": 0.003107,
+            "size": 2
+          },
+          {
+            "collection_wait_s": 0.012711,
+            "first_offset": 35,
+            "flush_reason": "max_wait",
+            "index": 21,
+            "last_offset": 36,
+            "processing_s": 0.004972,
+            "size": 2
+          },
+          {
+            "collection_wait_s": 0.025607,
+            "first_offset": 37,
+            "flush_reason": "max_wait",
+            "index": 22,
+            "last_offset": 39,
+            "processing_s": 0.004858,
+            "size": 3
+          },
+          {
+            "collection_wait_s": 0.010715,
+            "first_offset": 40,
+            "flush_reason": "max_wait",
+            "index": 23,
+            "last_offset": 40,
+            "processing_s": 0.002578,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.013212,
+            "first_offset": 41,
+            "flush_reason": "max_wait",
+            "index": 24,
+            "last_offset": 41,
+            "processing_s": 0.002317,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.013996,
+            "first_offset": 42,
+            "flush_reason": "max_wait",
+            "index": 25,
+            "last_offset": 42,
+            "processing_s": 0.002311,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.012856,
+            "first_offset": 43,
+            "flush_reason": "max_wait",
+            "index": 26,
+            "last_offset": 43,
+            "processing_s": 0.002041,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.013052,
+            "first_offset": 44,
+            "flush_reason": "max_wait",
+            "index": 27,
+            "last_offset": 44,
+            "processing_s": 0.003367,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.012212,
+            "first_offset": 45,
+            "flush_reason": "max_wait",
+            "index": 28,
+            "last_offset": 46,
+            "processing_s": 0.003454,
+            "size": 2
+          },
+          {
+            "collection_wait_s": 0.011608,
+            "first_offset": 47,
+            "flush_reason": "max_wait",
+            "index": 29,
+            "last_offset": 48,
+            "processing_s": 0.003467,
+            "size": 2
+          },
+          {
+            "collection_wait_s": 0.012272,
+            "first_offset": 49,
+            "flush_reason": "max_wait",
+            "index": 30,
+            "last_offset": 50,
+            "processing_s": 0.003565,
+            "size": 2
+          },
+          {
+            "collection_wait_s": 0.012108,
+            "first_offset": 51,
+            "flush_reason": "max_wait",
+            "index": 31,
+            "last_offset": 52,
+            "processing_s": 0.005903,
+            "size": 2
+          },
+          {
+            "collection_wait_s": 0.024365,
+            "first_offset": 53,
+            "flush_reason": "max_wait",
+            "index": 32,
+            "last_offset": 55,
+            "processing_s": 0.003288,
+            "size": 3
+          },
+          {
+            "collection_wait_s": 0.012004,
+            "first_offset": 56,
+            "flush_reason": "max_wait",
+            "index": 33,
+            "last_offset": 56,
+            "processing_s": 0.001029,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.015016,
+            "first_offset": 57,
+            "flush_reason": "max_wait",
+            "index": 34,
+            "last_offset": 57,
+            "processing_s": 0.002223,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.012999,
+            "first_offset": 58,
+            "flush_reason": "max_wait",
+            "index": 35,
+            "last_offset": 58,
+            "processing_s": 0.001821,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.013421,
+            "first_offset": 59,
+            "flush_reason": "max_wait",
+            "index": 36,
+            "last_offset": 59,
+            "processing_s": 0.001316,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.01387,
+            "first_offset": 60,
+            "flush_reason": "max_wait",
+            "index": 37,
+            "last_offset": 60,
+            "processing_s": 0.001695,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.014343,
+            "first_offset": 61,
+            "flush_reason": "max_wait",
+            "index": 38,
+            "last_offset": 61,
+            "processing_s": 0.002421,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.015454,
+            "first_offset": 62,
+            "flush_reason": "max_wait",
+            "index": 39,
+            "last_offset": 62,
+            "processing_s": 0.001581,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.013469,
+            "first_offset": 63,
+            "flush_reason": "max_wait",
+            "index": 40,
+            "last_offset": 63,
+            "processing_s": 0.001982,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.013295,
+            "first_offset": 64,
+            "flush_reason": "max_wait",
+            "index": 41,
+            "last_offset": 64,
+            "processing_s": 0.003332,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.011608,
+            "first_offset": 65,
+            "flush_reason": "max_wait",
+            "index": 42,
+            "last_offset": 66,
+            "processing_s": 0.004588,
+            "size": 2
+          },
+          {
+            "collection_wait_s": 0.011254,
+            "first_offset": 67,
+            "flush_reason": "max_wait",
+            "index": 43,
+            "last_offset": 68,
+            "processing_s": 0.003861,
+            "size": 2
+          },
+          {
+            "collection_wait_s": 0.012114,
+            "first_offset": 69,
+            "flush_reason": "max_wait",
+            "index": 44,
+            "last_offset": 70,
+            "processing_s": 0.004879,
+            "size": 2
+          },
+          {
+            "collection_wait_s": 0.010375,
+            "first_offset": 71,
+            "flush_reason": "max_wait",
+            "index": 45,
+            "last_offset": 72,
+            "processing_s": 0.004822,
+            "size": 2
+          },
+          {
+            "collection_wait_s": 0.010452,
+            "first_offset": 73,
+            "flush_reason": "max_wait",
+            "index": 46,
+            "last_offset": 74,
+            "processing_s": 0.00426,
+            "size": 2
+          },
+          {
+            "collection_wait_s": 0.010965,
+            "first_offset": 75,
+            "flush_reason": "max_wait",
+            "index": 47,
+            "last_offset": 76,
+            "processing_s": 0.003231,
+            "size": 2
+          },
+          {
+            "collection_wait_s": 0.012581,
+            "first_offset": 77,
+            "flush_reason": "max_wait",
+            "index": 48,
+            "last_offset": 78,
+            "processing_s": 0.004404,
+            "size": 2
+          },
+          {
+            "collection_wait_s": 0.010634,
+            "first_offset": 79,
+            "flush_reason": "max_wait",
+            "index": 49,
+            "last_offset": 80,
+            "processing_s": 0.00262,
+            "size": 2
+          },
+          {
+            "collection_wait_s": 0.012024,
+            "first_offset": 81,
+            "flush_reason": "max_wait",
+            "index": 50,
+            "last_offset": 81,
+            "processing_s": 0.002019,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.014096,
+            "first_offset": 82,
+            "flush_reason": "max_wait",
+            "index": 51,
+            "last_offset": 82,
+            "processing_s": 0.00193,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.013312,
+            "first_offset": 83,
+            "flush_reason": "max_wait",
+            "index": 52,
+            "last_offset": 83,
+            "processing_s": 0.001505,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.014035,
+            "first_offset": 84,
+            "flush_reason": "max_wait",
+            "index": 53,
+            "last_offset": 84,
+            "processing_s": 0.002571,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.013888,
+            "first_offset": 85,
+            "flush_reason": "max_wait",
+            "index": 54,
+            "last_offset": 85,
+            "processing_s": 0.001009,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.016108,
+            "first_offset": 86,
+            "flush_reason": "max_wait",
+            "index": 55,
+            "last_offset": 86,
+            "processing_s": 0.002344,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.012366,
+            "first_offset": 87,
+            "flush_reason": "max_wait",
+            "index": 56,
+            "last_offset": 87,
+            "processing_s": 0.001972,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.012928,
+            "first_offset": 88,
+            "flush_reason": "max_wait",
+            "index": 57,
+            "last_offset": 88,
+            "processing_s": 0.004011,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.011106,
+            "first_offset": 89,
+            "flush_reason": "max_wait",
+            "index": 58,
+            "last_offset": 90,
+            "processing_s": 0.007213,
+            "size": 2
+          },
+          {
+            "collection_wait_s": 0.023411,
+            "first_offset": 91,
+            "flush_reason": "max_wait",
+            "index": 59,
+            "last_offset": 93,
+            "processing_s": 0.006581,
+            "size": 3
+          },
+          {
+            "collection_wait_s": 0.024202,
+            "first_offset": 94,
+            "flush_reason": "max_wait",
+            "index": 60,
+            "last_offset": 95,
+            "processing_s": 0.004013,
+            "size": 2
+          },
+          {
+            "collection_wait_s": 0.01123,
+            "first_offset": 96,
+            "flush_reason": "max_wait",
+            "index": 61,
+            "last_offset": 96,
+            "processing_s": 0.001616,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.013879,
+            "first_offset": 97,
+            "flush_reason": "max_wait",
+            "index": 62,
+            "last_offset": 97,
+            "processing_s": 0.001669,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.013966,
+            "first_offset": 98,
+            "flush_reason": "max_wait",
+            "index": 63,
+            "last_offset": 98,
+            "processing_s": 0.001585,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.013658,
+            "first_offset": 99,
+            "flush_reason": "max_wait",
+            "index": 64,
+            "last_offset": 99,
+            "processing_s": 0.002219,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.013265,
+            "first_offset": 100,
+            "flush_reason": "max_wait",
+            "index": 65,
+            "last_offset": 100,
+            "processing_s": 0.002005,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.014386,
+            "first_offset": 101,
+            "flush_reason": "max_wait",
+            "index": 66,
+            "last_offset": 101,
+            "processing_s": 0.002514,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.013202,
+            "first_offset": 102,
+            "flush_reason": "max_wait",
+            "index": 67,
+            "last_offset": 102,
+            "processing_s": 0.002355,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.014048,
+            "first_offset": 103,
+            "flush_reason": "max_wait",
+            "index": 68,
+            "last_offset": 103,
+            "processing_s": 0.001539,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.014382,
+            "first_offset": 104,
+            "flush_reason": "max_wait",
+            "index": 69,
+            "last_offset": 104,
+            "processing_s": 0.00316,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.01173,
+            "first_offset": 105,
+            "flush_reason": "max_wait",
+            "index": 70,
+            "last_offset": 106,
+            "processing_s": 0.005214,
+            "size": 2
+          },
+          {
+            "collection_wait_s": 0.010446,
+            "first_offset": 107,
+            "flush_reason": "max_wait",
+            "index": 71,
+            "last_offset": 108,
+            "processing_s": 0.00624,
+            "size": 2
+          },
+          {
+            "collection_wait_s": 0.025664,
+            "first_offset": 109,
+            "flush_reason": "max_wait",
+            "index": 72,
+            "last_offset": 111,
+            "processing_s": 0.006956,
+            "size": 3
+          },
+          {
+            "collection_wait_s": 0.022867,
+            "first_offset": 112,
+            "flush_reason": "max_wait",
+            "index": 73,
+            "last_offset": 113,
+            "processing_s": 0.003538,
+            "size": 2
+          },
+          {
+            "collection_wait_s": 0.011758,
+            "first_offset": 114,
+            "flush_reason": "max_wait",
+            "index": 74,
+            "last_offset": 115,
+            "processing_s": 0.00326,
+            "size": 2
+          },
+          {
+            "collection_wait_s": 0.012191,
+            "first_offset": 116,
+            "flush_reason": "max_wait",
+            "index": 75,
+            "last_offset": 117,
+            "processing_s": 0.003544,
+            "size": 2
+          },
+          {
+            "collection_wait_s": 0.012118,
+            "first_offset": 118,
+            "flush_reason": "max_wait",
+            "index": 76,
+            "last_offset": 119,
+            "processing_s": 0.00294,
+            "size": 2
+          },
+          {
+            "collection_wait_s": 0.013684,
+            "first_offset": 120,
+            "flush_reason": "max_wait",
+            "index": 77,
+            "last_offset": 121,
+            "processing_s": 0.003378,
+            "size": 2
+          },
+          {
+            "collection_wait_s": 0.011502,
+            "first_offset": 122,
+            "flush_reason": "max_wait",
+            "index": 78,
+            "last_offset": 123,
+            "processing_s": 0.003072,
+            "size": 2
+          },
+          {
+            "collection_wait_s": 0.012103,
+            "first_offset": 124,
+            "flush_reason": "max_wait",
+            "index": 79,
+            "last_offset": 125,
+            "processing_s": 0.003326,
+            "size": 2
+          },
+          {
+            "collection_wait_s": 0.01248,
+            "first_offset": 126,
+            "flush_reason": "max_wait",
+            "index": 80,
+            "last_offset": 127,
+            "processing_s": 0.00395,
+            "size": 2
+          },
+          {
+            "collection_wait_s": 0.011814,
+            "first_offset": 128,
+            "flush_reason": "max_wait",
+            "index": 81,
+            "last_offset": 129,
+            "processing_s": 0.004424,
+            "size": 2
+          },
+          {
+            "collection_wait_s": 0.01254,
+            "first_offset": 130,
+            "flush_reason": "max_wait",
+            "index": 82,
+            "last_offset": 131,
+            "processing_s": 0.002735,
+            "size": 2
+          },
+          {
+            "collection_wait_s": 0.01464,
+            "first_offset": 132,
+            "flush_reason": "max_wait",
+            "index": 83,
+            "last_offset": 132,
+            "processing_s": 0.002077,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.010854,
+            "first_offset": 133,
+            "flush_reason": "max_wait",
+            "index": 84,
+            "last_offset": 133,
+            "processing_s": 0.001901,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.013658,
+            "first_offset": 134,
+            "flush_reason": "max_wait",
+            "index": 85,
+            "last_offset": 134,
+            "processing_s": 0.003384,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.012186,
+            "first_offset": 135,
+            "flush_reason": "max_wait",
+            "index": 86,
+            "last_offset": 136,
+            "processing_s": 0.003826,
+            "size": 2
+          },
+          {
+            "collection_wait_s": 0.011649,
+            "first_offset": 137,
+            "flush_reason": "max_wait",
+            "index": 87,
+            "last_offset": 138,
+            "processing_s": 0.002244,
+            "size": 2
+          },
+          {
+            "collection_wait_s": 0.01313,
+            "first_offset": 139,
+            "flush_reason": "max_wait",
+            "index": 88,
+            "last_offset": 139,
+            "processing_s": 0.002041,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.01365,
+            "first_offset": 140,
+            "flush_reason": "max_wait",
+            "index": 89,
+            "last_offset": 140,
+            "processing_s": 0.002295,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.013026,
+            "first_offset": 141,
+            "flush_reason": "max_wait",
+            "index": 90,
+            "last_offset": 141,
+            "processing_s": 0.00359,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.012439,
+            "first_offset": 142,
+            "flush_reason": "max_wait",
+            "index": 91,
+            "last_offset": 143,
+            "processing_s": 0.003732,
+            "size": 2
+          },
+          {
+            "collection_wait_s": 0.011314,
+            "first_offset": 144,
+            "flush_reason": "max_wait",
+            "index": 92,
+            "last_offset": 145,
+            "processing_s": 0.003632,
+            "size": 2
+          },
+          {
+            "collection_wait_s": 0.011911,
+            "first_offset": 146,
+            "flush_reason": "max_wait",
+            "index": 93,
+            "last_offset": 147,
+            "processing_s": 0.003614,
+            "size": 2
+          },
+          {
+            "collection_wait_s": 0.012292,
+            "first_offset": 148,
+            "flush_reason": "max_wait",
+            "index": 94,
+            "last_offset": 149,
+            "processing_s": 0.003238,
+            "size": 2
+          },
+          {
+            "collection_wait_s": 0.011988,
+            "first_offset": 150,
+            "flush_reason": "max_wait",
+            "index": 95,
+            "last_offset": 151,
+            "processing_s": 0.003075,
+            "size": 2
+          },
+          {
+            "collection_wait_s": 0.013119,
+            "first_offset": 152,
+            "flush_reason": "max_wait",
+            "index": 96,
+            "last_offset": 153,
+            "processing_s": 0.00355,
+            "size": 2
+          },
+          {
+            "collection_wait_s": 0.012633,
+            "first_offset": 154,
+            "flush_reason": "max_wait",
+            "index": 97,
+            "last_offset": 155,
+            "processing_s": 0.002846,
+            "size": 2
+          },
+          {
+            "collection_wait_s": 0.013283,
+            "first_offset": 156,
+            "flush_reason": "max_wait",
+            "index": 98,
+            "last_offset": 157,
+            "processing_s": 0.003379,
+            "size": 2
+          },
+          {
+            "collection_wait_s": 0.014887,
+            "first_offset": 158,
+            "flush_reason": "max_wait",
+            "index": 99,
+            "last_offset": 159,
+            "processing_s": 0.00352,
+            "size": 2
+          },
+          {
+            "collection_wait_s": 0.023075,
+            "first_offset": 160,
+            "flush_reason": "max_wait",
+            "index": 100,
+            "last_offset": 162,
+            "processing_s": 0.006705,
+            "size": 3
+          },
+          {
+            "collection_wait_s": 0.024065,
+            "first_offset": 163,
+            "flush_reason": "max_wait",
+            "index": 101,
+            "last_offset": 164,
+            "processing_s": 0.004205,
+            "size": 2
+          },
+          {
+            "collection_wait_s": 0.011141,
+            "first_offset": 165,
+            "flush_reason": "max_wait",
+            "index": 102,
+            "last_offset": 165,
+            "processing_s": 0.002095,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.013837,
+            "first_offset": 166,
+            "flush_reason": "max_wait",
+            "index": 103,
+            "last_offset": 166,
+            "processing_s": 0.002677,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.013383,
+            "first_offset": 167,
+            "flush_reason": "max_wait",
+            "index": 104,
+            "last_offset": 167,
+            "processing_s": 0.003455,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.012582,
+            "first_offset": 168,
+            "flush_reason": "max_wait",
+            "index": 105,
+            "last_offset": 169,
+            "processing_s": 0.003732,
+            "size": 2
+          },
+          {
+            "collection_wait_s": 0.011244,
+            "first_offset": 170,
+            "flush_reason": "max_wait",
+            "index": 106,
+            "last_offset": 171,
+            "processing_s": 0.003406,
+            "size": 2
+          },
+          {
+            "collection_wait_s": 0.013273,
+            "first_offset": 172,
+            "flush_reason": "max_wait",
+            "index": 107,
+            "last_offset": 173,
+            "processing_s": 0.002908,
+            "size": 2
+          },
+          {
+            "collection_wait_s": 0.012292,
+            "first_offset": 174,
+            "flush_reason": "max_wait",
+            "index": 108,
+            "last_offset": 175,
+            "processing_s": 0.003697,
+            "size": 2
+          },
+          {
+            "collection_wait_s": 0.011236,
+            "first_offset": 176,
+            "flush_reason": "max_wait",
+            "index": 109,
+            "last_offset": 177,
+            "processing_s": 0.00325,
+            "size": 2
+          },
+          {
+            "collection_wait_s": 0.013306,
+            "first_offset": 178,
+            "flush_reason": "max_wait",
+            "index": 110,
+            "last_offset": 179,
+            "processing_s": 0.002853,
+            "size": 2
+          },
+          {
+            "collection_wait_s": 0.012788,
+            "first_offset": 180,
+            "flush_reason": "max_wait",
+            "index": 111,
+            "last_offset": 180,
+            "processing_s": 0.003368,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.01358,
+            "first_offset": 181,
+            "flush_reason": "max_wait",
+            "index": 112,
+            "last_offset": 182,
+            "processing_s": 0.003841,
+            "size": 2
+          },
+          {
+            "collection_wait_s": 0.011241,
+            "first_offset": 183,
+            "flush_reason": "max_wait",
+            "index": 113,
+            "last_offset": 184,
+            "processing_s": 0.006656,
+            "size": 2
+          },
+          {
+            "collection_wait_s": 0.023982,
+            "first_offset": 185,
+            "flush_reason": "max_wait",
+            "index": 114,
+            "last_offset": 187,
+            "processing_s": 0.004128,
+            "size": 3
+          },
+          {
+            "collection_wait_s": 0.010505,
+            "first_offset": 188,
+            "flush_reason": "max_wait",
+            "index": 115,
+            "last_offset": 188,
+            "processing_s": 0.002064,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.013046,
+            "first_offset": 189,
+            "flush_reason": "max_wait",
+            "index": 116,
+            "last_offset": 189,
+            "processing_s": 0.002657,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.012185,
+            "first_offset": 190,
+            "flush_reason": "max_wait",
+            "index": 117,
+            "last_offset": 190,
+            "processing_s": 0.002981,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.013719,
+            "first_offset": 191,
+            "flush_reason": "max_wait",
+            "index": 118,
+            "last_offset": 192,
+            "processing_s": 0.003444,
+            "size": 2
+          },
+          {
+            "collection_wait_s": 0.01179,
+            "first_offset": 193,
+            "flush_reason": "max_wait",
+            "index": 119,
+            "last_offset": 194,
+            "processing_s": 0.006838,
+            "size": 2
+          },
+          {
+            "collection_wait_s": 0.023553,
+            "first_offset": 195,
+            "flush_reason": "max_wait",
+            "index": 120,
+            "last_offset": 197,
+            "processing_s": 0.004711,
+            "size": 3
+          },
+          {
+            "collection_wait_s": 0.011345,
+            "first_offset": 198,
+            "flush_reason": "max_wait",
+            "index": 121,
+            "last_offset": 198,
+            "processing_s": 0.001664,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.013782,
+            "first_offset": 199,
+            "flush_reason": "max_wait",
+            "index": 122,
+            "last_offset": 199,
+            "processing_s": 0.002946,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.012289,
+            "first_offset": 200,
+            "flush_reason": "max_wait",
+            "index": 123,
+            "last_offset": 201,
+            "processing_s": 0.003472,
+            "size": 2
+          },
+          {
+            "collection_wait_s": 0.012672,
+            "first_offset": 202,
+            "flush_reason": "max_wait",
+            "index": 124,
+            "last_offset": 203,
+            "processing_s": 0.004598,
+            "size": 2
+          },
+          {
+            "collection_wait_s": 0.024825,
+            "first_offset": 204,
+            "flush_reason": "max_wait",
+            "index": 125,
+            "last_offset": 206,
+            "processing_s": 0.005912,
+            "size": 3
+          },
+          {
+            "collection_wait_s": 0.025272,
+            "first_offset": 207,
+            "flush_reason": "max_wait",
+            "index": 126,
+            "last_offset": 208,
+            "processing_s": 0.005699,
+            "size": 2
+          },
+          {
+            "collection_wait_s": 0.024696,
+            "first_offset": 209,
+            "flush_reason": "max_wait",
+            "index": 127,
+            "last_offset": 210,
+            "processing_s": 0.003169,
+            "size": 2
+          },
+          {
+            "collection_wait_s": 0.012517,
+            "first_offset": 211,
+            "flush_reason": "max_wait",
+            "index": 128,
+            "last_offset": 211,
+            "processing_s": 0.002075,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.013322,
+            "first_offset": 212,
+            "flush_reason": "max_wait",
+            "index": 129,
+            "last_offset": 212,
+            "processing_s": 0.001748,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.013742,
+            "first_offset": 213,
+            "flush_reason": "max_wait",
+            "index": 130,
+            "last_offset": 213,
+            "processing_s": 0.002006,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.013707,
+            "first_offset": 214,
+            "flush_reason": "max_wait",
+            "index": 131,
+            "last_offset": 214,
+            "processing_s": 0.001877,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.013562,
+            "first_offset": 215,
+            "flush_reason": "max_wait",
+            "index": 132,
+            "last_offset": 215,
+            "processing_s": 0.001569,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.013582,
+            "first_offset": 216,
+            "flush_reason": "max_wait",
+            "index": 133,
+            "last_offset": 216,
+            "processing_s": 0.002484,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.013693,
+            "first_offset": 217,
+            "flush_reason": "max_wait",
+            "index": 134,
+            "last_offset": 217,
+            "processing_s": 0.001732,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.013598,
+            "first_offset": 218,
+            "flush_reason": "max_wait",
+            "index": 135,
+            "last_offset": 218,
+            "processing_s": 0.001776,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.012682,
+            "first_offset": 219,
+            "flush_reason": "max_wait",
+            "index": 136,
+            "last_offset": 219,
+            "processing_s": 0.003964,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.011515,
+            "first_offset": 220,
+            "flush_reason": "max_wait",
+            "index": 137,
+            "last_offset": 221,
+            "processing_s": 0.004116,
+            "size": 2
+          },
+          {
+            "collection_wait_s": 0.01153,
+            "first_offset": 222,
+            "flush_reason": "max_wait",
+            "index": 138,
+            "last_offset": 223,
+            "processing_s": 0.002737,
+            "size": 2
+          },
+          {
+            "collection_wait_s": 0.012417,
+            "first_offset": 224,
+            "flush_reason": "max_wait",
+            "index": 139,
+            "last_offset": 224,
+            "processing_s": 0.001893,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.013978,
+            "first_offset": 225,
+            "flush_reason": "max_wait",
+            "index": 140,
+            "last_offset": 225,
+            "processing_s": 0.002613,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.013181,
+            "first_offset": 226,
+            "flush_reason": "max_wait",
+            "index": 141,
+            "last_offset": 226,
+            "processing_s": 0.001463,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.01357,
+            "first_offset": 227,
+            "flush_reason": "max_wait",
+            "index": 142,
+            "last_offset": 227,
+            "processing_s": 0.001955,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.013597,
+            "first_offset": 228,
+            "flush_reason": "max_wait",
+            "index": 143,
+            "last_offset": 228,
+            "processing_s": 0.002561,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.013037,
+            "first_offset": 229,
+            "flush_reason": "max_wait",
+            "index": 144,
+            "last_offset": 229,
+            "processing_s": 0.001789,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.014259,
+            "first_offset": 230,
+            "flush_reason": "max_wait",
+            "index": 145,
+            "last_offset": 230,
+            "processing_s": 0.002658,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.013129,
+            "first_offset": 231,
+            "flush_reason": "max_wait",
+            "index": 146,
+            "last_offset": 231,
+            "processing_s": 0.002502,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.013279,
+            "first_offset": 232,
+            "flush_reason": "max_wait",
+            "index": 147,
+            "last_offset": 232,
+            "processing_s": 0.002134,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.013947,
+            "first_offset": 233,
+            "flush_reason": "max_wait",
+            "index": 148,
+            "last_offset": 233,
+            "processing_s": 0.002854,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.012186,
+            "first_offset": 234,
+            "flush_reason": "max_wait",
+            "index": 149,
+            "last_offset": 234,
+            "processing_s": 0.00174,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.014775,
+            "first_offset": 235,
+            "flush_reason": "max_wait",
+            "index": 150,
+            "last_offset": 235,
+            "processing_s": 0.001977,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.01168,
+            "first_offset": 236,
+            "flush_reason": "max_wait",
+            "index": 151,
+            "last_offset": 236,
+            "processing_s": 0.002454,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.013373,
+            "first_offset": 237,
+            "flush_reason": "max_wait",
+            "index": 152,
+            "last_offset": 237,
+            "processing_s": 0.001892,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.013999,
+            "first_offset": 238,
+            "flush_reason": "max_wait",
+            "index": 153,
+            "last_offset": 238,
+            "processing_s": 0.001736,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.01441,
+            "first_offset": 239,
+            "flush_reason": "max_wait",
+            "index": 154,
+            "last_offset": 239,
+            "processing_s": 0.002387,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.012505,
+            "first_offset": 240,
+            "flush_reason": "max_wait",
+            "index": 155,
+            "last_offset": 240,
+            "processing_s": 0.00202,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.013721,
+            "first_offset": 241,
+            "flush_reason": "max_wait",
+            "index": 156,
+            "last_offset": 241,
+            "processing_s": 0.001885,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.012974,
+            "first_offset": 242,
+            "flush_reason": "max_wait",
+            "index": 157,
+            "last_offset": 242,
+            "processing_s": 0.001517,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.015124,
+            "first_offset": 243,
+            "flush_reason": "max_wait",
+            "index": 158,
+            "last_offset": 243,
+            "processing_s": 0.001866,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.013655,
+            "first_offset": 244,
+            "flush_reason": "max_wait",
+            "index": 159,
+            "last_offset": 244,
+            "processing_s": 0.002698,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.012941,
+            "first_offset": 245,
+            "flush_reason": "max_wait",
+            "index": 160,
+            "last_offset": 245,
+            "processing_s": 0.0019,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.013422,
+            "first_offset": 246,
+            "flush_reason": "max_wait",
+            "index": 161,
+            "last_offset": 246,
+            "processing_s": 0.001606,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.014797,
+            "first_offset": 247,
+            "flush_reason": "max_wait",
+            "index": 162,
+            "last_offset": 247,
+            "processing_s": 0.000934,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.014033,
+            "first_offset": 248,
+            "flush_reason": "max_wait",
+            "index": 163,
+            "last_offset": 248,
+            "processing_s": 0.001011,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.014704,
+            "first_offset": 249,
+            "flush_reason": "max_wait",
+            "index": 164,
+            "last_offset": 249,
+            "processing_s": 0.00101,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.014816,
+            "first_offset": 250,
+            "flush_reason": "max_wait",
+            "index": 165,
+            "last_offset": 250,
+            "processing_s": 0.001572,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.014354,
+            "first_offset": 251,
+            "flush_reason": "max_wait",
+            "index": 166,
+            "last_offset": 251,
+            "processing_s": 0.001822,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.014818,
+            "first_offset": 252,
+            "flush_reason": "max_wait",
+            "index": 167,
+            "last_offset": 252,
+            "processing_s": 0.003181,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.011434,
+            "first_offset": 253,
+            "flush_reason": "max_wait",
+            "index": 168,
+            "last_offset": 254,
+            "processing_s": 0.004024,
+            "size": 2
+          },
+          {
+            "collection_wait_s": 0.01136,
+            "first_offset": 255,
+            "flush_reason": "max_wait",
+            "index": 169,
+            "last_offset": 256,
+            "processing_s": 0.005672,
+            "size": 2
+          },
+          {
+            "collection_wait_s": 0.024914,
+            "first_offset": 257,
+            "flush_reason": "max_wait",
+            "index": 170,
+            "last_offset": 259,
+            "processing_s": 0.004451,
+            "size": 3
+          },
+          {
+            "collection_wait_s": 0.01177,
+            "first_offset": 260,
+            "flush_reason": "max_wait",
+            "index": 171,
+            "last_offset": 260,
+            "processing_s": 0.001982,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.013015,
+            "first_offset": 261,
+            "flush_reason": "max_wait",
+            "index": 172,
+            "last_offset": 261,
+            "processing_s": 0.002114,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.013923,
+            "first_offset": 262,
+            "flush_reason": "max_wait",
+            "index": 173,
+            "last_offset": 262,
+            "processing_s": 0.002001,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.01335,
+            "first_offset": 263,
+            "flush_reason": "max_wait",
+            "index": 174,
+            "last_offset": 263,
+            "processing_s": 0.00143,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.014216,
+            "first_offset": 264,
+            "flush_reason": "max_wait",
+            "index": 175,
+            "last_offset": 264,
+            "processing_s": 0.002357,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.013503,
+            "first_offset": 265,
+            "flush_reason": "max_wait",
+            "index": 176,
+            "last_offset": 265,
+            "processing_s": 0.002011,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.013805,
+            "first_offset": 266,
+            "flush_reason": "max_wait",
+            "index": 177,
+            "last_offset": 266,
+            "processing_s": 0.001415,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.014694,
+            "first_offset": 267,
+            "flush_reason": "max_wait",
+            "index": 178,
+            "last_offset": 267,
+            "processing_s": 0.00169,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.014397,
+            "first_offset": 268,
+            "flush_reason": "max_wait",
+            "index": 179,
+            "last_offset": 268,
+            "processing_s": 0.003154,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.012401,
+            "first_offset": 269,
+            "flush_reason": "max_wait",
+            "index": 180,
+            "last_offset": 270,
+            "processing_s": 0.003145,
+            "size": 2
+          },
+          {
+            "collection_wait_s": 0.013054,
+            "first_offset": 271,
+            "flush_reason": "max_wait",
+            "index": 181,
+            "last_offset": 272,
+            "processing_s": 0.003499,
+            "size": 2
+          },
+          {
+            "collection_wait_s": 0.011752,
+            "first_offset": 273,
+            "flush_reason": "max_wait",
+            "index": 182,
+            "last_offset": 274,
+            "processing_s": 0.00321,
+            "size": 2
+          },
+          {
+            "collection_wait_s": 0.011567,
+            "first_offset": 275,
+            "flush_reason": "max_wait",
+            "index": 183,
+            "last_offset": 276,
+            "processing_s": 0.004504,
+            "size": 2
+          },
+          {
+            "collection_wait_s": 0.011808,
+            "first_offset": 277,
+            "flush_reason": "max_wait",
+            "index": 184,
+            "last_offset": 278,
+            "processing_s": 0.004292,
+            "size": 2
+          },
+          {
+            "collection_wait_s": 0.011116,
+            "first_offset": 279,
+            "flush_reason": "max_wait",
+            "index": 185,
+            "last_offset": 280,
+            "processing_s": 0.003882,
+            "size": 2
+          },
+          {
+            "collection_wait_s": 0.011591,
+            "first_offset": 281,
+            "flush_reason": "max_wait",
+            "index": 186,
+            "last_offset": 282,
+            "processing_s": 0.005371,
+            "size": 2
+          },
+          {
+            "collection_wait_s": 0.010442,
+            "first_offset": 283,
+            "flush_reason": "max_wait",
+            "index": 187,
+            "last_offset": 284,
+            "processing_s": 0.003344,
+            "size": 2
+          },
+          {
+            "collection_wait_s": 0.013495,
+            "first_offset": 285,
+            "flush_reason": "max_wait",
+            "index": 188,
+            "last_offset": 286,
+            "processing_s": 0.005512,
+            "size": 2
+          },
+          {
+            "collection_wait_s": 0.025065,
+            "first_offset": 287,
+            "flush_reason": "max_wait",
+            "index": 189,
+            "last_offset": 289,
+            "processing_s": 0.004011,
+            "size": 3
+          },
+          {
+            "collection_wait_s": 0.011278,
+            "first_offset": 290,
+            "flush_reason": "max_wait",
+            "index": 190,
+            "last_offset": 290,
+            "processing_s": 0.00221,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.013748,
+            "first_offset": 291,
+            "flush_reason": "max_wait",
+            "index": 191,
+            "last_offset": 291,
+            "processing_s": 0.002024,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.013227,
+            "first_offset": 292,
+            "flush_reason": "max_wait",
+            "index": 192,
+            "last_offset": 292,
+            "processing_s": 0.002232,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.01383,
+            "first_offset": 293,
+            "flush_reason": "max_wait",
+            "index": 193,
+            "last_offset": 293,
+            "processing_s": 0.00303,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.012365,
+            "first_offset": 294,
+            "flush_reason": "max_wait",
+            "index": 194,
+            "last_offset": 295,
+            "processing_s": 0.00245,
+            "size": 2
+          },
+          {
+            "collection_wait_s": 0.013247,
+            "first_offset": 296,
+            "flush_reason": "max_wait",
+            "index": 195,
+            "last_offset": 296,
+            "processing_s": 0.002317,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.014288,
+            "first_offset": 297,
+            "flush_reason": "max_wait",
+            "index": 196,
+            "last_offset": 297,
+            "processing_s": 0.003222,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.012025,
+            "first_offset": 298,
+            "flush_reason": "max_wait",
+            "index": 197,
+            "last_offset": 299,
+            "processing_s": 0.004259,
+            "size": 2
+          },
+          {
+            "collection_wait_s": 0.012941,
+            "first_offset": 300,
+            "flush_reason": "max_wait",
+            "index": 198,
+            "last_offset": 301,
+            "processing_s": 0.004714,
+            "size": 2
+          },
+          {
+            "collection_wait_s": 0.010793,
+            "first_offset": 302,
+            "flush_reason": "max_wait",
+            "index": 199,
+            "last_offset": 304,
+            "processing_s": 0.006466,
+            "size": 3
+          },
+          {
+            "collection_wait_s": 0.022638,
+            "first_offset": 305,
+            "flush_reason": "max_wait",
+            "index": 200,
+            "last_offset": 306,
+            "processing_s": 0.007222,
+            "size": 2
+          },
+          {
+            "collection_wait_s": 0.023288,
+            "first_offset": 307,
+            "flush_reason": "max_wait",
+            "index": 201,
+            "last_offset": 308,
+            "processing_s": 0.003671,
+            "size": 2
+          },
+          {
+            "collection_wait_s": 0.011562,
+            "first_offset": 309,
+            "flush_reason": "max_wait",
+            "index": 202,
+            "last_offset": 309,
+            "processing_s": 0.002133,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.013806,
+            "first_offset": 310,
+            "flush_reason": "max_wait",
+            "index": 203,
+            "last_offset": 310,
+            "processing_s": 0.002239,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.013426,
+            "first_offset": 311,
+            "flush_reason": "max_wait",
+            "index": 204,
+            "last_offset": 311,
+            "processing_s": 0.002226,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.013111,
+            "first_offset": 312,
+            "flush_reason": "max_wait",
+            "index": 205,
+            "last_offset": 312,
+            "processing_s": 0.002285,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.013613,
+            "first_offset": 313,
+            "flush_reason": "max_wait",
+            "index": 206,
+            "last_offset": 313,
+            "processing_s": 0.002693,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.013022,
+            "first_offset": 314,
+            "flush_reason": "max_wait",
+            "index": 207,
+            "last_offset": 314,
+            "processing_s": 0.003089,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.012378,
+            "first_offset": 315,
+            "flush_reason": "max_wait",
+            "index": 208,
+            "last_offset": 316,
+            "processing_s": 0.004832,
+            "size": 2
+          }
+        ],
+        "batch_sizes": [
+          1,
+          1,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          3,
+          2,
+          1,
+          1,
+          1,
+          1,
+          2,
+          2,
+          3,
+          1,
+          1,
+          1,
+          1,
+          1,
+          2,
+          2,
+          2,
+          2,
+          3,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          2,
+          3,
+          2,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          2,
+          2,
+          3,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          1,
+          1,
+          1,
+          2,
+          2,
+          1,
+          1,
+          1,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          3,
+          2,
+          1,
+          1,
+          1,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          1,
+          2,
+          2,
+          3,
+          1,
+          1,
+          1,
+          2,
+          2,
+          3,
+          1,
+          1,
+          2,
+          2,
+          3,
+          2,
+          2,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          2,
+          2,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          2,
+          2,
+          3,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          3,
+          1,
+          1,
+          1,
+          1,
+          2,
+          1,
+          1,
+          2,
+          2,
+          3,
+          2,
+          2,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          2
+        ],
+        "canonical_equal": true,
+        "consumed": 317,
+        "flush_counts": {
+          "final_drain": 0,
+          "max_size": 0,
+          "max_wait": 208
+        },
+        "produced": 317
+      },
+      "reference_totals": {
+        "late_order_cents": 328740,
+        "late_orders": 14,
+        "late_reviews": 0,
+        "negative_reviews": 0,
+        "orders": 286,
+        "revenue_cents": 5795430,
+        "reviews": 0
+      }
+    },
+    "reviews": {
+      "live": {
+        "batch_details": null,
+        "batch_sizes": null,
+        "canonical_equal": true,
+        "consumed": 6,
+        "flush_counts": null,
+        "produced": 6
+      },
+      "mb(1,0.2s)": {
+        "batch_details": [
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 0,
+            "flush_reason": "max_size",
+            "index": 1,
+            "last_offset": 0,
+            "processing_s": 0.001032,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 1,
+            "flush_reason": "max_size",
+            "index": 2,
+            "last_offset": 1,
+            "processing_s": 0.000941,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 2,
+            "flush_reason": "max_size",
+            "index": 3,
+            "last_offset": 2,
+            "processing_s": 0.000567,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 3,
+            "flush_reason": "max_size",
+            "index": 4,
+            "last_offset": 3,
+            "processing_s": 0.001133,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 4,
+            "flush_reason": "max_size",
+            "index": 5,
+            "last_offset": 4,
+            "processing_s": 0.000973,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 5,
+            "flush_reason": "max_size",
+            "index": 6,
+            "last_offset": 5,
+            "processing_s": 0.000782,
+            "size": 1
+          }
+        ],
+        "batch_sizes": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "canonical_equal": true,
+        "consumed": 6,
+        "flush_counts": {
+          "final_drain": 0,
+          "max_size": 6,
+          "max_wait": 0
+        },
+        "produced": 6
+      },
+      "mb(5,0.2s)": {
+        "batch_details": [
+          {
+            "collection_wait_s": 3.9e-05,
+            "first_offset": 0,
+            "flush_reason": "max_size",
+            "index": 1,
+            "last_offset": 4,
+            "processing_s": 0.005014,
+            "size": 5
+          },
+          {
+            "collection_wait_s": 2.1e-05,
+            "first_offset": 5,
+            "flush_reason": "final_drain",
+            "index": 2,
+            "last_offset": 5,
+            "processing_s": 0.000853,
+            "size": 1
+          }
+        ],
+        "batch_sizes": [
+          5,
+          1
+        ],
+        "canonical_equal": true,
+        "consumed": 6,
+        "flush_counts": {
+          "final_drain": 1,
+          "max_size": 1,
+          "max_wait": 0
+        },
+        "produced": 6
+      },
+      "mb(50,0.01s)": {
+        "batch_details": [
+          {
+            "collection_wait_s": 0.012537,
+            "first_offset": 0,
+            "flush_reason": "max_wait",
+            "index": 1,
+            "last_offset": 0,
+            "processing_s": 0.00235,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.012603,
+            "first_offset": 1,
+            "flush_reason": "max_wait",
+            "index": 2,
+            "last_offset": 1,
+            "processing_s": 0.003053,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.012923,
+            "first_offset": 2,
+            "flush_reason": "max_wait",
+            "index": 3,
+            "last_offset": 3,
+            "processing_s": 0.00369,
+            "size": 2
+          },
+          {
+            "collection_wait_s": 0.012041,
+            "first_offset": 4,
+            "flush_reason": "max_wait",
+            "index": 4,
+            "last_offset": 5,
+            "processing_s": 0.003525,
+            "size": 2
+          }
+        ],
+        "batch_sizes": [
+          1,
+          1,
+          2,
+          2
+        ],
+        "canonical_equal": true,
+        "consumed": 6,
+        "flush_counts": {
+          "final_drain": 0,
+          "max_size": 0,
+          "max_wait": 4
+        },
+        "produced": 6
+      },
+      "reference_totals": {
+        "late_order_cents": 0,
+        "late_orders": 0,
+        "late_reviews": 0,
+        "negative_reviews": 4,
+        "orders": 0,
+        "revenue_cents": 0,
+        "reviews": 5
+      }
+    },
+    "teaching": {
+      "live": {
+        "batch_details": null,
+        "batch_sizes": null,
+        "canonical_equal": true,
+        "consumed": 17,
+        "flush_counts": null,
+        "produced": 17
+      },
+      "mb(1,0.2s)": {
+        "batch_details": [
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 0,
+            "flush_reason": "max_size",
+            "index": 1,
+            "last_offset": 0,
+            "processing_s": 0.001262,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 1,
+            "flush_reason": "max_size",
+            "index": 2,
+            "last_offset": 1,
+            "processing_s": 0.00174,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 2,
+            "flush_reason": "max_size",
+            "index": 3,
+            "last_offset": 2,
+            "processing_s": 0.000889,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 3,
+            "flush_reason": "max_size",
+            "index": 4,
+            "last_offset": 3,
+            "processing_s": 0.000891,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 4,
+            "flush_reason": "max_size",
+            "index": 5,
+            "last_offset": 4,
+            "processing_s": 0.00092,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 5,
+            "flush_reason": "max_size",
+            "index": 6,
+            "last_offset": 5,
+            "processing_s": 0.000796,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 6,
+            "flush_reason": "max_size",
+            "index": 7,
+            "last_offset": 6,
+            "processing_s": 0.000966,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 7,
+            "flush_reason": "max_size",
+            "index": 8,
+            "last_offset": 7,
+            "processing_s": 0.000822,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 8,
+            "flush_reason": "max_size",
+            "index": 9,
+            "last_offset": 8,
+            "processing_s": 0.000946,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 9,
+            "flush_reason": "max_size",
+            "index": 10,
+            "last_offset": 9,
+            "processing_s": 0.000746,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 10,
+            "flush_reason": "max_size",
+            "index": 11,
+            "last_offset": 10,
+            "processing_s": 0.000691,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 11,
+            "flush_reason": "max_size",
+            "index": 12,
+            "last_offset": 11,
+            "processing_s": 0.000718,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 12,
+            "flush_reason": "max_size",
+            "index": 13,
+            "last_offset": 12,
+            "processing_s": 0.000833,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 13,
+            "flush_reason": "max_size",
+            "index": 14,
+            "last_offset": 13,
+            "processing_s": 0.000884,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 14,
+            "flush_reason": "max_size",
+            "index": 15,
+            "last_offset": 14,
+            "processing_s": 0.00058,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 1e-06,
+            "first_offset": 15,
+            "flush_reason": "max_size",
+            "index": 16,
+            "last_offset": 15,
+            "processing_s": 0.000759,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.0,
+            "first_offset": 16,
+            "flush_reason": "max_size",
+            "index": 17,
+            "last_offset": 16,
+            "processing_s": 0.000922,
+            "size": 1
+          }
+        ],
+        "batch_sizes": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "canonical_equal": true,
+        "consumed": 17,
+        "flush_counts": {
+          "final_drain": 0,
+          "max_size": 17,
+          "max_wait": 0
+        },
+        "produced": 17
+      },
+      "mb(5,0.2s)": {
+        "batch_details": [
+          {
+            "collection_wait_s": 7.9e-05,
+            "first_offset": 0,
+            "flush_reason": "max_size",
+            "index": 1,
+            "last_offset": 4,
+            "processing_s": 0.004681,
+            "size": 5
+          },
+          {
+            "collection_wait_s": 0.000118,
+            "first_offset": 5,
+            "flush_reason": "max_size",
+            "index": 2,
+            "last_offset": 9,
+            "processing_s": 0.006127,
+            "size": 5
+          },
+          {
+            "collection_wait_s": 4.8e-05,
+            "first_offset": 10,
+            "flush_reason": "max_size",
+            "index": 3,
+            "last_offset": 14,
+            "processing_s": 0.003699,
+            "size": 5
+          },
+          {
+            "collection_wait_s": 9.3e-05,
+            "first_offset": 15,
+            "flush_reason": "final_drain",
+            "index": 4,
+            "last_offset": 16,
+            "processing_s": 0.001919,
+            "size": 2
+          }
+        ],
+        "batch_sizes": [
+          5,
+          5,
+          5,
+          2
+        ],
+        "canonical_equal": true,
+        "consumed": 17,
+        "flush_counts": {
+          "final_drain": 1,
+          "max_size": 3,
+          "max_wait": 0
+        },
+        "produced": 17
+      },
+      "mb(50,0.01s)": {
+        "batch_details": [
+          {
+            "collection_wait_s": 0.024985,
+            "first_offset": 0,
+            "flush_reason": "max_wait",
+            "index": 1,
+            "last_offset": 1,
+            "processing_s": 0.003033,
+            "size": 2
+          },
+          {
+            "collection_wait_s": 0.01262,
+            "first_offset": 2,
+            "flush_reason": "max_wait",
+            "index": 2,
+            "last_offset": 2,
+            "processing_s": 0.001788,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.014066,
+            "first_offset": 3,
+            "flush_reason": "max_wait",
+            "index": 3,
+            "last_offset": 3,
+            "processing_s": 0.002322,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.012809,
+            "first_offset": 4,
+            "flush_reason": "max_wait",
+            "index": 4,
+            "last_offset": 4,
+            "processing_s": 0.001633,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.013948,
+            "first_offset": 5,
+            "flush_reason": "max_wait",
+            "index": 5,
+            "last_offset": 5,
+            "processing_s": 0.002685,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.012716,
+            "first_offset": 6,
+            "flush_reason": "max_wait",
+            "index": 6,
+            "last_offset": 6,
+            "processing_s": 0.002338,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.013065,
+            "first_offset": 7,
+            "flush_reason": "max_wait",
+            "index": 7,
+            "last_offset": 7,
+            "processing_s": 0.002432,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.013363,
+            "first_offset": 8,
+            "flush_reason": "max_wait",
+            "index": 8,
+            "last_offset": 8,
+            "processing_s": 0.00256,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.013201,
+            "first_offset": 9,
+            "flush_reason": "max_wait",
+            "index": 9,
+            "last_offset": 9,
+            "processing_s": 0.002729,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.01442,
+            "first_offset": 10,
+            "flush_reason": "max_wait",
+            "index": 10,
+            "last_offset": 10,
+            "processing_s": 0.003736,
+            "size": 1
+          },
+          {
+            "collection_wait_s": 0.011077,
+            "first_offset": 11,
+            "flush_reason": "max_wait",
+            "index": 11,
+            "last_offset": 12,
+            "processing_s": 0.003562,
+            "size": 2
+          },
+          {
+            "collection_wait_s": 0.013516,
+            "first_offset": 13,
+            "flush_reason": "max_wait",
+            "index": 12,
+            "last_offset": 14,
+            "processing_s": 0.003527,
+            "size": 2
+          },
+          {
+            "collection_wait_s": 0.00994,
+            "first_offset": 15,
+            "flush_reason": "final_drain",
+            "index": 13,
+            "last_offset": 16,
+            "processing_s": 0.005262,
+            "size": 2
+          }
+        ],
+        "batch_sizes": [
+          2,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          2,
+          2,
+          2
+        ],
+        "canonical_equal": true,
+        "consumed": 17,
+        "flush_counts": {
+          "final_drain": 1,
+          "max_size": 0,
+          "max_wait": 12
+        },
+        "produced": 17
+      },
+      "reference_totals": {
+        "late_order_cents": 1300,
+        "late_orders": 2,
+        "late_reviews": 0,
+        "negative_reviews": 4,
+        "orders": 7,
+        "revenue_cents": 12200,
+        "reviews": 5
+      }
+    }
+  }
+}
