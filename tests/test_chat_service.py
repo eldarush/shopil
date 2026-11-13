@@ -108,6 +108,37 @@ def test_shutdown_during_attempt_audit_prevents_terminal_approval():
     assert [event["status"] for event in events if event["event"] == "terminal"] == ["error"]
 
 
+@pytest.mark.parametrize("stage", ["snapshot", "attempt"])
+@pytest.mark.parametrize("failure", [OSError("disk unavailable"), ValueError("encoding unavailable")])
+def test_shutdown_reports_audit_failure_from_normal_error_path(stage, failure):
+    entered, release = Event(), Event()
+
+    def audit(event):
+        if event["event"] == stage:
+            entered.set()
+            assert release.wait(5)
+            raise failure
+        if event["event"] == "terminal":
+            raise failure
+
+    instance, _, _, _, _ = service(audit=audit)
+    with ThreadPoolExecutor(2) as pool:
+        answer = pool.submit(lambda: asyncio.run(instance.answer("question", [])))
+        try:
+            assert entered.wait(5)
+            shutdown = pool.submit(instance.shutdown)
+            deadline = monotonic() + 2
+            while not instance._closing and monotonic() < deadline:
+                sleep(.001)
+            assert instance._closing
+        finally:
+            release.set()
+        result = answer.result(timeout=5)
+        assert result.status == "error" and result.history == []
+        with pytest.raises(RuntimeError, match="persist.*audit"):
+            shutdown.result(timeout=5)
+
+
 @pytest.mark.parametrize("stage", ["capture", "actor", "critic"])
 def test_shutdown_waits_for_cancelled_question_audit_and_closes_admission(stage):
     async def scenario():

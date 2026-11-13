@@ -211,7 +211,8 @@ class ChatService:
                            error_type=type(exc).__name__, error_stage=stage)
                 record("terminal", status="error", attempts=attempt,
                        error_type=type(exc).__name__, error_stage=stage)
-            except OSError:
-                # An unavailable audit sink must never turn an answer into success.
-                pass
+            except (OSError, ValueError):
+                # Audit failures also make shutdown fail, including races during writes.
+                with self._condition:
+                    self._shutdown_audit_failed = True
             return reply("error", None, "אירעה שגיאה בעיבוד השאלה. לא הוצגה תשובה לא מאושרת.")
