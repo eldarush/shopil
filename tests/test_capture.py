@@ -408,3 +408,43 @@ def test_combined_factory_validates_scope_before_any_question(tmp_path, start, e
     with pytest.raises(ValueError):
         capture.build_capture(tmp_path / "unused.duckdb", tmp_path / "unused.db",
                               start=start, end=end, latest_windows=windows)
+
+
+def test_combined_total_question_preserves_separate_revenue_sources(tmp_path):
+    from chat.actor import Actor
+    from chat.critic import Critic
+    from chat.service import ChatService
+
+    callback = capture.build_capture(warehouse(tmp_path), database(tmp_path),
+                                     start=date(2026, 7, 1), end=date(2026, 7, 3))
+    question = "מה הסכום הכולל של ההכנסה מהזמנות ששולמו והסכומים מהזרם?"
+    rejected = "ההכנסה הכוללת היא 138.80 ש״ח."
+    separate = "הכנסה מהזמנות ששולמו: 15.35 ש״ח. סכום בחלון הסגור של הזרם: 12345 אגורות."
+
+    class ScriptedModel:
+        calls = 0
+
+        async def complete(self, messages, *, schema=None):
+            self.calls += 1
+            payload = json.loads(messages[3 if schema is None else 2]["content"])
+            assert payload["question"] == question
+            paid = payload_source(payload, "marts.fct_orders")
+            stream = payload_source(payload, "realtime_revenue")
+            assert paid["rows"] == [{"paid_orders": 2, "paid_revenue": "15.35"}]
+            assert stream["rows"][0]["revenue_cents"] == 12345
+            assert "ILS" in paid["units"] and "integer agorot" in stream["units"]
+            assert "no payment status" in stream["metric"]
+            assert "unverified" in payload["batch"]["cross_source_product_mapping"]
+            assert "138.80" not in json.dumps(payload)
+            if schema is None:
+                assert "never add historical and streaming revenue" in messages[0]["content"]
+                return rejected if self.calls == 1 else separate
+            assert "do not approve their sum" in messages[0]["content"]
+            return json.dumps({"is_acceptable": self.calls == 4, "feedback": "Keep the sources separate"})
+
+    model, audit = ScriptedModel(), []
+    reply = asyncio.run(ChatService(Actor(model), Critic(model), callback, audit.append).answer(question, []))
+    assert model.calls == 4
+    assert reply.status == "approved" and reply.answer == separate
+    assert [item["is_acceptable"] for item in audit if item["event"] == "attempt"] == [False, True]
+    assert rejected not in json.dumps(reply.history, ensure_ascii=False)
