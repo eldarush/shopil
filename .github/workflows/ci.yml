@@ -14,6 +14,13 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
+        include:
+          - os: ubuntu-latest
+            etl-python: etl/.venv/bin/python
+          - os: windows-latest
+            etl-python: etl/.venv/Scripts/python.exe
+          - os: macos-latest
+            etl-python: etl/.venv/bin/python
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
       - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
@@ -25,3 +32,11 @@ jobs:
       - run: uv run --locked python -m pytest -q
       - run: uv run --directory streaming --locked python -m pytest -q
       - run: uv run --locked python -m integration.smoke
+      - run: git clone https://github.com/paulavrahami/etl-course-demo.git runs/course
+      - run: git -C runs/course checkout --detach 6788526695bbb20ac40f46a947413fff3545b86a
+      - run: uv venv --python 3.14.10 etl/.venv
+      - run: uv pip install --python ${{ matrix.etl-python }} -r etl/requirements.txt
+      - name: Complete Batch and reference checks
+        run: uv run --locked python -m integration.batch --lab-dir runs/course --etl-python ${{ matrix.etl-python }} --run-dir runs/batch-first
+      - name: Repeat Batch without deleting warehouse or state
+        run: uv run --locked python -m integration.batch --lab-dir runs/course --etl-python ${{ matrix.etl-python }} --run-dir runs/batch-repeat
