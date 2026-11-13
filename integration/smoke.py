@@ -20,7 +20,7 @@ def smoke() -> None:
             database = Path(temporary) / f"{mode}.db"
             subprocess.run(
                 [uv, "run", "--project", str(ROOT / "streaming"), "--locked",
-                 "python", "-m", "shopil_streaming.service", "--mode", mode,
+                 "python", "-X", "utf8", "-m", "shopil_streaming.service", "--mode", mode,
                  "--seconds", "0.5", "--interval", "0.01", "--db", str(database)],
                 check=True, timeout=60,
                 env={key: value for key, value in os.environ.items() if key != "VIRTUAL_ENV"},

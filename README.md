@@ -20,8 +20,8 @@ The smoke test runs live and microbatch ingestion against temporary SQLite datab
 ## Run streaming independently
 
 ```text
-uv run --project streaming --locked python -m shopil_streaming.service --mode live --seconds 30 --db runs/live.db
-uv run --project streaming --locked python -m shopil_streaming.service --mode microbatch --seconds 30 --db runs/microbatch.db
+uv run --project streaming --locked python -X utf8 -m shopil_streaming.service --mode live --seconds 30 --db runs/live.db
+uv run --project streaming --locked python -X utf8 -m shopil_streaming.service --mode microbatch --seconds 30 --db runs/microbatch.db
 ```
 
 Use different databases to compare modes. Finite runs stop admitting records and drain the queue. Normal completion leaves business windows open; `--finalize` declares demo EOF and should not be used on a database you intend to resume. See [streaming](streaming/README.md) for experiment inputs and source attribution.
