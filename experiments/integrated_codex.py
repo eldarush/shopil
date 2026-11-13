@@ -49,7 +49,6 @@ class RehearsalModel:
     def __init__(self, directory, model):
         self.directory, self.model = directory, model
         self.calls, self.injected = 0, False
-        self.generated_answers = set()
 
     async def complete(self, messages, *, schema=None):
         self.calls += 1
@@ -74,25 +73,40 @@ class RehearsalModel:
             encoding="utf-8").splitlines() if line.strip()]
         verify_text_only_turn(events)
         answer = stem.with_suffix(".txt").read_text(encoding="utf-8")
-        if not schema:
-            self.generated_answers.add(answer.strip())
         return answer
 
 
-def fixed_capture(capture, model, directory):
+def approved_history(directory, snapshots):
+    """Read only turns whose terminal approval was durably written by ChatService."""
+    logs = [[json.loads(line) for line in path.read_text(encoding="utf-8").splitlines()]
+            for path in (directory / "audit").glob("*.jsonl")]
+    history = []
+    for index, snapshot in enumerate(snapshots):
+        matches = [events for events in logs if events and events[0].get("snapshot_id") == snapshot]
+        if len(matches) != 1:
+            raise ModelError("Previous rehearsal turn has no unique durable audit")
+        events = matches[0]
+        approved = [event for event in events if event["event"] == "attempt" and event["is_acceptable"]]
+        if events[-1].get("status") != "approved" or events[-1]["event"] != "terminal" or len(approved) != 1:
+            raise ModelError("Previous rehearsal turn was not durably approved")
+        history += [{"role": "user", "content": QUESTIONS[index]},
+                    {"role": "assistant", "content": approved[0]["draft"]}]
+    return history
+
+
+def fixed_capture(capture, directory):
+    snapshots = []
+
     async def take(question, history):
-        # No arbitrary questions or client-supplied assistant text reach an agent CLI.
-        index = len(history) // 2
-        if len(history) % 2 or index >= len(QUESTIONS) or question != QUESTIONS[index]:
-            raise ModelError("This rehearsal accepts only the three documented questions in order")
-        for position, message in enumerate(history):
-            role = "assistant" if position % 2 else "user"
-            if (message.get("role") != role or
-                    (role == "user" and message.get("content") != QUESTIONS[position // 2]) or
-                    (role == "assistant" and message.get("content") not in model.generated_answers)):
-                raise ModelError("History is outside the fixed rehearsal")
+        # Admission advances once: clearing/reopening the UI cannot bypass the injected draft.
+        index = len(snapshots)
+        if index >= len(QUESTIONS) or question != QUESTIONS[index] or len(history) != index * 2:
+            raise ModelError("This run accepts one conversation with the three documented questions in order")
+        if history != approved_history(directory, snapshots):
+            raise ModelError("History is outside the durably approved rehearsal")
         evidence = await capture(question, history)
         save(directory / f"snapshot-{evidence['snapshot_id']}.json", evidence)
+        snapshots.append(evidence["snapshot_id"])
         return evidence
     return take
 
@@ -124,7 +138,7 @@ def serve(args):
     model = RehearsalModel(args.run_dir, args.model)
     capture = build_capture(args.run_dir / "course/warehouse.duckdb", args.run_dir / "stream.db",
                             start=date(2026, 1, 1), end=date(2027, 1, 1))
-    run_app(fixed_capture(capture, model, args.run_dir), model, args.run_dir / "audit",
+    run_app(fixed_capture(capture, args.run_dir), model, args.run_dir / "audit",
             managed=True, port=args.port)
 
 

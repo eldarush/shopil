@@ -19,21 +19,21 @@ from experiments import integrated_codex as demo
 def test_fixed_questions_reject_untrusted_input_before_read_or_model(tmp_path, question, history):
     async def unexpected(*args):
         pytest.fail("No evidence read should occur")
-    capture = demo.fixed_capture(unexpected, demo.RehearsalModel(tmp_path, "test"), tmp_path)
+    capture = demo.fixed_capture(unexpected, tmp_path)
     with pytest.raises(ModelError):
         asyncio.run(capture(question, history))
     assert not list(tmp_path.iterdir())
 
 
 def test_fixed_followup_retains_real_capture_and_records_snapshot(tmp_path):
-    model = demo.RehearsalModel(tmp_path, "test")
-    model.generated_answers.add("generated answer")
     history = [{"role": "user", "content": demo.QUESTIONS[0]},
                {"role": "assistant", "content": "generated answer"}]
     async def capture(question, previous):
-        assert question == demo.QUESTIONS[1] and previous == history
-        return {"snapshot_id": "new", "question": question}
-    result = asyncio.run(demo.fixed_capture(capture, model, tmp_path)(demo.QUESTIONS[1], history))
+        return {"snapshot_id": "first" if not previous else "new", "question": question}
+    take = demo.fixed_capture(capture, tmp_path)
+    asyncio.run(take(demo.QUESTIONS[0], []))
+    audit(tmp_path, "first", "generated answer")
+    result = asyncio.run(take(demo.QUESTIONS[1], history))
     assert json.loads((tmp_path / "snapshot-new.json").read_text(encoding="utf-8")) == result
 
 
@@ -79,7 +79,7 @@ def test_injection_is_separate_from_real_correction_and_progress(tmp_path, monke
     checkpoints = iter([5, 8])
     monkeypatch.setattr(demo, "_checkpoint", lambda _: next(checkpoints))
     answer = asyncio.run(model.complete(messages))
-    assert answer in model.generated_answers and len(calls) == 1
+    assert answer == "תשובה אמיתית בבדיקת יחידה מדומה" and len(calls) == 1
     assert calls[0][-2:] == ["--model", "explicit-model"]
     progress = json.loads((tmp_path / "call-2.progress.json").read_text())
     assert (progress["before"], progress["after"], progress["snapshot_checkpoint"]) == (5, 8, 4)
@@ -100,3 +100,41 @@ def test_worker_preserves_configuration_and_uses_stdin_schema(tmp_path, monkeypa
     assert command[-1] == "-" and "--output-schema" in command
     assert "read-only" in command
     assert not any("ignore" in arg or "bypass" in arg for arg in command)
+
+
+def audit(directory, snapshot, answer, *, status="approved", terminal=True):
+    (directory / "audit").mkdir(exist_ok=True)
+    events = [{"event": "snapshot", "snapshot_id": snapshot},
+              {"event": "attempt", "is_acceptable": False, "draft": "rejected draft"},
+              {"event": "attempt", "is_acceptable": True, "draft": answer}]
+    if terminal:
+        events.append({"event": "terminal", "status": status})
+    (directory / "audit" / f"{snapshot}.jsonl").write_text(
+        "\n".join(json.dumps(event) for event in events), encoding="utf-8")
+
+
+@pytest.mark.parametrize("status,terminal", [("error", True), ("approved", False)])
+def test_critic_approval_without_successful_terminal_audit_is_not_history(tmp_path, status, terminal):
+    audit(tmp_path, "first", "draft", status=status, terminal=terminal)
+    with pytest.raises(ModelError, match="durably approved"):
+        demo.approved_history(tmp_path, ["first"])
+
+
+def test_rejected_draft_and_second_conversation_cannot_reach_model(tmp_path):
+    reads = []
+    async def capture(question, history):
+        reads.append(question)
+        return {"snapshot_id": str(len(reads)), "question": question}
+    take = demo.fixed_capture(capture, tmp_path)
+    asyncio.run(take(demo.QUESTIONS[0], []))
+    audit(tmp_path, "1", "approved correction")
+    rejected = [{"role": "user", "content": demo.QUESTIONS[0]},
+                {"role": "assistant", "content": "rejected draft"}]
+    with pytest.raises(ModelError, match="durably approved"):
+        asyncio.run(take(demo.QUESTIONS[1], rejected))
+    with pytest.raises(ModelError, match="one conversation"):
+        asyncio.run(take(demo.QUESTIONS[0], []))
+    assert reads == [demo.QUESTIONS[0]]
+    rejected[1]["content"] = "approved correction"
+    asyncio.run(take(demo.QUESTIONS[1], rejected))
+    assert reads == list(demo.QUESTIONS[:2])

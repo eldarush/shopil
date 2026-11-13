@@ -49,6 +49,11 @@ On macOS/Linux use `etl/.venv/bin/python` and ordinary shell line continuation. 
 2. `ומה לגבי מוצר 5?`
 3. `מהן עלויות המשלוח?`
 
+Each run permits one conversation. Clearing the UI, opening another session or
+retrying after a failed question requires a fresh run directory/restart. Later
+questions must exactly match the history durably approved in the service audit;
+rejected drafts and Critic approvals without a successful terminal audit do not qualify.
+
 The first candidate deliberately fabricates 999999 ILS and combines historical and
 streaming revenue. It is explicitly recorded in `call-1.injection.json`, not labeled a
 real response. Its rejection, the corrected draft and subsequent evaluations must come
