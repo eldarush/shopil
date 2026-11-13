@@ -44,3 +44,10 @@ midnights, matching the course fixture. The materialized product mart is
 full-history and carries its own observed coverage. Keep its totals separate
 from the date-filtered paid-order totals. Amounts are serialized as exact ILS
 decimal strings.
+
+## Compose evidence for chat
+
+`make_capture(batch_path, stream_path, start=start_date, end=end_date, product_id=None)`
+returns the async callable accepted by `ChatService`. Dates form a half-open
+historical range. Each call reads both databases and creates a fresh package.
+The chat service freezes that package across retries.
