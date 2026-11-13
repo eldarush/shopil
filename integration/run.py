@@ -54,9 +54,13 @@ def _kill_group(process: subprocess.Popen) -> None:
     if process.poll() is not None:
         return
     if os.name == "nt":
-        result = subprocess.run(["taskkill", "/PID", str(process.pid), "/T", "/F"],
-                                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-        if result.returncode and process.poll() is None:
+        try:
+            subprocess.run(["taskkill", "/PID", str(process.pid), "/T", "/F"],
+                           stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=5)
+        except (OSError, subprocess.TimeoutExpired):
+            # Tree cleanup can be unavailable or stall; still reap the direct child.
+            pass
+        if process.poll() is None:
             process.kill()
     else:
         try:

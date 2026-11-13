@@ -1,10 +1,13 @@
 """Real subprocess and SQLite lifecycle tests; chat and batch are explicit stubs."""
 
 from contextlib import closing
+import io
 import os
 import sqlite3
+import subprocess
 import sys
 import time
+from types import SimpleNamespace
 
 import pytest
 
@@ -142,3 +145,46 @@ def test_managed_stream_accepts_newline_as_a_graceful_stop(tmp_path):
         run._stop(child, "Streaming", 5)
     with closing(sqlite3.connect(database)) as connection:
         assert connection.execute("SELECT finalized FROM stream_meta").fetchone()[0] == 0
+
+
+@pytest.mark.parametrize("failure", [
+    subprocess.TimeoutExpired("taskkill", 5), OSError("taskkill unavailable"), None,
+])
+def test_windows_tree_cleanup_failure_is_bounded_and_falls_back_to_child_kill(monkeypatch, failure):
+    class UncooperativeProcess:
+        pid = 1234
+
+        def __init__(self):
+            self.stdin = io.BytesIO()
+            self.killed = False
+            self.waits = []
+
+        def poll(self):
+            return 1 if self.killed else None
+
+        def kill(self):
+            self.killed = True
+
+        def wait(self, timeout):
+            self.waits.append(timeout)
+            if not self.killed:
+                raise subprocess.TimeoutExpired("child", timeout)
+            return 1
+
+    calls = []
+
+    def taskkill(command, **kwargs):
+        calls.append((command, kwargs))
+        if failure:
+            raise failure
+        return subprocess.CompletedProcess(command, returncode=1)
+
+    monkeypatch.setattr(run, "os", SimpleNamespace(name="nt"))
+    monkeypatch.setattr(run.subprocess, "run", taskkill)
+    child = UncooperativeProcess()
+    with pytest.raises(run.StackError, match="forced termination"):
+        run._stop(child, "Chat", 0.1)
+    assert calls[0][0] == ["taskkill", "/PID", "1234", "/T", "/F"]
+    assert calls[0][1]["timeout"] == 5
+    assert child.stdin.closed and child.killed
+    assert child.waits == [0.1, 5]
