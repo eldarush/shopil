@@ -138,3 +138,37 @@ def test_rejected_draft_and_second_conversation_cannot_reach_model(tmp_path):
     rejected[1]["content"] = "approved correction"
     asyncio.run(take(demo.QUESTIONS[1], rejected))
     assert reads == list(demo.QUESTIONS[:2])
+
+
+def test_actual_service_audit_admits_one_complete_conversation(tmp_path):
+    from datetime import datetime, UTC
+    from uuid import uuid4
+    from chat.actor import Actor
+    from chat.audit import JsonlAudit
+    from chat.critic import Critic
+    from chat.service import ChatService
+
+    class ScriptedModel:
+        async def complete(self, messages, *, schema=None):
+            return (json.dumps({"is_acceptable": True, "feedback": "Explicit mechanics test"})
+                    if schema else "תשובת בדיקה מדומה")
+
+    reads = []
+    async def capture(question, history):
+        reads.append(question)
+        return {"question": question, "snapshot_id": uuid4().hex,
+                "captured_at": datetime.now(UTC).isoformat(), "sources": []}
+    model = ScriptedModel()
+    service = ChatService(Actor(model), Critic(model), demo.fixed_capture(capture, tmp_path),
+                          JsonlAudit(tmp_path / "audit"))
+    async def run():
+        history = []
+        for question in demo.QUESTIONS:
+            reply = await service.answer(question, history)
+            assert reply.status == "approved"
+            history = reply.history
+        assert len(history) == 6
+        assert (await service.answer(demo.QUESTIONS[0], [])).status == "error"
+    asyncio.run(run())
+    service.shutdown()
+    assert reads == list(demo.QUESTIONS)
