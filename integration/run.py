@@ -2,12 +2,14 @@
 
 from collections.abc import Sequence
 from contextlib import closing
+import argparse
 import math
 import os
 from pathlib import Path
 import signal
 import sqlite3
 import subprocess
+import sys
 import time
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -153,3 +155,41 @@ def run_stack(
             errors.append("Batch was interrupted and required termination")
         if errors:
             raise StackError("; ".join(errors))
+
+
+def main(argv=None):
+    from chat.__main__ import add_arguments
+    from chat.transport import OllamaModel
+
+    parser = argparse.ArgumentParser(description=__doc__)
+    add_arguments(parser)
+    parser.add_argument("--lab-dir", type=Path, required=True)
+    parser.add_argument("--etl-python", type=Path, required=True)
+    parser.add_argument("--batch-run-dir", type=Path, required=True)
+    parser.add_argument("--mode", choices=("live", "microbatch"), default="live")
+    args = parser.parse_args(argv)
+    if args.warehouse.resolve() != (args.lab_dir / "warehouse.duckdb").resolve():
+        parser.error("--warehouse must name warehouse.duckdb in --lab-dir")
+    if args.history_start >= args.history_end or args.latest_windows < 1 or not 1 <= args.port <= 65535:
+        parser.error("Use ordered history dates, positive latest-windows and port 1–65535")
+    try:
+        OllamaModel(args.model, args.ollama_url)
+    except ValueError as error:
+        parser.error(str(error))
+    batch = [sys.executable, "-m", "integration.batch", "--lab-dir", str(args.lab_dir.resolve()),
+             "--etl-python", str(args.etl_python.resolve()), "--run-dir", str(args.batch_run_dir.resolve())]
+    chat = [sys.executable, "-m", "chat", "--managed", "--warehouse", str(args.warehouse.resolve()),
+            "--stream-db", str(args.stream_db.resolve()), "--history-start", args.history_start.isoformat(),
+            "--history-end", args.history_end.isoformat(), "--model", args.model,
+            "--ollama-url", args.ollama_url, "--audit-dir", str(args.audit_dir.resolve()),
+            "--latest-windows", str(args.latest_windows), "--port", str(args.port)]
+    try:
+        run_stack(batch, chat, stream_db=args.stream_db, mode=args.mode)
+    except KeyboardInterrupt:
+        pass  # run_stack closes both children before propagating the interrupt.
+    except (StackError, OSError, subprocess.SubprocessError) as error:
+        parser.exit(1, f"Stack failed: {error}\n")
+
+
+if __name__ == "__main__":
+    main()

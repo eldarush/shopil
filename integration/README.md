@@ -6,6 +6,26 @@ Complete batch loading and dbt before starting chat. The batch process must exit
 
 The supervisor uses `streaming/.venv` directly, so first run `uv sync --project streaming --locked`. It inherits component output for visible produced/consumed/checkpoint progress. A startup failure prevents chat from starting; a stream failure while chat is active stops the stack.
 
+## Concrete Batch command
+
+Prepare the pinned course checkout and isolated ETL dependencies as described in [ETL setup](../etl/README.md). From the repository root on Windows:
+
+```text
+uv run --locked python -m integration.batch --lab-dir ../etl-course-demo --etl-python ../.venv-shopil-etl/Scripts/python.exe --run-dir runs/batch-1
+```
+
+On macOS/Linux, use `../.venv-shopil-etl/bin/python` for `--etl-python`. This runs base ingestion, reviews replacement, a full dbt build, the baseline checker, course checks 1–3 and the exact-row staging checker. Failure stops subsequent stages. A new run directory contains an exported copy of the pinned course dbt project plus the authored model overlays, logs and dbt results. Existing course model files remain unchanged. Reuse the warehouse and dlt state with a new output directory such as `runs/batch-2` to verify rerun behavior. Existing output directories are never overwritten.
+
+## Run the complete stack
+
+With the isolated environments prepared and an installed model served by stable Ollama >=0.13.0, run:
+
+```text
+uv run --locked python -m integration.run --lab-dir ../etl-course-demo --etl-python ../.venv-shopil-etl/Scripts/python.exe --batch-run-dir runs/batch-stack-1 --warehouse ../etl-course-demo/warehouse.duckdb --stream-db runs/stream-live.db --history-start 2026-01-01 --history-end 2027-01-01 --model YOUR_INSTALLED_MODEL --mode live
+```
+
+Use the macOS/Linux interpreter path above on those platforms. `--mode microbatch` selects the other runner; use a distinct SQLite path for comparisons. The warehouse must be the Batch output in `--lab-dir`. All child commands are argument lists, without a shell. Open `http://127.0.0.1:7860` after startup; Ctrl+C in the supervisor closes chat and drains the stream. Enter/EOF controls apply when running a managed component directly, not to the supervisor's own stdin.
+
 ## Run streaming independently
 
 From the repository root in PowerShell or a macOS/Linux terminal:
@@ -26,4 +46,4 @@ uv run --locked python -m pytest tests/test_lifecycle.py -q
 uv run --directory streaming --locked python -m pytest tests/test_managed.py -q
 ```
 
-Tests run real worker processes with bounded queues, assert that all admitted records drain, and exercise failed batch startup, continuing stream progress during a chat stub, unexpected stream failure, startup deadlines and uncooperative child shutdown. These checks do not establish that the final ETL/chat command pair has been integrated; that requires the completed data pipeline and configured model service.
+Tests run real worker processes with bounded queues, assert that all admitted records drain, and exercise failed batch startup, continuing stream progress during a chat stub, unexpected stream failure, startup deadlines and uncooperative child shutdown. CLI tests verify concrete command wiring. CI also runs the complete Batch command twice in separate output directories against the same warehouse/state on each supported OS. Local Batch validation passed twice with eight product rows, 289 cleaned reviews, 402 paid orders and ILS 97,210.10. Scripted-model server tests and Batch runs do not prove a real local model deployment; the combined demonstration still needs that configured service.
