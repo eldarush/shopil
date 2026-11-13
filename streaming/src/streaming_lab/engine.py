@@ -225,6 +225,7 @@ class StreamEngine:
         try:
             iso_time(start)
             iso_time(end)
+            iso_time(end + self.grace_ms)
             iso_time(watermark)
         except (OverflowError, ValueError):
             raise InvalidEvent("event_time produces a window or watermark outside supported years 1..9999") from None

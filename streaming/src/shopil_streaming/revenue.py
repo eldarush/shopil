@@ -5,8 +5,11 @@ for display (`shekels`). Accepted revenue = closed windows + still-open windows;
 summing only closed windows under-reports while the stream is live.
 
 Reconciliation is INSIDE the stream: accepted + late (side output) must equal a
-full recomputation over the same valid, unique order events (`batch_truth`,
-which ignores arrival order). This is NOT the ShopIL historical Batch revenue
+recomputation over the same valid, unique order events. Recorded dead-letter
+offsets are excluded before `batch_truth`; the independent schema-only input
+truth and excluded offsets are also reported so storage rejection is visible.
+This arithmetic check does not independently prove the rejection classification.
+This is NOT the ShopIL historical Batch revenue
 (fct_orders, status='paid', ILS): stream order events have no payment status,
 so the two are reported separately and never summed.
 """
@@ -19,8 +22,9 @@ from streaming_lab.events import iso_time
 
 from .runs import shekels
 
-SCOPE_NOTE = ("Stream reconciliation only: accepted + late vs. a full recomputation of the same valid, unique "
-              "stream order events. Not comparable to or additive with Batch paid revenue (fct_orders).")
+SCOPE_NOTE = ("Stream reconciliation only: accepted + late vs. valid unique input after recorded dead-letter "
+              "offsets are excluded. Input schema-only truth and exclusions are reported separately; "
+              "this does not prove rejection classification. Not additive with Batch paid revenue (fct_orders).")
 
 
 def revenue_windows(snapshot: dict[str, Any]) -> list[dict[str, Any]]:
@@ -52,7 +56,10 @@ def window_monitor(snapshot: dict[str, Any]) -> dict[str, Any]:
 
 
 def reconcile(snapshot: dict[str, Any], deliveries: Iterable[Delivery]) -> dict[str, Any]:
-    truth = batch_truth(list(deliveries))
+    deliveries = list(deliveries)
+    input_truth = batch_truth(deliveries)
+    rejected_offsets = {row["source_offset"] for row in snapshot["dead_letters"]}
+    truth = batch_truth(item for item in deliveries if item.offset not in rejected_offsets)
     t = snapshot["totals"]
     accepted, late = t["revenue_cents"], t["late_order_cents"]
     return {"accepted_orders": t["orders"], "accepted_cents": accepted, "accepted_ils": shekels(accepted),
@@ -60,5 +67,7 @@ def reconcile(snapshot: dict[str, Any], deliveries: Iterable[Delivery]) -> dict[
             "stream_total_ils": shekels(accepted + late),
             "recomputed_orders": truth["orders"], "recomputed_cents": truth["revenue_cents"],
             "recomputed_ils": shekels(truth["revenue_cents"]),
+            "input_schema_truth": input_truth,
+            "excluded_dead_letter_offsets": sorted(rejected_offsets),
             "orders_match": t["orders"] + t["late_orders"] == truth["orders"],
             "revenue_match": accepted + late == truth["revenue_cents"], "scope": SCOPE_NOTE}

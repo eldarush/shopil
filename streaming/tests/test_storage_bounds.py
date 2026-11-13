@@ -76,6 +76,7 @@ def test_window_overflow_retains_exact_money_and_rejected_payload(tmp_path):
     ("9999-12-31T23:59:59.999999Z", {}),
     ("0001-01-01T00:00:00Z", {"out_of_order_seconds": 1}),
     ("2026-11-01T10:00:00Z", {"window_seconds": 315537897600}),
+    ("2026-11-01T10:00:00Z", {"grace_seconds": 315537897600}),
 ])
 def test_unrenderable_dates_never_commit_unreadable_state(tmp_path, stamp, config):
     path = tmp_path / "dates.db"
@@ -96,3 +97,21 @@ def test_unrepresentable_time_policies_are_rejected_before_database_creation(tmp
     with pytest.raises(ValueError, match=key):
         StreamEngine(path, **{key: 315537897601})
     assert not path.exists()
+
+
+def test_schema_precheck_is_not_a_prediction_of_state_dependent_acceptance(tmp_path):
+    from shopil_streaming.contract import check
+    from shopil_streaming.revenue import window_monitor
+    bad = order(event_time="9999-12-31T23:59:59.999999Z")
+    assert check(bad) is None
+    with StreamEngine(tmp_path / "precheck.db") as engine:
+        assert engine.ingest(bad, offset=0)["status"] == "invalid"
+        assert window_monitor(engine.snapshot())["accepted_revenue_ils"] == "0.00"
+
+
+def test_schema_invalid_retry_remains_invalid_but_valid_retry_is_duplicate(tmp_path):
+    with StreamEngine(tmp_path / "retry.db") as engine:
+        assert engine.ingest(order(), offset=0)["status"] == "accepted"
+        assert engine.ingest(order(amount_cents=SQLITE_MAX_INTEGER + 1), offset=1)["status"] == "invalid"
+        assert engine.ingest(order(amount_cents=100), offset=2)["status"] == "duplicate"
+        assert engine.snapshot()["totals"]["revenue_cents"] == 1

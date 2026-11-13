@@ -1,10 +1,12 @@
 """SHOPIL-17: the streaming event contract, as enforced by the course engine.
 
-We deliberately keep the course contract (assignment: "keep the lab contract").
-`streaming_lab.events.Event` is the single validator; StreamEngine.ingest calls
-it and writes any failure to `dead_letters(source_offset, payload_json, reason)`
-in the SAME transaction that advances the checkpoint. This module documents the
-contract, exposes the same check for reporting, and summarises dead letters.
+`streaming_lab.events.Event` checks the event schema, including representable
+integers and Unicode. This module exposes that stateless precheck. Ingestion
+additionally validates configured window bounds and the current window's revenue
+capacity; a schema-valid event can still be rejected there. All ingestion
+rejections go to `dead_letters(source_offset, payload_json, reason)` in the SAME
+transaction that advances the checkpoint. Read that recorded reason for the
+authoritative ingestion outcome.
 
 Identity: `event_id` is the business identity of an event. `offset` is only the
 position in ONE ordered source partition; a producer retry may legitimately
@@ -18,7 +20,7 @@ from streaming_lab.events import Event, InvalidEvent
 
 CONTRACT: list[dict[str, str]] = [
     {"field": "event_id", "applies_to": "all", "type": "non-empty string",
-     "rule": "Business identity. Duplicates are ignored by the engine, whatever their offset."},
+     "rule": "Business identity. Schema-valid duplicates are ignored at new offsets; schema-invalid retries remain invalid."},
     {"field": "kind", "applies_to": "all", "type": "'order' | 'review'", "rule": "Any other value is invalid."},
     {"field": "event_time", "applies_to": "all", "type": "ISO-8601 with timezone (or tz-aware datetime)",
      "rule": "Naive timestamps are invalid. Normalised to UTC; windows are computed in integer milliseconds."},
@@ -39,7 +41,7 @@ PAYMENT_STATUS_NOTE = ("Streaming order events carry amount_cents but no payment
 
 
 def check(payload: Event | Mapping[str, Any] | Any) -> str | None:
-    """Return None if valid, otherwise the exact reason the engine would store."""
+    """Return a schema error or None; this does not predict state-dependent acceptance."""
     if isinstance(payload, Event):
         return None
     try:
