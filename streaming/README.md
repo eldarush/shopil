@@ -14,6 +14,19 @@ uv sync --locked
 uv run python -m pytest -q
 ```
 
+## Run the continuous stream
+
+```powershell
+# one record at a time, 30 s of admission, progress every 0.5 s
+uv run python -m shopil_streaming.service --mode live --seconds 30
+# small batches (released at 5 records or 0.2 s after the first record, whichever is first)
+uv run python -m shopil_streaming.service --mode microbatch --batch-size 5 --max-wait 0.2 --seconds 30
+# keep running next to the chat; Ctrl+C stops it, re-running with the same --db resumes
+uv run python -m shopil_streaming.service --db runs\chat\stream.db --forever
+```
+
+The source (`shopil_streaming.source`) is endless and deterministic per offset, uses the ShopIL catalog product ids 1–8 and prices in agorot, and includes producer retries (same `event_id`, new offset) and out-of-order events.
+
 ## Layout
 
 | Path | What |
