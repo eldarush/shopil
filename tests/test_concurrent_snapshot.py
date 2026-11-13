@@ -58,7 +58,7 @@ class BarrierModel:
                 self.entered.set()
                 await self.release.wait()
                 return "טיוטה ראשונה לבדיקה"
-            if len(messages) == 5:
+            if len(messages) == 6:
                 self.corrections.append(json.loads(messages[4]["content"]))
             snapshot = json.loads(messages[3]["content"])
             count = snapshot["stream"]["counters"]["accepted_reviews"]

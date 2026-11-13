@@ -37,8 +37,9 @@ def test_draft_preserves_evidence_and_does_not_promote_history_to_instructions()
     assert messages[3]["content"] is EVIDENCE
     assert json.loads(messages[1]["content"])["approved_history"] == original
     assert history == original
-    assert [m["role"] for m in messages] == ["system", "user", "user", "user"]
+    assert [m["role"] for m in messages] == ["system", "user", "user", "user", "user"]
     assert messages[2]["content"] == "ומה ההכנסה עכשיו?"
+    assert messages[-1]["content"] == messages[2]["content"]
     instructions = messages[0]["content"]
     for requirement in (
         "Answer in Hebrew", "stale facts in history must not override",
@@ -58,7 +59,8 @@ def test_retry_forwards_draft_feedback_and_exact_same_snapshot():
     first, second = [call[0] for call in model.calls]
     assert first[3]["content"] is second[3]["content"] is EVIDENCE
     assert first[:4] == second[:4]
-    assert json.loads(second[-1]["content"]) == {
+    assert first[-1] == second[-1] == {"role": "user", "content": "שאלה"}
+    assert json.loads(second[-2]["content"]) == {
         "previous_draft": "טיוטה שגויה", "feedback": "יש להבחין בין אפס למידע חסר"
     }
 
