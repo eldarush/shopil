@@ -1,0 +1,31 @@
+{
+  "snapshot_id": "synthetic-shopil-28",
+  "captured_at": "2026-11-13T10:01:00Z",
+  "question": "What did product 5 sell historically, and what happened in the latest stream window?",
+  "sources": [
+    {
+      "table": "marts.fct_orders",
+      "metric": "historical_paid_revenue",
+      "units": "ILS",
+      "identifiers": ["product_id"],
+      "time_start": "2026-07-01",
+      "time_end": "2026-08-01",
+      "rows": [{"product_id": 5, "paid_revenue": "238.00"}],
+      "checkpoint": null,
+      "watermark": null,
+      "window_state": null
+    },
+    {
+      "table": "order_state",
+      "metric": "stream_order_amount",
+      "units": "agorot",
+      "identifiers": [],
+      "time_start": "2026-11-13T10:00:00Z",
+      "time_end": "2026-11-13T10:01:00Z",
+      "rows": [{"orders": 2, "revenue_cents": 13980}],
+      "checkpoint": 17,
+      "watermark": "2026-11-13T10:00:45Z",
+      "window_state": "open"
+    }
+  ]
+}
