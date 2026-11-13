@@ -33,3 +33,14 @@ counters, checkpoint, and watermark from one SQLite read transaction. The keys
 `realtime_revenue` and `review_windows` contain closed windows. Amounts remain
 integer agorot and time values ending in `_ms` are UTC epoch milliseconds.
 The caller can build per-question evidence after the reader closes the transaction.
+
+## Read historical evidence
+
+`read_batch_sources(warehouse, start=..., end=..., product_id=...)` in
+`data_access.batch` reads the completed warehouse in one read-only transaction.
+Pass a half-open range of calendar dates and an optional historical product ID.
+Order filters use the stored calendar dates. Review timestamp filters use UTC
+midnights, matching the course fixture. The materialized product mart is
+full-history and carries its own observed coverage. Keep its totals separate
+from the date-filtered paid-order totals. Amounts are serialized as exact ILS
+decimal strings.
