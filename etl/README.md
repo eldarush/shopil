@@ -90,3 +90,22 @@ cp etl/dbt/models/marts/mart_product_reviews.sql etl/dbt/models/marts/_mart_prod
 The model adapts the [course mart starter](https://github.com/paulavrahami/etl-course-demo/blob/6788526695bbb20ac40f46a947413fff3545b86a/exercises/starter/mart_product_reviews.sql). It aggregates reviews and paid orders separately before joining to the full product catalog. Products without reviews have zero review counts and a null average. Revenue sums the paid order amounts in ILS. The source amount already includes quantity.
 
 The reference run produced eight unique products, 289 reviews, 402 paid orders and ILS 97,210.10 in paid revenue. All 14 course checks for steps 1–3 passed. The dbt build had 26 passing nodes, the known warning about 19 staged orders with no matching customer, and no errors.
+
+## Verify the reference dataset and rerun
+
+Run the verifier from the repository root with the same isolated ETL environment.
+
+```sh
+../.venv-shopil-etl/bin/python -m integration.verify_batch \
+  --lab-dir ../etl-course-demo \
+  --etl-python ../.venv-shopil-etl/bin/python \
+  --output runs/etl-reference
+```
+
+The verifier checks out the pinned course revision in a temporary directory and
+runs the complete Batch pipeline twice against the same warehouse and dlt
+state. The existing checkers validate the reference counts, paid revenue and
+cleaned rows on each run. The verifier then compares sorted business rows for
+raw orders, reviews, tags and the product mart, excluding regenerated dlt
+metadata. The output directory contains both logs, dbt results and a JSON
+comparison with counts and hashes.
