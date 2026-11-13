@@ -1,0 +1,458 @@
+{
+  "cases": [
+    {
+      "case": "valid order (Israel time, +02:00)",
+      "checkpoint_after": 0,
+      "engine_status": "accepted",
+      "expected": "accepted",
+      "offset": 0,
+      "precheck_matches_engine": true,
+      "reason": ""
+    },
+    {
+      "case": "valid review (UTC Z suffix)",
+      "checkpoint_after": 1,
+      "engine_status": "accepted",
+      "expected": "accepted",
+      "offset": 1,
+      "precheck_matches_engine": true,
+      "reason": ""
+    },
+    {
+      "case": "missing event_id",
+      "checkpoint_after": 2,
+      "engine_status": "invalid",
+      "expected": "invalid",
+      "offset": 2,
+      "precheck_matches_engine": true,
+      "reason": "missing required field: event_id"
+    },
+    {
+      "case": "blank event_id",
+      "checkpoint_after": 3,
+      "engine_status": "invalid",
+      "expected": "invalid",
+      "offset": 3,
+      "precheck_matches_engine": true,
+      "reason": "event_id must be a nonempty string"
+    },
+    {
+      "case": "unknown kind",
+      "checkpoint_after": 4,
+      "engine_status": "invalid",
+      "expected": "invalid",
+      "offset": 4,
+      "precheck_matches_engine": true,
+      "reason": "kind must be 'order' or 'review'"
+    },
+    {
+      "case": "event_time without timezone",
+      "checkpoint_after": 5,
+      "engine_status": "invalid",
+      "expected": "invalid",
+      "offset": 5,
+      "precheck_matches_engine": true,
+      "reason": "event_time must include a timezone"
+    },
+    {
+      "case": "event_time not ISO-8601",
+      "checkpoint_after": 6,
+      "engine_status": "invalid",
+      "expected": "invalid",
+      "offset": 6,
+      "precheck_matches_engine": true,
+      "reason": "event_time must be ISO-8601"
+    },
+    {
+      "case": "missing product_id",
+      "checkpoint_after": 7,
+      "engine_status": "invalid",
+      "expected": "invalid",
+      "offset": 7,
+      "precheck_matches_engine": true,
+      "reason": "missing required field: product_id"
+    },
+    {
+      "case": "product_id as string",
+      "checkpoint_after": 8,
+      "engine_status": "invalid",
+      "expected": "invalid",
+      "offset": 8,
+      "precheck_matches_engine": true,
+      "reason": "product_id must be an integer >= 1"
+    },
+    {
+      "case": "product_id zero",
+      "checkpoint_after": 9,
+      "engine_status": "invalid",
+      "expected": "invalid",
+      "offset": 9,
+      "precheck_matches_engine": true,
+      "reason": "product_id must be an integer >= 1"
+    },
+    {
+      "case": "amount in shekels as float",
+      "checkpoint_after": 10,
+      "engine_status": "invalid",
+      "expected": "invalid",
+      "offset": 10,
+      "precheck_matches_engine": true,
+      "reason": "amount_cents must be an integer >= 0"
+    },
+    {
+      "case": "negative amount",
+      "checkpoint_after": 11,
+      "engine_status": "invalid",
+      "expected": "invalid",
+      "offset": 11,
+      "precheck_matches_engine": true,
+      "reason": "amount_cents must be an integer >= 0"
+    },
+    {
+      "case": "boolean amount",
+      "checkpoint_after": 12,
+      "engine_status": "invalid",
+      "expected": "invalid",
+      "offset": 12,
+      "precheck_matches_engine": true,
+      "reason": "amount_cents must be an integer >= 0"
+    },
+    {
+      "case": "order missing amount",
+      "checkpoint_after": 13,
+      "engine_status": "invalid",
+      "expected": "invalid",
+      "offset": 13,
+      "precheck_matches_engine": true,
+      "reason": "amount_cents must be an integer >= 0"
+    },
+    {
+      "case": "order carrying a rating",
+      "checkpoint_after": 14,
+      "engine_status": "invalid",
+      "expected": "invalid",
+      "offset": 14,
+      "precheck_matches_engine": true,
+      "reason": "an order must not contain a rating"
+    },
+    {
+      "case": "review rating 0",
+      "checkpoint_after": 15,
+      "engine_status": "invalid",
+      "expected": "invalid",
+      "offset": 15,
+      "precheck_matches_engine": true,
+      "reason": "rating must be an integer >= 1"
+    },
+    {
+      "case": "review rating 7",
+      "checkpoint_after": 16,
+      "engine_status": "invalid",
+      "expected": "invalid",
+      "offset": 16,
+      "precheck_matches_engine": true,
+      "reason": "rating must be between 1 and 5"
+    },
+    {
+      "case": "review missing rating",
+      "checkpoint_after": 17,
+      "engine_status": "invalid",
+      "expected": "invalid",
+      "offset": 17,
+      "precheck_matches_engine": true,
+      "reason": "rating must be an integer >= 1"
+    },
+    {
+      "case": "review carrying amount_cents",
+      "checkpoint_after": 18,
+      "engine_status": "invalid",
+      "expected": "invalid",
+      "offset": 18,
+      "precheck_matches_engine": true,
+      "reason": "a review must not contain amount_cents"
+    },
+    {
+      "case": "review text not a string",
+      "checkpoint_after": 19,
+      "engine_status": "invalid",
+      "expected": "invalid",
+      "offset": 19,
+      "precheck_matches_engine": true,
+      "reason": "text must be a string"
+    },
+    {
+      "case": "payload is not an object",
+      "checkpoint_after": 20,
+      "engine_status": "invalid",
+      "expected": "invalid",
+      "offset": 20,
+      "precheck_matches_engine": true,
+      "reason": "event must be an object"
+    },
+    {
+      "case": "invalid event one hour in the future (must not move watermark)",
+      "checkpoint_after": 21,
+      "engine_status": "invalid",
+      "expected": "invalid",
+      "offset": 21,
+      "precheck_matches_engine": true,
+      "reason": "amount_cents must be an integer >= 0"
+    },
+    {
+      "case": "valid order after the bad input (stream keeps going)",
+      "checkpoint_after": 22,
+      "engine_status": "accepted",
+      "expected": "accepted",
+      "offset": 22,
+      "precheck_matches_engine": true,
+      "reason": ""
+    }
+  ],
+  "checkpoint": 22,
+  "checks": {
+    "a future-dated invalid event (11:00) did not move max event time / watermark": true,
+    "checkpoint advanced over invalid input (last offset)": true,
+    "contract.check() reproduces the engine reason": true,
+    "every case has the expected status": true,
+    "every invalid input is in dead_letters with input, offset and reason": true,
+    "stats.invalid == dead letters": true
+  },
+  "dead_letters": [
+    {
+      "input": {
+        "amount_cents": 100,
+        "event_time": "2026-11-01T10:00:11Z",
+        "kind": "order",
+        "product_id": 5
+      },
+      "offset": 2,
+      "reason": "missing required field: event_id"
+    },
+    {
+      "input": {
+        "amount_cents": 100,
+        "event_id": "  ",
+        "event_time": "2026-11-01T10:00:11Z",
+        "kind": "order",
+        "product_id": 5
+      },
+      "offset": 3,
+      "reason": "event_id must be a nonempty string"
+    },
+    {
+      "input": {
+        "amount_cents": 100,
+        "event_id": "c-refund",
+        "event_time": "2026-11-01T10:00:12Z",
+        "kind": "refund",
+        "product_id": 5
+      },
+      "offset": 4,
+      "reason": "kind must be 'order' or 'review'"
+    },
+    {
+      "input": {
+        "amount_cents": 100,
+        "event_id": "c-naive",
+        "event_time": "2026-11-01T10:00:13",
+        "kind": "order",
+        "product_id": 5
+      },
+      "offset": 5,
+      "reason": "event_time must include a timezone"
+    },
+    {
+      "input": {
+        "amount_cents": 100,
+        "event_id": "c-badtime",
+        "event_time": "yesterday",
+        "kind": "order",
+        "product_id": 5
+      },
+      "offset": 6,
+      "reason": "event_time must be ISO-8601"
+    },
+    {
+      "input": {
+        "amount_cents": 100,
+        "event_id": "c-noproduct",
+        "event_time": "2026-11-01T10:00:14Z",
+        "kind": "order"
+      },
+      "offset": 7,
+      "reason": "missing required field: product_id"
+    },
+    {
+      "input": {
+        "amount_cents": 100,
+        "event_id": "c-strproduct",
+        "event_time": "2026-11-01T10:00:14Z",
+        "kind": "order",
+        "product_id": "5"
+      },
+      "offset": 8,
+      "reason": "product_id must be an integer >= 1"
+    },
+    {
+      "input": {
+        "amount_cents": 100,
+        "event_id": "c-zeroproduct",
+        "event_time": "2026-11-01T10:00:14Z",
+        "kind": "order",
+        "product_id": 0
+      },
+      "offset": 9,
+      "reason": "product_id must be an integer >= 1"
+    },
+    {
+      "input": {
+        "amount_cents": 19.9,
+        "event_id": "c-float",
+        "event_time": "2026-11-01T10:00:15Z",
+        "kind": "order",
+        "product_id": 5
+      },
+      "offset": 10,
+      "reason": "amount_cents must be an integer >= 0"
+    },
+    {
+      "input": {
+        "amount_cents": -100,
+        "event_id": "c-negative",
+        "event_time": "2026-11-01T10:00:15Z",
+        "kind": "order",
+        "product_id": 5
+      },
+      "offset": 11,
+      "reason": "amount_cents must be an integer >= 0"
+    },
+    {
+      "input": {
+        "amount_cents": true,
+        "event_id": "c-bool",
+        "event_time": "2026-11-01T10:00:15Z",
+        "kind": "order",
+        "product_id": 5
+      },
+      "offset": 12,
+      "reason": "amount_cents must be an integer >= 0"
+    },
+    {
+      "input": {
+        "event_id": "c-noamount",
+        "event_time": "2026-11-01T10:00:15Z",
+        "kind": "order",
+        "product_id": 5
+      },
+      "offset": 13,
+      "reason": "amount_cents must be an integer >= 0"
+    },
+    {
+      "input": {
+        "amount_cents": 100,
+        "event_id": "c-orderrating",
+        "event_time": "2026-11-01T10:00:16Z",
+        "kind": "order",
+        "product_id": 5,
+        "rating": 3
+      },
+      "offset": 14,
+      "reason": "an order must not contain a rating"
+    },
+    {
+      "input": {
+        "event_id": "c-rating0",
+        "event_time": "2026-11-01T10:00:17Z",
+        "kind": "review",
+        "product_id": 5,
+        "rating": 0,
+        "text": "x"
+      },
+      "offset": 15,
+      "reason": "rating must be an integer >= 1"
+    },
+    {
+      "input": {
+        "event_id": "c-rating7",
+        "event_time": "2026-11-01T10:00:17Z",
+        "kind": "review",
+        "product_id": 5,
+        "rating": 7,
+        "text": "x"
+      },
+      "offset": 16,
+      "reason": "rating must be between 1 and 5"
+    },
+    {
+      "input": {
+        "event_id": "c-norating",
+        "event_time": "2026-11-01T10:00:17Z",
+        "kind": "review",
+        "product_id": 5,
+        "text": "x"
+      },
+      "offset": 17,
+      "reason": "rating must be an integer >= 1"
+    },
+    {
+      "input": {
+        "amount_cents": 100,
+        "event_id": "c-reviewamount",
+        "event_time": "2026-11-01T10:00:18Z",
+        "kind": "review",
+        "product_id": 5,
+        "rating": 4,
+        "text": "x"
+      },
+      "offset": 18,
+      "reason": "a review must not contain amount_cents"
+    },
+    {
+      "input": {
+        "event_id": "c-textnum",
+        "event_time": "2026-11-01T10:00:18Z",
+        "kind": "review",
+        "product_id": 5,
+        "rating": 4,
+        "text": 123
+      },
+      "offset": 19,
+      "reason": "text must be a string"
+    },
+    {
+      "input": [
+        "c-list",
+        "order",
+        "2026-11-01T10:00:19Z",
+        5,
+        100
+      ],
+      "offset": 20,
+      "reason": "event must be an object"
+    },
+    {
+      "input": {
+        "amount_cents": 1.5,
+        "event_id": "c-future",
+        "event_time": "2026-11-01T11:00:00Z",
+        "kind": "order",
+        "product_id": 5
+      },
+      "offset": 21,
+      "reason": "amount_cents must be an integer >= 0"
+    }
+  ],
+  "stats": {
+    "accepted": 3,
+    "accepted_orders": 2,
+    "accepted_reviews": 1,
+    "alerts_emitted": 0,
+    "duplicates": 0,
+    "invalid": 20,
+    "late": 0,
+    "received": 23,
+    "revenue_windows_emitted": 0,
+    "review_windows_emitted": 0
+  },
+  "watermark": "2026-11-01T10:00:20.000+00:00"
+}

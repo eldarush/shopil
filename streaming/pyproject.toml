@@ -1,0 +1,26 @@
+[build-system]
+requires = ["hatchling>=1.27,<2"]
+build-backend = "hatchling.build"
+
+[project]
+name = "shopil-streaming"
+version = "0.1.0"
+description = "ShopIL continuous order/review ingestion on top of the course StreamEngine"
+requires-python = ">=3.13,<3.14"
+dependencies = []
+
+[project.optional-dependencies]
+# Only the optional course broker lab (streaming_lab.kafka_demo) needs this.
+kafka = ["confluent-kafka==2.16.1"]
+
+[dependency-groups]
+dev = ["pytest>=8.3,<9"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/streaming_lab", "src/shopil_streaming"]
+
+[tool.uv]
+default-groups = ["dev"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
