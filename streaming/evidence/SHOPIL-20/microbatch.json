@@ -1,0 +1,252 @@
+{
+  "checks": {
+    "every scenario: canonical_results == sequential reference (per-record transactions)": true,
+    "every scenario: engine saw offsets in source order": true,
+    "every scenario: sum(batch_sizes) == consumed == produced": true,
+    "final_drain did not close event-time windows (still open without finalize)": true,
+    "final_drain: [5 max_size, 2 final_drain]": true,
+    "max_size: full batches released by size [5,5,5] then final_drain 2": true,
+    "max_wait: collection wait ~= max_wait_s (>= 0.1 s, well below 0.5 s arrival gap)": true,
+    "max_wait: every batch released by timer holding 1 record": true,
+    "max_wait: released WITHOUT a further event (produced == last_offset + 1 at release)": true
+  },
+  "runs": {
+    "final_drain": {
+      "batch_sizes": [
+        5,
+        2
+      ],
+      "consumed": 7,
+      "flush_counts": {
+        "final_drain": 1,
+        "max_size": 1,
+        "max_wait": 0
+      },
+      "matches_reference": true,
+      "name": "final_drain",
+      "offsets_in_source_order": true,
+      "open_windows_after_run": 2,
+      "produced": 7,
+      "releases": [
+        {
+          "checkpoint_at_release": 4,
+          "closed_windows": 0,
+          "collection_wait_s": 3.4e-05,
+          "consumed_at_release": 5,
+          "first_offset": 0,
+          "flush_reason": "max_size",
+          "index": 1,
+          "last_offset": 4,
+          "open_windows": 2,
+          "processing_s": 0.004683,
+          "produced_at_release": 7,
+          "size": 5
+        },
+        {
+          "checkpoint_at_release": 6,
+          "closed_windows": 0,
+          "collection_wait_s": 2.9e-05,
+          "consumed_at_release": 7,
+          "first_offset": 5,
+          "flush_reason": "final_drain",
+          "index": 2,
+          "last_offset": 6,
+          "open_windows": 2,
+          "processing_s": 0.001665,
+          "produced_at_release": 7,
+          "size": 2
+        }
+      ],
+      "settings": {
+        "interval_s": 0.0,
+        "max_batch_size": 5,
+        "max_wait_s": 10.0,
+        "queue_maxsize": 8,
+        "records": 7
+      }
+    },
+    "max_size": {
+      "batch_sizes": [
+        5,
+        5,
+        5,
+        2
+      ],
+      "consumed": 17,
+      "flush_counts": {
+        "final_drain": 1,
+        "max_size": 3,
+        "max_wait": 0
+      },
+      "matches_reference": true,
+      "name": "max_size",
+      "offsets_in_source_order": true,
+      "open_windows_after_run": 1,
+      "produced": 17,
+      "releases": [
+        {
+          "checkpoint_at_release": 4,
+          "closed_windows": 0,
+          "collection_wait_s": 7e-05,
+          "consumed_at_release": 5,
+          "first_offset": 0,
+          "flush_reason": "max_size",
+          "index": 1,
+          "last_offset": 4,
+          "open_windows": 2,
+          "processing_s": 0.004618,
+          "produced_at_release": 8,
+          "size": 5
+        },
+        {
+          "checkpoint_at_release": 9,
+          "closed_windows": 1,
+          "collection_wait_s": 0.0002,
+          "consumed_at_release": 10,
+          "first_offset": 5,
+          "flush_reason": "max_size",
+          "index": 2,
+          "last_offset": 9,
+          "open_windows": 1,
+          "processing_s": 0.005694,
+          "produced_at_release": 16,
+          "size": 5
+        },
+        {
+          "checkpoint_at_release": 14,
+          "closed_windows": 2,
+          "collection_wait_s": 4e-05,
+          "consumed_at_release": 15,
+          "first_offset": 10,
+          "flush_reason": "max_size",
+          "index": 3,
+          "last_offset": 14,
+          "open_windows": 1,
+          "processing_s": 0.004074,
+          "produced_at_release": 16,
+          "size": 5
+        },
+        {
+          "checkpoint_at_release": 16,
+          "closed_windows": 3,
+          "collection_wait_s": 8.7e-05,
+          "consumed_at_release": 17,
+          "first_offset": 15,
+          "flush_reason": "final_drain",
+          "index": 4,
+          "last_offset": 16,
+          "open_windows": 1,
+          "processing_s": 0.001896,
+          "produced_at_release": 17,
+          "size": 2
+        }
+      ],
+      "settings": {
+        "interval_s": 0.0,
+        "max_batch_size": 5,
+        "max_wait_s": 5.0,
+        "queue_maxsize": 8,
+        "records": 17
+      }
+    },
+    "max_wait": {
+      "batch_sizes": [
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "consumed": 5,
+      "flush_counts": {
+        "final_drain": 0,
+        "max_size": 0,
+        "max_wait": 5
+      },
+      "matches_reference": true,
+      "name": "max_wait",
+      "offsets_in_source_order": true,
+      "open_windows_after_run": 2,
+      "produced": 5,
+      "releases": [
+        {
+          "checkpoint_at_release": 0,
+          "closed_windows": 0,
+          "collection_wait_s": 0.110712,
+          "consumed_at_release": 1,
+          "first_offset": 0,
+          "flush_reason": "max_wait",
+          "index": 1,
+          "last_offset": 0,
+          "open_windows": 1,
+          "processing_s": 0.013975,
+          "produced_at_release": 1,
+          "size": 1
+        },
+        {
+          "checkpoint_at_release": 1,
+          "closed_windows": 0,
+          "collection_wait_s": 0.111082,
+          "consumed_at_release": 2,
+          "first_offset": 1,
+          "flush_reason": "max_wait",
+          "index": 2,
+          "last_offset": 1,
+          "open_windows": 1,
+          "processing_s": 0.003433,
+          "produced_at_release": 2,
+          "size": 1
+        },
+        {
+          "checkpoint_at_release": 2,
+          "closed_windows": 0,
+          "collection_wait_s": 0.105737,
+          "consumed_at_release": 3,
+          "first_offset": 2,
+          "flush_reason": "max_wait",
+          "index": 3,
+          "last_offset": 2,
+          "open_windows": 2,
+          "processing_s": 0.014414,
+          "produced_at_release": 3,
+          "size": 1
+        },
+        {
+          "checkpoint_at_release": 3,
+          "closed_windows": 0,
+          "collection_wait_s": 0.109512,
+          "consumed_at_release": 4,
+          "first_offset": 3,
+          "flush_reason": "max_wait",
+          "index": 4,
+          "last_offset": 3,
+          "open_windows": 2,
+          "processing_s": 0.014161,
+          "produced_at_release": 4,
+          "size": 1
+        },
+        {
+          "checkpoint_at_release": 4,
+          "closed_windows": 0,
+          "collection_wait_s": 0.108797,
+          "consumed_at_release": 5,
+          "first_offset": 4,
+          "flush_reason": "max_wait",
+          "index": 5,
+          "last_offset": 4,
+          "open_windows": 2,
+          "processing_s": 0.013921,
+          "produced_at_release": 5,
+          "size": 1
+        }
+      ],
+      "settings": {
+        "interval_s": 0.5,
+        "max_batch_size": 5,
+        "max_wait_s": 0.1,
+        "queue_maxsize": 8,
+        "records": 5
+      }
+    }
+  }
+}
