@@ -1,4 +1,5 @@
 import asyncio
+from contextlib import closing
 from datetime import date
 import json
 from pathlib import Path
@@ -24,7 +25,7 @@ def test_capture_freezes_evidence_during_retry_and_refreshes(tmp_path):
             INSERT INTO marts.mart_product_reviews VALUES (5, 'item', 0, NULL, 0, 1, 10);
         """)
     stream = tmp_path / "stream.db"
-    with sqlite3.connect(stream) as db:
+    with closing(sqlite3.connect(stream)) as db, db:
         db.executescript("""
             CREATE TABLE stream_meta(singleton, checkpoint, watermark_ms, config_json, finalized);
             INSERT INTO stream_meta VALUES(1, 0, NULL, '{"window_seconds":60}', 0);
@@ -41,7 +42,7 @@ def test_capture_freezes_evidence_during_retry_and_refreshes(tmp_path):
     async def draft(question, evidence, *args):
         observed.append(evidence)
         if len(observed) == 1:
-            with sqlite3.connect(stream) as db:
+            with closing(sqlite3.connect(stream)) as db, db:
                 db.execute("UPDATE stream_meta SET checkpoint=1, watermark_ms=1000")
                 db.execute("INSERT INTO order_state VALUES(0, 1, 500)")
         return "draft"
