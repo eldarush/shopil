@@ -1,0 +1,3 @@
+offset,reason,input
+11,amount_cents must be an integer >= 0,"{""amount_cents"": 19.9, ""event_id"": ""bad-money"", ""event_time"": ""2026-11-01T10:02:10+00:00"", ""kind"": ""order"", ""product_id"": 5}"
+18,event_time must include a timezone,"{""amount_cents"": 700, ""event_id"": ""order-naive"", ""event_time"": ""2026-11-01T10:03:20"", ""kind"": ""order"", ""product_id"": 5}"
