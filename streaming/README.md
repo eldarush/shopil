@@ -54,6 +54,8 @@ SQLite stores signed 64-bit integers. Event amounts and product/order IDs must f
 
 Window starts/ends and resulting watermarks must be representable in Python's UTC years 1–9999. Unrepresentable events are dead-lettered before committing business state. Time-policy settings cannot exceed 315,537,897,600 seconds (the complete datetime domain); oversized configuration is rejected before opening a database. These bounds prevent a committed checkpoint from referring to state that the evidence reader cannot display.
 
+Event IDs and review text must be valid Unicode without unpaired surrogates. Invalid text is rejected; JSON escaping preserves the original malformed payload in dead letters without breaking SQLite's UTF-8 storage. Hebrew and other valid Unicode remain unchanged when decoded.
+
 ## Experiments by task
 
 Every Jira task has `experiments/shopil_<n>_<topic>.py` and `evidence/SHOPIL-<n>/README.md`. Run any of them with:

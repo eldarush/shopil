@@ -96,6 +96,11 @@ class Event:
                 raise InvalidEvent("a review must not contain amount_cents")
         if not isinstance(self.text, str):
             raise InvalidEvent("text must be a string")
+        try:
+            self.event_id.encode("utf-8")
+            self.text.encode("utf-8")
+        except UnicodeEncodeError:
+            raise InvalidEvent("event_id and text must be valid Unicode without unpaired surrogates") from None
         if self.order_id is not None:
             _stored_integer(self.order_id, "order_id", 1)
 

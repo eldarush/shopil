@@ -92,7 +92,8 @@ CREATE TABLE IF NOT EXISTS accepted_reviews (
 
 
 def _json(value: Any) -> str:
-    return json.dumps(value, ensure_ascii=False, sort_keys=True, default=str, allow_nan=False)
+    # Escaping retains malformed Unicode in dead-letter payloads without breaking SQLite TEXT.
+    return json.dumps(value, ensure_ascii=True, sort_keys=True, default=str, allow_nan=False)
 
 
 class StreamEngine:

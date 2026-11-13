@@ -2,7 +2,7 @@
 
 | Path | Origin | Changes |
 | --- | --- | --- |
-| `src/streaming_lab/` | [paulavrahami/streaming-course-demo](https://github.com/paulavrahami/streaming-course-demo) commit `c27b4fc1b343e5bfca1880ad3c5ae34e97f60b71`, `src/streaming_lab/` | Course base retained. SHOPIL-49 adds signed 64-bit integer validation in `events.py` and storage/window timestamp capacity checks in `engine.py`; invalid records retain their payload and reason in dead letters. Other course modules remain unchanged. |
+| `src/streaming_lab/` | [paulavrahami/streaming-course-demo](https://github.com/paulavrahami/streaming-course-demo) commit `c27b4fc1b343e5bfca1880ad3c5ae34e97f60b71`, `src/streaming_lab/` | Course base retained. SHOPIL-49 adds signed 64-bit integer/Unicode validation in `events.py` and storage/window timestamp capacity checks plus escaped JSON storage in `engine.py`; invalid records retain their payload and reason in dead letters. Other course modules remain unchanged. |
 | `tests/course/test_core.py` | Same commit, `tests/test_core.py` | None. Kept to prove the copied engine still passes its own course tests here. |
 | `.python-version` | Same commit | None (3.13.12). |
 

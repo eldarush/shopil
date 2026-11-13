@@ -32,6 +32,28 @@ def test_direct_event_objects_have_the_same_integer_bounds():
         Event("review", "review", T0, SQLITE_MAX_INTEGER + 1, rating=1)
 
 
+@pytest.mark.parametrize("field", ["event_id", "text"])
+def test_unpaired_surrogates_are_preserved_in_dead_letters(tmp_path, field):
+    bad = {"event_id": "bad", "kind": "review", "event_time": T0.isoformat(),
+           "product_id": 1, "rating": 1, "text": "valid", field: "\ud800"}
+    path = tmp_path / "unicode.db"
+    with StreamEngine(path) as engine:
+        assert engine.ingest(bad, offset=0)["status"] == "invalid"
+        assert engine.ingest(order("next"), offset=1)["status"] == "accepted"
+    with StreamEngine(path) as engine:
+        snap = engine.snapshot()
+        assert snap["checkpoint"] == 1
+        assert snap["dead_letters"][0]["payload"] == bad
+        assert "Unicode" in snap["dead_letters"][0]["reason"]
+
+
+def test_invalid_payload_with_surrogate_key_is_still_auditable(tmp_path):
+    with StreamEngine(tmp_path / "unicode-key.db") as engine:
+        bad = {"\ud800": "invalid schema"}
+        assert engine.ingest(bad, offset=0)["status"] == "invalid"
+        assert engine.snapshot()["dead_letters"][0]["payload"] == bad
+
+
 def test_window_overflow_retains_exact_money_and_rejected_payload(tmp_path):
     with StreamEngine(tmp_path / "sum.db") as engine:
         first = order(amount_cents=SQLITE_MAX_INTEGER)
