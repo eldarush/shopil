@@ -23,3 +23,13 @@ See the [shared contract](https://privaterelay-team-yb37vjhl.atlassian.net/brows
 and [synthetic payload](../tests/fixtures/evidence_snapshot.json). The payload
 does not require a confirmed cross-source product mapping. Keep historical and
 stream values separate until the team validates the mapping and semantics.
+
+## Read streaming state
+
+`read_stream_snapshot(Path(...))` in `data_access.streaming` opens the running
+engine's SQLite file read-only. It returns detached window rows, review alerts,
+counters, checkpoint, and watermark from one SQLite read transaction. The keys
+`order_state` and `review_state` contain open windows. The keys
+`realtime_revenue` and `review_windows` contain closed windows. Amounts remain
+integer agorot and time values ending in `_ms` are UTC epoch milliseconds.
+The caller can build per-question evidence after the reader closes the transaction.
