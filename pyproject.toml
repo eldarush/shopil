@@ -4,6 +4,7 @@ version = "0.1.0"
 description = "Evidence-grounded Hebrew business assistant for ShopIL"
 requires-python = ">=3.14,<3.15"
 dependencies = [
+    "gradio>=6,<7",
     "pydantic>=2,<3",
 ]
 
