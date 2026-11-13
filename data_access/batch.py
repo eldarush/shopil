@@ -77,16 +77,17 @@ def read_batch_sources(
         ),
     ]
     first_day, last_day = coverage
-    if first_day is not None:
-        sources.append(EvidenceSource(
-            table="marts.mart_product_reviews", metric="full_history_product_metrics",
-            units="review and order counts, rating (1–5), revenue in ILS",
-            identifiers=("product_id",), time_start=first_day, time_end=last_day + timedelta(days=1),
-            rows=[
-                {"product_id": pid, "product_name": name, "review_count": review_count,
-                 "avg_rating": avg_rating, "negative_reviews": negative_reviews,
-                 "paid_orders": paid_orders, "revenue": str(revenue)}
-                for pid, name, review_count, avg_rating, negative_reviews, paid_orders, revenue in products
-            ],
-        ))
+    sources.append(EvidenceSource(
+        table="marts.mart_product_reviews", metric="full_history_product_metrics",
+        units="review and order counts, rating (1–5), revenue in ILS",
+        identifiers=("product_id",), time_start=first_day,
+        time_end=last_day + timedelta(days=1) if last_day is not None else None,
+        time_coverage="bounded" if first_day is not None else "no_observed_history",
+        rows=[
+            {"product_id": pid, "product_name": name, "review_count": review_count,
+             "avg_rating": avg_rating, "negative_reviews": negative_reviews,
+             "paid_orders": paid_orders, "revenue": str(revenue)}
+            for pid, name, review_count, avg_rating, negative_reviews, paid_orders, revenue in products
+        ],
+    ))
     return tuple(sources)

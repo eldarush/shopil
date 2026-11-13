@@ -357,11 +357,15 @@ def test_combined_empty_results_preserve_observed_zero_and_full_mart_scope(tmp_p
     assert (sample["available"], sample["selected"], sample["omitted"]) == (0, 0, 0)
     assert payload["stream"]["checkpoint"] == -1 and payload["stream"]["watermark"] is None
     assert all(source["table"].startswith(("marts.", "staging.")) for source in payload["sources"])
+    products = payload_source(payload, "marts.mart_product_reviews")
+    assert len(products["rows"]) == 8
     if empty_warehouse:
-        assert len(payload["sources"]) == 2  # No invented full-mart date coverage.
+        assert products["time_coverage"] == "no_observed_history"
+        assert products["time_start"] is None and products["time_end"] is None
+        assert all(row["review_count"] == row["negative_reviews"] == row["paid_orders"] == 0
+                   and row["avg_rating"] is None and row["revenue"] == "0.00" for row in products["rows"])
     else:
-        products = payload_source(payload, "marts.mart_product_reviews")
-        assert len(products["rows"]) == 8 and products["time_end"] == "2026-07-04"
+        assert products["time_coverage"] == "bounded" and products["time_end"] == "2026-07-04"
         assert products["rows"][-1]["review_count"] == 0 and products["rows"][-1]["avg_rating"] is None
 
 

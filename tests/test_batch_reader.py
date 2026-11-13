@@ -1,9 +1,11 @@
 from datetime import date
+from pathlib import Path
 
 import duckdb
 import pytest
 
 from data_access.batch import read_batch_sources
+from data_access.evidence import EvidencePackage
 
 
 def test_batch_evidence_uses_paid_rows_and_half_open_ranges(tmp_path):
@@ -61,3 +63,47 @@ def test_reader_rejects_invalid_inputs_and_does_not_create_database(tmp_path):
     with pytest.raises(duckdb.IOException):
         read_batch_sources(database, start=start, end=end)
     assert not database.exists()
+
+
+@pytest.mark.parametrize("product_id", [None, 6, 7])
+def test_known_zero_product_metrics_survive_without_observed_history(tmp_path, product_id):
+    database = tmp_path / "empty_history.duckdb"
+    with duckdb.connect(str(database)) as connection:
+        connection.execute("""
+            CREATE SCHEMA staging;
+            CREATE SCHEMA marts;
+            CREATE TABLE staging.stg_products (
+                product_id INTEGER, product_name VARCHAR, category VARCHAR
+            );
+            INSERT INTO staging.stg_products VALUES (6, 'Cup', 'Home');
+            CREATE TABLE staging.stg_reviews (
+                review_id INTEGER, product_id INTEGER, rating INTEGER,
+                review_text VARCHAR, created_at TIMESTAMPTZ
+            );
+            CREATE TABLE marts.fct_orders (
+                product_id INTEGER, order_date DATE, status VARCHAR, amount DECIMAL(10, 2)
+            );
+            INSERT INTO marts.fct_orders VALUES (6, '2026-07-01', 'refunded', 10.00);
+        """)
+        model = (Path(__file__).parents[1] / "etl/dbt/models/marts/mart_product_reviews.sql").read_text(
+            encoding="utf-8"
+        )
+        for name, schema in (("stg_reviews", "staging"), ("stg_products", "staging"), ("fct_orders", "marts")):
+            model = model.replace("{{ ref('" + name + "') }}", schema + "." + name)
+        connection.execute("CREATE TABLE marts.mart_product_reviews AS " + model)
+
+    paid, reviews, metrics = read_batch_sources(
+        database, start=date(2026, 1, 1), end=date(2027, 1, 1), product_id=product_id
+    )
+    assert metrics.time_start is None and metrics.time_end is None
+    assert metrics.time_coverage == "no_observed_history"
+    assert metrics.model_dump(mode="json")["rows"] == ([] if product_id == 7 else [{
+        "product_id": 6, "product_name": "Cup", "review_count": 0, "avg_rating": None,
+        "negative_reviews": 0, "paid_orders": 0, "revenue": "0.00",
+    }])
+    assert not reviews.rows
+    assert paid.time_coverage == "bounded"
+    assert (paid.time_start, paid.time_end) == (date(2026, 1, 1), date(2027, 1, 1))
+    assert bool(paid.rows) == (product_id != 7)
+    package = EvidencePackage(question="How many reviews?", sources=(paid, reviews, metrics))
+    assert EvidencePackage.model_validate_json(package.model_dump_json()) == package

@@ -46,4 +46,7 @@ def run_app(
     except KeyboardInterrupt:
         pass
     finally:
-        app.close()
+        try:
+            service.shutdown()
+        finally:
+            app.close()

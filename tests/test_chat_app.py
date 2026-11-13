@@ -3,6 +3,7 @@ from copy import deepcopy
 from types import SimpleNamespace
 
 import pytest
+import gradio as gr
 
 from chat.app import ChatPage, build_app
 
@@ -35,6 +36,7 @@ def test_unapproved_response_never_enters_ui_or_session_history(status):
     output = asyncio.run(ChatPage(FakeService(status)).ask("שאלה חדשה", history))
     assert output[0] == output[1] == original
     assert output[-1] == "שאלה חדשה"
+    assert output[3] == output[4] == gr.skip()
     assert history == original
 
 
@@ -43,6 +45,7 @@ def test_blank_question_does_not_call_backend():
     result = asyncio.run(ChatPage(service).ask(" ", []))
     assert service.calls == []
     assert result[0] == result[1] == []
+    assert result[3] == result[4] == gr.skip()
 
 
 def test_real_service_keeps_rejected_draft_in_audit_only(tmp_path):

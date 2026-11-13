@@ -95,9 +95,13 @@ Use `--mode microbatch` for the other runner and a distinct stream path for comp
 
 Ctrl+C in the supervisor closes chat and drains the stream. Enter controls a managed component directly, not the supervisor's own stdin. Forced termination or a failed component is reported as an error, not a successful drain. Batch does not run concurrently with chat's historical reads. [Lifecycle details](integration/README.md).
 
+Chat stops accepting questions during shutdown and waits up to five seconds for active questions to record a cancellation/error terminal event before closing the server. A failed audit or shutdown deadline makes the process fail. A failed or blank question leaves the last approved answer's source and snapshot fields unchanged.
+
 ## Evidence scope and configuration
 
 The examples use the fixed half-open calendar range **[2026-01-01, 2027-01-01)**, which covers the pinned fixture's order dates and review timestamps. It controls paid-order totals and cleaned review text. Product mart metrics retain their independently reported full-history coverage. Questions and follow-ups do not generate SQL or silently alter the configured date range.
+
+When the catalog has products but there are no historical orders or reviews, their known zero counts and null averages remain available. The mart source explicitly reports `no_observed_history` with null time bounds instead of inventing coverage dates.
 
 Every question reads fresh data. All product metrics are included; review text is the **latest 12 cleaned reviews across all products**, with available/selected/omitted counts. It is a global sample, not a complete or balanced review list. Streaming evidence defaults to the **latest three distinct event-time windows**, keeping all products in those windows and explicitly reporting omissions. Open/closed windows and alert trigger counts remain distinct. Historical paid ILS and streaming cents are never added together; the cross-source product mapping is marked unverified. Missing data is not presented as zero. [Evidence contract](data_access/README.md).
 

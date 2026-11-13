@@ -39,6 +39,10 @@ Press Enter or Ctrl+C to stop admission and drain accepted queue entries. EOF on
 
 Orderly shutdown closes chat, then stops streaming admission and waits for its producer/consumer drain. It does not call `finalize_demo`: open event-time windows remain resumable. A deadline that forces termination is reported as an error, never as successful draining. SQLite's committed checkpoint remains the restart boundary.
 
+Before closing Gradio, chat rejects new admission, cancels active questions and waits up to five seconds for their terminal audit records. Cancellation preserves approved-only history. If a request ignores cancellation or its audit cannot be written, shutdown fails visibly.
+
+Windows commands run inside a Job Object, joining before they can start descendants; the supervisor retains the job handle and terminates remaining members during cleanup. POSIX commands use a new process group. Cleanup also runs when the original leader has already exited, and completed groups are not signaled again. Batch ownership is released before starting streaming or chat. These controls cover normal component descendants, not programs deliberately escaping their POSIX process group.
+
 ## Verification
 
 ```text
@@ -47,3 +51,5 @@ uv run --directory streaming --locked python -m pytest tests/test_managed.py -q
 ```
 
 Tests run real worker processes with bounded queues, assert that all admitted records drain, and exercise failed batch startup, continuing stream progress during a chat stub, unexpected stream failure, startup deadlines and uncooperative child shutdown. CLI tests verify concrete command wiring. CI also runs the complete Batch command twice in separate output directories against the same warehouse/state on each supported OS. Local Batch validation passed twice with eight product rows, 289 cleaned reviews, 402 paid orders and ILS 97,210.10. Scripted-model server tests and Batch runs do not prove a real local model deployment; the combined demonstration still needs that configured service.
+
+Regression tests also stop an actual Gradio server during Actor/Critic work and verify terminal audit events, and launch descendants whose original batch/chat leader exits first. A held socket verifies descendant termination rather than merely checking the direct child handle.

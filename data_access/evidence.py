@@ -19,8 +19,9 @@ class EvidenceSource(BaseModel):
     metric: str = Field(min_length=1)
     units: str = Field(min_length=1)
     identifiers: tuple[str, ...]
-    time_start: AwareDatetime | date
-    time_end: AwareDatetime | date
+    time_start: AwareDatetime | date | None
+    time_end: AwareDatetime | date | None
+    time_coverage: Literal["bounded", "no_observed_history"] = "bounded"
     rows: tuple[tuple[tuple[str, Cell], ...], ...]
     checkpoint: int | None = Field(default=None, ge=-1)
     watermark: AwareDatetime | None = None
@@ -28,7 +29,13 @@ class EvidenceSource(BaseModel):
 
     @model_validator(mode="after")
     def validate_provenance(self) -> Self:
-        if type(self.time_start) is not type(self.time_end) or self.time_start >= self.time_end:
+        if self.time_coverage == "no_observed_history":
+            if self.time_start is not None or self.time_end is not None:
+                raise ValueError("No observed history requires null time bounds")
+            if any(value is not None for value in (self.checkpoint, self.watermark, self.window_state)):
+                raise ValueError("Streaming evidence cannot declare no observed history")
+        elif (self.time_start is None or self.time_end is None
+              or type(self.time_start) is not type(self.time_end) or self.time_start >= self.time_end):
             raise ValueError("Evidence requires ordered time bounds of the same type")
         if self.window_state is not None and self.checkpoint is None:
             raise ValueError("Streaming windows require a checkpoint")
