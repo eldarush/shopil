@@ -1,0 +1,23 @@
+# Adapted from exercises/starter/_reviews.yml in the ShopIL ETL course lab.
+version: 2
+
+models:
+  - name: stg_reviews
+    columns:
+      - name: review_id
+        data_tests: [unique, not_null]
+      - name: rating
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [1, 2, 3, 4, 5]
+                quote: false
+      - name: review_text
+        data_tests: [not_null]
+      - name: product_id
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('stg_products')
+                field: product_id
