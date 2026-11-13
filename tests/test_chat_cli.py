@@ -86,3 +86,19 @@ def test_stack_rejects_mismatched_warehouse_before_any_process(arguments, tmp_pa
         run.main(arguments + ["--lab-dir", str(tmp_path / "other"), "--etl-python", "python",
                               "--batch-run-dir", "new-run"])
     assert caught.value.code == 2
+
+
+def test_stack_preserves_virtualenv_symlink_path(arguments, tmp_path, monkeypatch):
+    interpreter = tmp_path / "etl-venv/bin/python"
+    resolve = Path.resolve
+    calls = []
+
+    def resolve_interpreter(path, *args, **kwargs):
+        return tmp_path / "system/bin/python" if path == interpreter else resolve(path, *args, **kwargs)
+
+    monkeypatch.setattr(Path, "resolve", resolve_interpreter)
+    monkeypatch.setattr(run, "run_stack", lambda *args, **kwargs: calls.append(args))
+    run.main(arguments + ["--lab-dir", str(tmp_path), "--etl-python", str(interpreter),
+                          "--batch-run-dir", str(tmp_path / "run")])
+    batch_command = calls[0][0]
+    assert batch_command[batch_command.index("--etl-python") + 1] == str(interpreter)

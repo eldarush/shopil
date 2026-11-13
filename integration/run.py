@@ -177,7 +177,7 @@ def main(argv=None):
     except ValueError as error:
         parser.error(str(error))
     batch = [sys.executable, "-m", "integration.batch", "--lab-dir", str(args.lab_dir.resolve()),
-             "--etl-python", str(args.etl_python.resolve()), "--run-dir", str(args.batch_run_dir.resolve())]
+             "--etl-python", os.path.abspath(args.etl_python), "--run-dir", str(args.batch_run_dir.resolve())]
     chat = [sys.executable, "-m", "chat", "--managed", "--warehouse", str(args.warehouse.resolve()),
             "--stream-db", str(args.stream_db.resolve()), "--history-start", args.history_start.isoformat(),
             "--history-end", args.history_end.isoformat(), "--model", args.model,

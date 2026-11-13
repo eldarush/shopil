@@ -16,7 +16,9 @@ MODELS = ("staging/stg_reviews.sql", "staging/_stg_reviews.yml",
 
 def prepare_batch(lab_dir: Path, etl_python: Path, run_dir: Path) -> Path:
     """Keep model overlays/results in a new run directory; reuse the warehouse/state."""
-    lab_dir, etl_python, run_dir = lab_dir.resolve(), etl_python.resolve(), run_dir.resolve()
+    lab_dir, run_dir = lab_dir.resolve(), run_dir.resolve()
+    # POSIX venv Python is a symlink; resolving it would select the base environment.
+    etl_python = Path(os.path.abspath(etl_python))
     dbt = etl_python.parent / ("dbt.exe" if os.name == "nt" else "dbt")
     for path in (etl_python, dbt, lab_dir / "pipelines/02_dlt_pipeline.py",
                  lab_dir / "exercises/check_exercise.py",

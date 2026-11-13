@@ -93,3 +93,18 @@ def test_missing_required_component_does_not_run_partial_pipeline(setup):
     with pytest.raises(FileNotFoundError):
         batch.prepare_batch(lab, python, run_dir)
     assert not run_dir.exists() and not commands
+
+
+def test_virtualenv_interpreter_symlink_keeps_its_environment(setup, monkeypatch):
+    lab, python, run_dir, commands = setup
+    resolve = Path.resolve
+    base_python = python.parent.parent / "system/bin/python"
+
+    def resolve_interpreter(path, *args, **kwargs):
+        # Model the POSIX venv symlink on Windows, which need not permit creating links.
+        return base_python if path == python else resolve(path, *args, **kwargs)
+
+    monkeypatch.setattr(Path, "resolve", resolve_interpreter)
+    batch.prepare_batch(lab, python, run_dir)
+    assert commands[0][0][0] == str(python)
+    assert Path(commands[2][0][0]).parent == python.parent
