@@ -127,6 +127,8 @@ CI runs application tests, streaming tests, smoke checks and complete Batch prep
 
 Server tests use explicitly scripted models and HTTP contract tests use mocked transport. They do not establish that a real Ollama endpoint is installed or functioning. The separate [teaching experiments](experiments/README.md) document real Actor/Critic correction and manual SQL comparisons; they are not a fallback backend for the application.
 
+The [architecture report](docs/report.md) explains loading policies, event-time processing, transaction and snapshot boundaries, Actor/Critic feedback, and verified results with their limits. Its two-page explanation is followed by separate architecture and results appendices in the generated submission PDF.
+
 ## Contributing
 
 `etl/` contains loaders/models, `streaming/` event processing, `data_access/` read-only queries/evidence types, `chat/` the interface and Actor/Critic, and `integration/` startup supervision. Course starter attribution and deterministic inputs remain tracked; generated run artifacts stay ignored. Instructor solutions are excluded from independent work.
