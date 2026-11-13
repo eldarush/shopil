@@ -1,11 +1,11 @@
 # ShopIL Batch ETL
 
-[SHOPIL-11](https://privaterelay-team-yb37vjhl.atlassian.net/browse/SHOPIL-11) loads the original ShopIL customers, orders and products into DuckDB with dlt and builds the course dbt models. Run the commands below from the ShopIL repository root in a shell on macOS or Linux. Python 3.12 and uv are required.
+[SHOPIL-11](https://privaterelay-team-yb37vjhl.atlassian.net/browse/SHOPIL-11) loads the original ShopIL customers, orders and products into DuckDB with dlt and builds the course dbt models. Run the commands below from the ShopIL repository root in a shell on macOS or Linux. The baseline was verified with Python 3.14.10 and uv.
 
 ```sh
 git clone https://github.com/paulavrahami/etl-course-demo.git ../etl-course-demo
 git -C ../etl-course-demo checkout --detach 6788526695bbb20ac40f46a947413fff3545b86a
-uv venv --python 3.12 .venv
+uv venv --python 3.14.10 .venv
 uv pip install --python .venv/bin/python -r etl/requirements.txt
 
 shopil_python="$PWD/.venv/bin/python"
@@ -23,8 +23,27 @@ If the course checkout already exists, use it in place of the clone after verify
 
 The pipeline, inputs and dbt models come from the [course ETL lab](https://github.com/paulavrahami/etl-course-demo/tree/6788526695bbb20ac40f46a947413fff3545b86a). ShopIL adds the reference check and keeps the generated warehouse and dlt state in the course checkout.
 
+dlt 1.32.0 requires Python below 3.15, and its DuckDB extra requires DuckDB below 2.0. The course dependency file reports an optimizer assertion in the reviews exercise with DuckDB 1.5.6. This run covers the base models. Verify the reviews tests when implementing the exercise.
+
 ## Reference run
 
 The original dataset produced 600 raw and staged orders, 549 valid orders, eight products, and 402 paid orders totaling ILS 97,210.10. dbt built six models and ran 18 tests. Seventeen tests passed. The course relationship test reported 19 staged orders with no matching customer, which the course fact model excludes through its inner join. dbt recorded one warning and zero errors.
 
 Re-running the same orders input with the same dlt state wrote zero orders. All six reference checks passed again.
+
+## Load the reviews snapshot
+
+[SHOPIL-13](https://privaterelay-team-yb37vjhl.atlassian.net/browse/SHOPIL-13) uses the same course checkout, warehouse and virtual environment as the baseline. From the ShopIL repository root, run:
+
+```sh
+shopil_root="$PWD"
+(
+  cd ../etl-course-demo &&
+  "$shopil_root/.venv/bin/python" "$shopil_root/etl/load_reviews.py" . &&
+  "$shopil_root/.venv/bin/python" exercises/check_exercise.py 1
+)
+```
+
+The loader adapts the course's [reviews starter](https://github.com/paulavrahami/etl-course-demo/blob/6788526695bbb20ac40f46a947413fff3545b86a/exercises/starter/04_reviews_pipeline.py). dlt replaces the snapshot in `raw.reviews`, flattens `product.id` to `product__id`, and writes tags to `raw.reviews__tags`. The raw load preserves duplicates and invalid review values for the staging model to handle.
+
+On Python 3.14.10 with DuckDB 1.5.6, the course checker passed all three step 1 checks on both loads. Each load produced 310 review rows with 300 distinct review IDs and 284 tag rows. All six baseline checks passed after the second load.
