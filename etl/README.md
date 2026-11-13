@@ -68,3 +68,25 @@ cp etl/dbt/models/staging/stg_reviews.sql etl/dbt/models/staging/_stg_reviews.ym
 The SQL and schema tests adapt the [course reviews starter](https://github.com/paulavrahami/etl-course-demo/tree/6788526695bbb20ac40f46a947413fff3545b86a/exercises/starter). The view preserves `created_at` as a timestamp with time zone. It first filters ratings outside 1–5, then strips leading and trailing whitespace and drops empty text. It keeps the earliest valid timestamp per `review_id`. Ties use order ID, product ID, rating, and cleaned text in ascending order.
 
 The original fixture produced **310 raw → 304 with valid ratings → 298 with nonempty text → 289 after deduplication**. The project checker independently computes the winning rows from the JSON and prints all retained IDs after comparing every projected value. On Python 3.14.10 and DuckDB 1.5.6, all six dbt tests and all five course checker checks passed.
+
+## Build the product reviews mart
+
+[SHOPIL-15](https://privaterelay-team-yb37vjhl.atlassian.net/browse/SHOPIL-15) adds the product-level mart. After installing the cleaned reviews model, run from the ShopIL repository root:
+
+```sh
+shopil_root="$PWD"
+cp etl/dbt/models/marts/mart_product_reviews.sql etl/dbt/models/marts/_mart_product_reviews.yml \
+  ../etl-course-demo/dbt_project/models/marts/ &&
+(
+  cd ../etl-course-demo/dbt_project &&
+  "$shopil_root/../.venv-shopil-etl/bin/dbt" build --select +mart_product_reviews --profiles-dir .
+) &&
+(
+  cd ../etl-course-demo &&
+  "$shopil_root/../.venv-shopil-etl/bin/python" exercises/check_exercise.py 1 2 3
+)
+```
+
+The model adapts the [course mart starter](https://github.com/paulavrahami/etl-course-demo/blob/6788526695bbb20ac40f46a947413fff3545b86a/exercises/starter/mart_product_reviews.sql). It aggregates reviews and paid orders separately before joining to the full product catalog. Products without reviews have zero review counts and a null average. Revenue sums the paid order amounts in ILS. The source amount already includes quantity.
+
+The reference run produced eight unique products, 289 reviews, 402 paid orders and ILS 97,210.10 in paid revenue. All 14 course checks for steps 1–3 passed. The dbt build had 26 passing nodes, the known warning about 19 staged orders with no matching customer, and no errors.

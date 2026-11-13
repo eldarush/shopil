@@ -1,0 +1,9 @@
+# Adapted from exercises/starter/_reviews.yml in the ShopIL ETL course lab.
+version: 2
+
+models:
+  - name: mart_product_reviews
+    description: One row per product with review metrics and paid orders in ILS.
+    columns:
+      - name: product_id
+        data_tests: [unique, not_null]
