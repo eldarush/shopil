@@ -15,6 +15,7 @@ EPOCH = datetime(1970, 1, 1, tzinfo=UTC)
 T0 = datetime(2026, 11, 1, 10, 0, 0, tzinfo=UTC)
 PRICE_CENTS = (4990, 8990, 11900, 22900, 34900)
 PRODUCT_BY_PRICE = {4990: 6, 8990: 3, 11900: 5, 22900: 4, 34900: 1}
+SQLITE_MAX_INTEGER = (1 << 63) - 1
 
 
 class InvalidEvent(ValueError):
@@ -24,6 +25,13 @@ class InvalidEvent(ValueError):
 def _integer(value: Any, name: str, minimum: int = 0) -> int:
     if isinstance(value, bool) or not isinstance(value, int) or value < minimum:
         raise InvalidEvent(f"{name} must be an integer >= {minimum}")
+    return value
+
+
+def _stored_integer(value: Any, name: str, minimum: int = 0) -> int:
+    _integer(value, name, minimum)
+    if value > SQLITE_MAX_INTEGER:
+        raise InvalidEvent(f"{name} exceeds SQLite signed 64-bit integer capacity")
     return value
 
 
@@ -75,9 +83,9 @@ class Event:
         if self.kind not in ("order", "review"):
             raise InvalidEvent("kind must be 'order' or 'review'")
         object.__setattr__(self, "event_time", parse_time(self.event_time))
-        _integer(self.product_id, "product_id", 1)
+        _stored_integer(self.product_id, "product_id", 1)
         if self.kind == "order":
-            _integer(self.amount_cents, "amount_cents")
+            _stored_integer(self.amount_cents, "amount_cents")
             if self.rating is not None:
                 raise InvalidEvent("an order must not contain a rating")
         else:
@@ -89,7 +97,7 @@ class Event:
         if not isinstance(self.text, str):
             raise InvalidEvent("text must be a string")
         if self.order_id is not None:
-            _integer(self.order_id, "order_id", 1)
+            _stored_integer(self.order_id, "order_id", 1)
 
     def to_dict(self) -> dict[str, Any]:
         record: dict[str, Any] = {

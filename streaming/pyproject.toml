@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "shopil-streaming"
-version = "0.1.0"
+version = "1.0.0"
 description = "ShopIL continuous order/review ingestion on top of the course StreamEngine"
 requires-python = ">=3.13,<3.14"
 dependencies = []

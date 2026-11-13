@@ -23,7 +23,7 @@ CONTRACT: list[dict[str, str]] = [
     {"field": "event_time", "applies_to": "all", "type": "ISO-8601 with timezone (or tz-aware datetime)",
      "rule": "Naive timestamps are invalid. Normalised to UTC; windows are computed in integer milliseconds."},
     {"field": "product_id", "applies_to": "all", "type": "integer >= 1",
-     "rule": "Strings, floats and booleans are invalid. Same id space as ShopIL products.product_id."},
+     "rule": "Strings, floats and booleans are invalid. Cross-source product mapping must be verified before joining Batch data."},
     {"field": "amount_cents", "applies_to": "order", "type": "integer >= 0 (agorot)",
      "rule": "Never a float. 12200 agorot = 122.00 ILS. Orders must not carry a rating."},
     {"field": "order_id", "applies_to": "order (optional)", "type": "integer >= 1", "rule": "Informational only."},

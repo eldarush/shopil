@@ -4,18 +4,23 @@ A Hebrew business assistant for Assignment 1 in AI Systems Engineering. Batch in
 
 ## 1. Install and prepare the runtimes
 
-Install Git and [uv](https://docs.astral.sh/uv/getting-started/installation/). Run these commands in PowerShell on Windows or a terminal on macOS/Linux:
+Install Git, [uv](https://docs.astral.sh/uv/getting-started/installation/), and the two pinned interpreters: [Python 3.14.10](https://www.python.org/downloads/release/python-31410/) for the application/ETL and [Python 3.13.12](https://www.python.org/downloads/release/python-31312/) for the isolated course streaming runtime. Use the official installer for your operating system. On Linux, use your distribution or the official release source if the exact version is unavailable as a binary.
+
+Alternatively, `uv python install 3.14.10 3.13.12` can install the interpreters when both builds are in its catalog. That catalog is [frozen per uv release](https://docs.astral.sh/uv/concepts/python-versions/#installing-a-python-version): uv 0.11.26 could not download 3.14.10 during validation. If you see `No download found`, update uv through its original installation method or use the Python.org installers above. An already installed interpreter does not make an unavailable uv download succeed; use `uv python find` to verify discovery instead.
+
+Run these commands in PowerShell on Windows or a terminal on macOS/Linux. Both discovery commands must succeed before continuing:
 
 ```text
 git clone https://github.com/eldarush/shopil.git
 cd shopil
-uv python install 3.14.10 3.13.12
+uv python find --system 3.14.10
+uv python find --project streaming --system 3.13.12
 uv sync --locked
 uv sync --project streaming --locked
 uv run --locked python -m integration.smoke
 ```
 
-Run all remaining commands from this repository root. Check that each command succeeds before continuing. The application uses Python **3.14.10** and the course streaming package uses isolated Python **3.13.12**. The smoke test exercises both streaming modes using temporary databases; it needs no model service.
+Run all remaining commands from this repository root. Check that each command succeeds before continuing. This is a checkout-based application: the root is not a pip-installable library or wheel. `uv sync` installs its locked dependencies, and `python -m ...` runs the source from this directory. The streaming subproject is separately installable. The application uses Python **3.14.10** and the course streaming package uses isolated Python **3.13.12**. The smoke test exercises both streaming modes using temporary databases; it needs no model service.
 
 Prepare the pinned course checkout and a third environment for ETL. Use unused sibling paths on first setup; if they already exist, verify their contents and revision before reusing them.
 
@@ -140,16 +145,6 @@ The [architecture report](docs/report.md) explains loading policies, event-time 
 
 Use the [submission guide](docs/submission.md) to select the required logs, screenshots and report, then package them with an exact committed source revision. Review the evidence and its real-model limitations before submission; the packaging command only checks files and hashes and does not upload anything.
 
-## Contributing
+## Project layout
 
 `etl/` contains loaders/models, `streaming/` event processing, `data_access/` read-only queries/evidence types, `chat/` the interface and Actor/Critic, and `integration/` startup supervision. Course starter attribution and deterministic inputs remain tracked; generated run artifacts stay ignored. Instructor solutions are excluded from independent work.
-
-Install the [ShopIL plugin](https://github.com/eldarush/shopil-plugin) and follow its Jira workflow and Ponytail skills. Resolve your authenticated Jira identity and modify only tickets assigned to your account ID. Do not create or claim tasks unless explicitly requested. Use one ticket branch/PR targeting `master`, such as `feature/SHOPIL-5-chat-runtime`, and Conventional Commit subjects containing the ticket: `feat(chat): add local model transport [SHOPIL-5]`.
-
-Install local Git checks once per clone:
-
-```text
-uv run --locked python tools/workflow_guard.py install-hooks
-```
-
-Run relevant tests, include the Jira URL and actual verification in the PR, and wait for current-head CI and review before merging. Pull `master` after each merge. Hooks are local guardrails; they do not replace remote checks or review. Do not commit secrets, warehouses, environments or generated audit logs.

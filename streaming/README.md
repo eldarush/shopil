@@ -2,7 +2,7 @@
 
 Continuous ingestion and processing of ShopIL order and review events (assignment part B), owned by the [Streaming epic SHOPIL-3](https://privaterelay-team-yb37vjhl.atlassian.net/browse/SHOPIL-3).
 
-It runs the course `StreamEngine` unchanged (see [SOURCES.md](SOURCES.md)): a producer feeds a bounded `asyncio.Queue`, a consumer processes either one record at a time (`run_live`) or in small batches (`run_microbatch`), and every event is committed to SQLite in its own transaction together with dedupe state, window state, side outputs and the checkpoint.
+It runs the course `StreamEngine` with the storage validation additions attributed in [SOURCES.md](SOURCES.md): a producer feeds a bounded `asyncio.Queue`, a consumer processes either one record at a time (`run_live`) or in small batches (`run_microbatch`), and every event is committed to SQLite in its own transaction together with dedupe state, window state, side outputs and the checkpoint.
 
 ## Setup (Windows / PowerShell, uv)
 
@@ -31,7 +31,7 @@ The source (`shopil_streaming.source`) is endless and deterministic per offset, 
 
 | Path | What |
 | --- | --- |
-| `src/streaming_lab/` | Course engine, copied verbatim |
+| `src/streaming_lab/` | Course engine with documented storage validation additions |
 | `src/shopil_streaming/` | Our ShopIL layer (contract, source, runners, reports) |
 | `fixtures/` | Versioned, deterministic experiment inputs (source order preserved, never sorted by event time) |
 | `experiments/shopil_<n>_*.py` | One script per Jira task; each opens fresh DBs and writes `evidence/SHOPIL-<n>/` |
@@ -49,6 +49,10 @@ close_window = watermark >= window_end + grace
 ```
 
 Only valid, unique, accepted events move the maximum event time; the watermark never goes back; neither the wall clock nor the micro-batch timer advance it. `finalize_demo()` closes remaining windows with reason `demo_end_of_input` without moving the watermark.
+
+SQLite stores signed 64-bit integers. Event amounts and product/order IDs must fit that range; a window's accumulated revenue must also fit. An order that would exceed its window's capacity is rejected into `dead_letters` with its payload and reason, advancing the checkpoint but changing no revenue, dedupe or watermark. It is not counted as accepted money. Duplicate and late deliveries retain their separate treatment. Reconciliation of arbitrary inputs must account for these storage rejections in addition to late events; the supplied course fixtures do not reach the limit.
+
+Window starts/ends and resulting watermarks must be representable in Python's UTC years 1–9999. Unrepresentable events are dead-lettered before committing business state. Time-policy settings cannot exceed 315,537,897,600 seconds (the complete datetime domain); oversized configuration is rejected before opening a database. These bounds prevent a committed checkpoint from referring to state that the evidence reader cannot display.
 
 ## Experiments by task
 
