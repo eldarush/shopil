@@ -1,6 +1,6 @@
 # ShopIL data and evidence contract
 
-Version 0 for team review. Track open decisions in SHOPIL-9 and keep changes to the contract in this file. The DuckDB names reflect the pinned ETL lab and SHOPIL-14. The SQLite names reflect the merged streaming engine. The evidence payload below is a proposal for SHOPIL-28.
+This contract describes the implemented DuckDB/SQLite readers and immutable evidence types. Track open cross-source mapping decisions in SHOPIL-9. The DuckDB names reflect the pinned ETL lab and authored review models; the SQLite names reflect the course streaming engine.
 
 ## Historical DuckDB
 
@@ -10,7 +10,7 @@ Version 0 for team review. Track open decisions in SHOPIL-9 and keep changes to 
 | `marts.fct_orders` | One valid historical order per integer `order_id`. Includes `product_id`, `customer_id`, `status`, `quantity` and `amount`. | `order_date` is a calendar date. Paid revenue sums `amount` in ILS for `status = 'paid'`. Amount already includes quantity. |
 | `raw.reviews`, `raw.reviews__tags` | Raw review rows may repeat `review_id`. The nested product key is `product__id`. Tag rows join to the specific raw review on `_dlt_parent_id = _dlt_id`. | `created_at` is stored as a timestamp with time zone by dlt for the reference fixture. |
 | `staging.stg_reviews` | One valid row per integer `review_id`, with `product_id`, `order_id`, `rating`, `review_text` and `created_at`. | Earliest valid `created_at` per ID, exposed as a timestamp with time zone. Ratings are 1–5. |
-| `marts.mart_product_reviews` (planned) | One row per product. Review count, average rating, negative count, paid order count and paid revenue. | The query must report the data coverage for its metrics. A product with zero reviews has a null average. |
+| `marts.mart_product_reviews` | One row per product. Review count, average rating, negative count, paid order count and paid revenue. | The reader reports full-history coverage independently of the configured question range. A product with zero reviews has a null average. |
 
 ## Streaming SQLite
 
@@ -31,7 +31,7 @@ Stream `event_time` must carry a timezone. The engine converts it to UTC epoch m
 - For streaming result sets, include `checkpoint`, `watermark` and `window_state` for window results. Encode exact historical ILS amounts as decimal strings and streaming amounts as integer agorot. Read those fields and the corresponding rows in one SQLite read transaction.
 - Preserve this same immutable payload for Actor, Critic and every retry. Read a fresh payload for a new question. Calculate counts and sums in SQL or Python.
 
-Before adopting the contract, confirm which metric and row types the chat will consume, the meaning of historical date boundaries, and the mapping of streaming product IDs to the historical catalog.
+`chat.capture.build_capture` composes both readers after Batch completes. Historical order filters use calendar dates; review timestamp filters use UTC midnight bounds. All product metrics are retained, with the latest 12 cleaned review texts across products as an explicitly labeled sample. Streaming evidence includes all products in the latest three distinct window starts by default, with omission counts and separate all-time counters. The source package and scope metadata are frozen together for each question. There is no cross-database transaction: the historical warehouse must remain unchanged during chat. Product mapping remains unverified, so sources are kept separate. See [runtime configuration](../README.md#evidence-scope-and-configuration).
 
 Reference implementations and tracking issues
 
