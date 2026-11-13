@@ -1,0 +1,52 @@
+# Credentials and local configuration
+.env
+.env.*
+!.env.example
+!.env.*.example
+.dlt/secrets.toml
+secrets.toml
+credentials.json
+*.pem
+*.key
+
+# Persistent runtime databases and sidecars
+*.db
+*.db-*
+*.sqlite
+*.sqlite-*
+*.sqlite3
+*.sqlite3-*
+*.duckdb
+*.duckdb.*
+*.wal
+
+# Python environments and caches
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+.coverage
+htmlcov/
+build/
+dist/
+
+# Generated data and run outputs (curated fixtures belong under integration/fixtures)
+**/data/raw/
+**/data/generated/
+**/data/processed/
+artifacts/
+logs/
+*.log
+target/
+dbt_packages/
+
+# Local editor and OS state
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
