@@ -5,19 +5,16 @@ SHOPIL_STREAMING_PYTHON may select an existing isolated streaming interpreter fo
 worktree. Both runner modes use identical ordered events and fresh databases.
 
 The model is explicitly scripted: this checks concurrency, snapshots, audit and
-history, not language-model quality. The small SQL capture below is a test fixture,
-not a replacement for the team's production retrieval layer. Expected update:
+history, not language-model quality. The chat fixture wraps the read-only SQLite snapshot reader. Expected update:
 checkpoint 2 -> 5; accepted reviews 2 -> 4; one alert; the first revenue window
 closes at event-time watermark 75s (end 60s + grace 10s), without finalization.
 """
 
 import asyncio
-from contextlib import closing
 from datetime import datetime, timezone
 import json
 import os
 from pathlib import Path
-import sqlite3
 from uuid import uuid4
 
 import pytest
@@ -26,28 +23,20 @@ from chat.actor import Actor
 from chat.audit import JsonlAudit
 from chat.critic import Critic
 from chat.service import ChatService
+from data_access.streaming import WINDOW_TABLES, read_stream_snapshot
 
 
 ROOT = Path(__file__).resolve().parents[1]
-TABLES = ("order_state", "realtime_revenue", "review_state", "review_windows", "review_alerts")
-
 
 def capture_fixture(database, question):
-    with closing(sqlite3.connect(database.as_uri() + "?mode=ro", uri=True)) as connection:
-        connection.row_factory = sqlite3.Row
-        connection.execute("BEGIN")
-        meta = dict(connection.execute("SELECT * FROM stream_meta WHERE singleton=1").fetchone())
-        rows = {table: [dict(row) for row in connection.execute(
-            f"SELECT * FROM {table} ORDER BY window_start_ms"
-        )] for table in TABLES}
-        counters = dict(connection.execute("SELECT name,value FROM counters"))
-        connection.execute("COMMIT")
-    return {"snapshot_id": uuid4().hex, "captured_at": datetime.now(timezone.utc).isoformat(),
-            "question": question, "sources": [{"table": table, "units": "integer cents or counts"}
-                                             for table in TABLES],
-            "stream": {"checkpoint": meta["checkpoint"], "watermark_ms": meta["watermark_ms"],
-                       "config": json.loads(meta["config_json"]), "finalized": bool(meta["finalized"]),
-                       "counters": counters, "rows": rows}}
+    return {
+        "snapshot_id": uuid4().hex,
+        "captured_at": datetime.now(timezone.utc).isoformat(),
+        "question": question,
+        "sources": [{"table": table, "units": "integer cents or counts"}
+                    for table, _ in WINDOW_TABLES],
+        "stream": read_stream_snapshot(database),
+    }
 
 
 class BarrierModel:
