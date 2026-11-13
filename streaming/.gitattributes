@@ -1,0 +1,3 @@
+# Fixture hashes in manifest.json are over LF bytes; keep them identical on every OS.
+fixtures/streaming/*.jsonl text eol=lf
+fixtures/streaming/manifest.json text eol=lf

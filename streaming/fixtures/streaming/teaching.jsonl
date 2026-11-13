@@ -1,0 +1,17 @@
+{"arrival_delay_s": 0.0, "event": {"amount_cents": 1000, "event_id": "order-a", "event_time": "2026-11-01T10:00:05+00:00", "kind": "order", "product_id": 5}, "offset": 0}
+{"arrival_delay_s": 0.0, "event": {"event_id": "review-1", "event_time": "2026-11-01T10:00:10+00:00", "kind": "review", "product_id": 5, "rating": 1, "text": "הגיע שבור"}, "offset": 1}
+{"arrival_delay_s": 0.0, "event": {"amount_cents": 2000, "event_id": "order-b", "event_time": "2026-11-01T10:01:05+00:00", "kind": "order", "product_id": 5}, "offset": 2}
+{"arrival_delay_s": 0.0, "event": {"amount_cents": 1500, "event_id": "order-c", "event_time": "2026-11-01T10:00:20+00:00", "kind": "order", "product_id": 5}, "offset": 3}
+{"arrival_delay_s": 0.0, "event": {"event_id": "review-2", "event_time": "2026-11-01T10:00:12+00:00", "kind": "review", "product_id": 5, "rating": 2, "text": "איכות ירודה"}, "offset": 4}
+{"arrival_delay_s": 0.0, "event": {"amount_cents": 1000, "event_id": "order-a", "event_time": "2026-11-01T10:00:05+00:00", "kind": "order", "product_id": 5}, "offset": 5}
+{"arrival_delay_s": 0.0, "event": {"event_id": "review-3", "event_time": "2026-11-01T10:00:15+00:00", "kind": "review", "product_id": 5, "rating": 1, "text": "לא עובד בכלל"}, "offset": 6}
+{"arrival_delay_s": 0.0, "event": {"event_id": "review-4", "event_time": "2026-11-01T10:00:18+00:00", "kind": "review", "product_id": 5, "rating": 1, "text": "הסוללה נגמרת מהר"}, "offset": 7}
+{"arrival_delay_s": 0.0, "event": {"amount_cents": 3000, "event_id": "order-d", "event_time": "2026-11-01T10:01:15+00:00", "kind": "order", "product_id": 5}, "offset": 8}
+{"arrival_delay_s": 0.0, "event": {"amount_cents": 500, "event_id": "order-late", "event_time": "2026-11-01T10:00:25+00:00", "kind": "order", "product_id": 5}, "offset": 9}
+{"arrival_delay_s": 0.0, "event": {"amount_cents": 2500, "event_id": "order-e", "event_time": "2026-11-01T10:02:05+00:00", "kind": "order", "product_id": 5}, "offset": 10}
+{"arrival_delay_s": 0.0, "event": {"amount_cents": 19.9, "event_id": "bad-money", "event_time": "2026-11-01T10:02:10+00:00", "kind": "order", "product_id": 5}, "offset": 11}
+{"arrival_delay_s": 0.0, "event": {"amount_cents": 1000, "event_id": "order-f", "event_time": "2026-11-01T10:02:15+00:00", "kind": "order", "product_id": 5}, "offset": 12}
+{"arrival_delay_s": 0.0, "event": {"event_id": "review-5", "event_time": "2026-11-01T10:02:05+00:00", "kind": "review", "product_id": 5, "rating": 5, "text": "מוצר מעולה"}, "offset": 13}
+{"arrival_delay_s": 0.0, "event": {"amount_cents": 500, "event_id": "order-late", "event_time": "2026-11-01T10:00:25+00:00", "kind": "order", "product_id": 5}, "offset": 14}
+{"arrival_delay_s": 0.0, "event": {"amount_cents": 800, "event_id": "order-boundary", "event_time": "2026-11-01T10:01:00+00:00", "kind": "order", "product_id": 5}, "offset": 15}
+{"arrival_delay_s": 0.0, "event": {"amount_cents": 1200, "event_id": "order-h", "event_time": "2026-11-01T10:03:15+00:00", "kind": "order", "product_id": 5}, "offset": 16}

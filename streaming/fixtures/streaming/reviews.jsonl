@@ -1,0 +1,6 @@
+{"arrival_delay_s": 0.0, "event": {"event_id": "review-1", "event_time": "2026-11-01T10:00:05+00:00", "kind": "review", "product_id": 5, "rating": 1, "text": "הגיע שבור"}, "offset": 0}
+{"arrival_delay_s": 0.0, "event": {"event_id": "review-2", "event_time": "2026-11-01T10:00:12+00:00", "kind": "review", "product_id": 5, "rating": 2, "text": "איכות ירודה"}, "offset": 1}
+{"arrival_delay_s": 0.0, "event": {"event_id": "review-1", "event_time": "2026-11-01T10:00:05+00:00", "kind": "review", "product_id": 5, "rating": 1, "text": "הגיע שבור"}, "offset": 2}
+{"arrival_delay_s": 0.0, "event": {"event_id": "review-3", "event_time": "2026-11-01T10:00:15+00:00", "kind": "review", "product_id": 5, "rating": 1, "text": "לא עובד בכלל"}, "offset": 3}
+{"arrival_delay_s": 0.0, "event": {"event_id": "review-4", "event_time": "2026-11-01T10:00:18+00:00", "kind": "review", "product_id": 5, "rating": 1, "text": "הסוללה נגמרת מהר"}, "offset": 4}
+{"arrival_delay_s": 0.0, "event": {"event_id": "review-5", "event_time": "2026-11-01T10:01:05+00:00", "kind": "review", "product_id": 3, "rating": 5, "text": "מוצר מעולה"}, "offset": 5}
