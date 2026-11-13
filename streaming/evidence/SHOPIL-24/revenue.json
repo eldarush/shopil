@@ -1,0 +1,429 @@
+{
+  "checks": {
+    "mid-stream: accepted revenue includes open windows (closed-only would under-report)": true,
+    "orders300: accepted + late == recompute 61,241.70 ILS": true,
+    "orders300: accepted 57,954.30 ILS (grace 10 reference)": true,
+    "teaching: accepted 122.00 ILS": true,
+    "teaching: closed window revenue sums to accepted after finalize": true,
+    "teaching: full recompute of valid unique orders 135.00 ILS == accepted + late": true,
+    "teaching: late 13.00 ILS": true
+  },
+  "orders300": {
+    "reconciliation": {
+      "accepted_cents": 5795430,
+      "accepted_ils": "57,954.30",
+      "accepted_orders": 286,
+      "late_cents": 328740,
+      "late_ils": "3,287.40",
+      "late_orders": 14,
+      "orders_match": true,
+      "recomputed_cents": 6124170,
+      "recomputed_ils": "61,241.70",
+      "recomputed_orders": 300,
+      "revenue_match": true,
+      "scope": "Stream reconciliation only: accepted + late vs. a full recomputation of the same valid, unique stream order events. Not comparable to or additive with Batch paid revenue (fct_orders).",
+      "stream_total_ils": "61,241.70"
+    },
+    "windows": [
+      {
+        "closes_at_watermark": "2026-11-01T10:01:10.000+00:00",
+        "closure_reason": "watermark",
+        "emitted_at_watermark": "2026-11-01T10:01:10.750+00:00",
+        "orders": 28,
+        "revenue_cents": 442150,
+        "revenue_ils": "4,421.50",
+        "state": "closed",
+        "window_end": "2026-11-01T10:01:00.000+00:00",
+        "window_start": "2026-11-01T10:00:00.000+00:00"
+      },
+      {
+        "closes_at_watermark": "2026-11-01T10:02:10.000+00:00",
+        "closure_reason": "watermark",
+        "emitted_at_watermark": "2026-11-01T10:02:10.505+00:00",
+        "orders": 28,
+        "revenue_cents": 660530,
+        "revenue_ils": "6,605.30",
+        "state": "closed",
+        "window_end": "2026-11-01T10:02:00.000+00:00",
+        "window_start": "2026-11-01T10:01:00.000+00:00"
+      },
+      {
+        "closes_at_watermark": "2026-11-01T10:03:10.000+00:00",
+        "closure_reason": "watermark",
+        "emitted_at_watermark": "2026-11-01T10:03:12.854+00:00",
+        "orders": 28,
+        "revenue_cents": 595920,
+        "revenue_ils": "5,959.20",
+        "state": "closed",
+        "window_end": "2026-11-01T10:03:00.000+00:00",
+        "window_start": "2026-11-01T10:02:00.000+00:00"
+      },
+      {
+        "closes_at_watermark": "2026-11-01T10:04:10.000+00:00",
+        "closure_reason": "watermark",
+        "emitted_at_watermark": "2026-11-01T10:04:10.931+00:00",
+        "orders": 29,
+        "revenue_cents": 624170,
+        "revenue_ils": "6,241.70",
+        "state": "closed",
+        "window_end": "2026-11-01T10:04:00.000+00:00",
+        "window_start": "2026-11-01T10:03:00.000+00:00"
+      },
+      {
+        "closes_at_watermark": "2026-11-01T10:05:10.000+00:00",
+        "closure_reason": "watermark",
+        "emitted_at_watermark": "2026-11-01T10:05:12.406+00:00",
+        "orders": 30,
+        "revenue_cents": 556980,
+        "revenue_ils": "5,569.80",
+        "state": "closed",
+        "window_end": "2026-11-01T10:05:00.000+00:00",
+        "window_start": "2026-11-01T10:04:00.000+00:00"
+      },
+      {
+        "closes_at_watermark": "2026-11-01T10:06:10.000+00:00",
+        "closure_reason": "watermark",
+        "emitted_at_watermark": "2026-11-01T10:06:10.301+00:00",
+        "orders": 27,
+        "revenue_cents": 585130,
+        "revenue_ils": "5,851.30",
+        "state": "closed",
+        "window_end": "2026-11-01T10:06:00.000+00:00",
+        "window_start": "2026-11-01T10:05:00.000+00:00"
+      },
+      {
+        "closes_at_watermark": "2026-11-01T10:07:10.000+00:00",
+        "closure_reason": "watermark",
+        "emitted_at_watermark": "2026-11-01T10:07:10.355+00:00",
+        "orders": 29,
+        "revenue_cents": 619860,
+        "revenue_ils": "6,198.60",
+        "state": "closed",
+        "window_end": "2026-11-01T10:07:00.000+00:00",
+        "window_start": "2026-11-01T10:06:00.000+00:00"
+      },
+      {
+        "closes_at_watermark": "2026-11-01T10:08:10.000+00:00",
+        "closure_reason": "watermark",
+        "emitted_at_watermark": "2026-11-01T10:08:14.250+00:00",
+        "orders": 30,
+        "revenue_cents": 604000,
+        "revenue_ils": "6,040.00",
+        "state": "closed",
+        "window_end": "2026-11-01T10:08:00.000+00:00",
+        "window_start": "2026-11-01T10:07:00.000+00:00"
+      },
+      {
+        "closes_at_watermark": "2026-11-01T10:09:10.000+00:00",
+        "closure_reason": "watermark",
+        "emitted_at_watermark": "2026-11-01T10:09:10.557+00:00",
+        "orders": 27,
+        "revenue_cents": 601590,
+        "revenue_ils": "6,015.90",
+        "state": "closed",
+        "window_end": "2026-11-01T10:09:00.000+00:00",
+        "window_start": "2026-11-01T10:08:00.000+00:00"
+      },
+      {
+        "closes_at_watermark": "2026-11-01T10:10:10.000+00:00",
+        "closure_reason": "demo_end_of_input",
+        "emitted_at_watermark": "2026-11-01T10:09:58.706+00:00",
+        "orders": 30,
+        "revenue_cents": 505100,
+        "revenue_ils": "5,051.00",
+        "state": "closed",
+        "window_end": "2026-11-01T10:10:00.000+00:00",
+        "window_start": "2026-11-01T10:09:00.000+00:00"
+      }
+    ]
+  },
+  "teaching": {
+    "canonical_results": {
+      "alerts": [
+        {
+          "emitted_at_watermark": "2026-11-01T10:01:05.000+00:00",
+          "emitted_at_watermark_ms": 1793527265000,
+          "negative_reviews": 3,
+          "product_id": 5,
+          "trigger_event_id": "review-3",
+          "window_end": "2026-11-01T10:01:00.000+00:00",
+          "window_end_ms": 1793527260000,
+          "window_start": "2026-11-01T10:00:00.000+00:00",
+          "window_start_ms": 1793527200000
+        }
+      ],
+      "checkpoint": 16,
+      "config": {
+        "alert_threshold": 3,
+        "grace_seconds": 10,
+        "out_of_order_seconds": 0,
+        "window_seconds": 60
+      },
+      "dead_letters": [
+        {
+          "payload": {
+            "amount_cents": 19.9,
+            "event_id": "bad-money",
+            "event_time": "2026-11-01T10:02:10+00:00",
+            "kind": "order",
+            "product_id": 5
+          },
+          "reason": "amount_cents must be an integer >= 0",
+          "source_offset": 11
+        }
+      ],
+      "finalized": true,
+      "late_events": [
+        {
+          "amount_cents": 500,
+          "event_id": "order-late",
+          "event_time": "2026-11-01T10:00:25.000+00:00",
+          "event_time_ms": 1793527225000,
+          "kind": "order",
+          "payload": {
+            "amount_cents": 500,
+            "event_id": "order-late",
+            "event_time": "2026-11-01T10:00:25+00:00",
+            "kind": "order",
+            "product_id": 5
+          },
+          "reason": "watermark >= window_end + grace",
+          "source_offset": 9,
+          "watermark": "2026-11-01T10:01:15.000+00:00",
+          "watermark_ms": 1793527275000,
+          "window_end": "2026-11-01T10:01:00.000+00:00",
+          "window_end_ms": 1793527260000,
+          "window_start": "2026-11-01T10:00:00.000+00:00",
+          "window_start_ms": 1793527200000
+        },
+        {
+          "amount_cents": 800,
+          "event_id": "order-boundary",
+          "event_time": "2026-11-01T10:01:00.000+00:00",
+          "event_time_ms": 1793527260000,
+          "kind": "order",
+          "payload": {
+            "amount_cents": 800,
+            "event_id": "order-boundary",
+            "event_time": "2026-11-01T10:01:00+00:00",
+            "kind": "order",
+            "product_id": 5
+          },
+          "reason": "watermark >= window_end + grace",
+          "source_offset": 15,
+          "watermark": "2026-11-01T10:02:15.000+00:00",
+          "watermark_ms": 1793527335000,
+          "window_end": "2026-11-01T10:02:00.000+00:00",
+          "window_end_ms": 1793527320000,
+          "window_start": "2026-11-01T10:01:00.000+00:00",
+          "window_start_ms": 1793527260000
+        }
+      ],
+      "max_event_time_ms": 1793527395000,
+      "open_review_windows": [],
+      "open_windows": [],
+      "revenue_windows": [
+        {
+          "closure_reason": "watermark",
+          "emitted_at_watermark": "2026-11-01T10:01:15.000+00:00",
+          "emitted_at_watermark_ms": 1793527275000,
+          "orders": 2,
+          "revenue_cents": 2500,
+          "window_end": "2026-11-01T10:01:00.000+00:00",
+          "window_end_ms": 1793527260000,
+          "window_start": "2026-11-01T10:00:00.000+00:00",
+          "window_start_ms": 1793527200000
+        },
+        {
+          "closure_reason": "watermark",
+          "emitted_at_watermark": "2026-11-01T10:02:15.000+00:00",
+          "emitted_at_watermark_ms": 1793527335000,
+          "orders": 2,
+          "revenue_cents": 5000,
+          "window_end": "2026-11-01T10:02:00.000+00:00",
+          "window_end_ms": 1793527320000,
+          "window_start": "2026-11-01T10:01:00.000+00:00",
+          "window_start_ms": 1793527260000
+        },
+        {
+          "closure_reason": "watermark",
+          "emitted_at_watermark": "2026-11-01T10:03:15.000+00:00",
+          "emitted_at_watermark_ms": 1793527395000,
+          "orders": 2,
+          "revenue_cents": 3500,
+          "window_end": "2026-11-01T10:03:00.000+00:00",
+          "window_end_ms": 1793527380000,
+          "window_start": "2026-11-01T10:02:00.000+00:00",
+          "window_start_ms": 1793527320000
+        },
+        {
+          "closure_reason": "demo_end_of_input",
+          "emitted_at_watermark": "2026-11-01T10:03:15.000+00:00",
+          "emitted_at_watermark_ms": 1793527395000,
+          "orders": 1,
+          "revenue_cents": 1200,
+          "window_end": "2026-11-01T10:04:00.000+00:00",
+          "window_end_ms": 1793527440000,
+          "window_start": "2026-11-01T10:03:00.000+00:00",
+          "window_start_ms": 1793527380000
+        }
+      ],
+      "review_windows": [
+        {
+          "closure_reason": "watermark",
+          "emitted_at_watermark": "2026-11-01T10:01:15.000+00:00",
+          "emitted_at_watermark_ms": 1793527275000,
+          "negative_reviews": 4,
+          "product_id": 5,
+          "reviews": 4,
+          "window_end": "2026-11-01T10:01:00.000+00:00",
+          "window_end_ms": 1793527260000,
+          "window_start": "2026-11-01T10:00:00.000+00:00",
+          "window_start_ms": 1793527200000
+        },
+        {
+          "closure_reason": "watermark",
+          "emitted_at_watermark": "2026-11-01T10:03:15.000+00:00",
+          "emitted_at_watermark_ms": 1793527395000,
+          "negative_reviews": 0,
+          "product_id": 5,
+          "reviews": 1,
+          "window_end": "2026-11-01T10:03:00.000+00:00",
+          "window_end_ms": 1793527380000,
+          "window_start": "2026-11-01T10:02:00.000+00:00",
+          "window_start_ms": 1793527320000
+        }
+      ],
+      "stats": {
+        "accepted": 12,
+        "accepted_orders": 7,
+        "accepted_reviews": 5,
+        "alerts_emitted": 1,
+        "duplicates": 2,
+        "invalid": 1,
+        "late": 2,
+        "received": 17,
+        "revenue_windows_emitted": 4,
+        "review_windows_emitted": 2
+      },
+      "totals": {
+        "late_order_cents": 1300,
+        "late_orders": 2,
+        "late_reviews": 0,
+        "negative_reviews": 4,
+        "orders": 7,
+        "revenue_cents": 12200,
+        "reviews": 5
+      },
+      "watermark": "2026-11-01T10:03:15.000+00:00",
+      "watermark_ms": 1793527395000
+    },
+    "mid_stream_monitor": {
+      "accepted_revenue_ils": "110.00",
+      "checkpoint": 12,
+      "closed_revenue_ils": "75.00",
+      "closed_windows": 2,
+      "finalized": false,
+      "next_close_at_watermark": "2026-11-01T10:03:10.000+00:00",
+      "open_revenue_ils": "35.00",
+      "open_windows": 1,
+      "watermark": "2026-11-01T10:02:15.000+00:00"
+    },
+    "mid_stream_windows": [
+      {
+        "closes_at_watermark": "2026-11-01T10:01:10.000+00:00",
+        "closure_reason": "watermark",
+        "emitted_at_watermark": "2026-11-01T10:01:15.000+00:00",
+        "orders": 2,
+        "revenue_cents": 2500,
+        "revenue_ils": "25.00",
+        "state": "closed",
+        "window_end": "2026-11-01T10:01:00.000+00:00",
+        "window_start": "2026-11-01T10:00:00.000+00:00"
+      },
+      {
+        "closes_at_watermark": "2026-11-01T10:02:10.000+00:00",
+        "closure_reason": "watermark",
+        "emitted_at_watermark": "2026-11-01T10:02:15.000+00:00",
+        "orders": 2,
+        "revenue_cents": 5000,
+        "revenue_ils": "50.00",
+        "state": "closed",
+        "window_end": "2026-11-01T10:02:00.000+00:00",
+        "window_start": "2026-11-01T10:01:00.000+00:00"
+      },
+      {
+        "closes_at_watermark": "2026-11-01T10:03:10.000+00:00",
+        "closure_reason": "",
+        "emitted_at_watermark": "",
+        "orders": 2,
+        "revenue_cents": 3500,
+        "revenue_ils": "35.00",
+        "state": "open",
+        "window_end": "2026-11-01T10:03:00.000+00:00",
+        "window_start": "2026-11-01T10:02:00.000+00:00"
+      }
+    ],
+    "reconciliation": {
+      "accepted_cents": 12200,
+      "accepted_ils": "122.00",
+      "accepted_orders": 7,
+      "late_cents": 1300,
+      "late_ils": "13.00",
+      "late_orders": 2,
+      "orders_match": true,
+      "recomputed_cents": 13500,
+      "recomputed_ils": "135.00",
+      "recomputed_orders": 9,
+      "revenue_match": true,
+      "scope": "Stream reconciliation only: accepted + late vs. a full recomputation of the same valid, unique stream order events. Not comparable to or additive with Batch paid revenue (fct_orders).",
+      "stream_total_ils": "135.00"
+    },
+    "windows": [
+      {
+        "closes_at_watermark": "2026-11-01T10:01:10.000+00:00",
+        "closure_reason": "watermark",
+        "emitted_at_watermark": "2026-11-01T10:01:15.000+00:00",
+        "orders": 2,
+        "revenue_cents": 2500,
+        "revenue_ils": "25.00",
+        "state": "closed",
+        "window_end": "2026-11-01T10:01:00.000+00:00",
+        "window_start": "2026-11-01T10:00:00.000+00:00"
+      },
+      {
+        "closes_at_watermark": "2026-11-01T10:02:10.000+00:00",
+        "closure_reason": "watermark",
+        "emitted_at_watermark": "2026-11-01T10:02:15.000+00:00",
+        "orders": 2,
+        "revenue_cents": 5000,
+        "revenue_ils": "50.00",
+        "state": "closed",
+        "window_end": "2026-11-01T10:02:00.000+00:00",
+        "window_start": "2026-11-01T10:01:00.000+00:00"
+      },
+      {
+        "closes_at_watermark": "2026-11-01T10:03:10.000+00:00",
+        "closure_reason": "watermark",
+        "emitted_at_watermark": "2026-11-01T10:03:15.000+00:00",
+        "orders": 2,
+        "revenue_cents": 3500,
+        "revenue_ils": "35.00",
+        "state": "closed",
+        "window_end": "2026-11-01T10:03:00.000+00:00",
+        "window_start": "2026-11-01T10:02:00.000+00:00"
+      },
+      {
+        "closes_at_watermark": "2026-11-01T10:04:10.000+00:00",
+        "closure_reason": "demo_end_of_input",
+        "emitted_at_watermark": "2026-11-01T10:03:15.000+00:00",
+        "orders": 1,
+        "revenue_cents": 1200,
+        "revenue_ils": "12.00",
+        "state": "closed",
+        "window_end": "2026-11-01T10:04:00.000+00:00",
+        "window_start": "2026-11-01T10:03:00.000+00:00"
+      }
+    ]
+  }
+}
