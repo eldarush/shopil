@@ -121,6 +121,11 @@ export SHOPIL_MODEL='YOUR_INSTALLED_MODEL'
 
 ## Tests and validation
 
+For a controlled full-stack demonstration using an already authenticated Codex CLI,
+see the [integrated live-model rehearsal](experiments/README.md#integrated-live-model-rehearsal).
+It runs the real Gradio/Batch/streaming stack with fixed public course questions and
+records actual model output separately from the deliberately faulty first draft.
+
 ```text
 uv run --locked python -m pytest -q
 uv run --directory streaming --locked python -m pytest -q
