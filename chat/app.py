@@ -15,12 +15,13 @@ class ChatPage:
 
     async def ask(self, question: str, history: list[dict[str, str]]):
         if not question.strip():
-            return history, history, "נא להזין שאלה.", [], "", question
+            return history, history, "נא להזין שאלה.", gr.skip(), gr.skip(), question
         result = await self.service.answer(question, deepcopy(history))
-        approved = result.history if result.status == "approved" else history
+        if result.status != "approved":
+            return deepcopy(history), deepcopy(history), result.message, gr.skip(), gr.skip(), question
         snapshot = " · ".join(value for value in (result.snapshot_id, result.captured_at) if value)
-        return (deepcopy(approved), deepcopy(approved), result.message,
-                result.sources, snapshot, "" if result.status == "approved" else question)
+        return (deepcopy(result.history), deepcopy(result.history), result.message,
+                result.sources, snapshot, "")
 
 
 def build_app(service: "ChatService") -> gr.Blocks:

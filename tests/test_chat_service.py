@@ -1,8 +1,11 @@
 """Loop tests use explicit fake models; they do not validate LLM factual quality."""
 
 import asyncio
+from concurrent.futures import ThreadPoolExecutor, TimeoutError as FutureTimeout
 from copy import deepcopy
 import json
+from threading import Event
+from time import monotonic, sleep
 from types import SimpleNamespace
 
 import pytest
@@ -17,6 +20,255 @@ def snapshot():
     return {"snapshot_id": "s1", "captured_at": "2026-11-13T10:00:00+00:00",
             "sources": [{"table": "marts.fct_orders", "units": "ILS"}],
             "rows": [{"paid_revenue": "0.00", "average_rating": None}]}
+
+
+@pytest.mark.parametrize("accepted", [True, False])
+def test_terminal_publication_and_shutdown_are_serialized(accepted):
+    entered, release, stopping = Event(), Event(), Event()
+    events, closing_during_commit = [], []
+
+    def audit(event):
+        if event["event"] == "terminal":
+            entered.set()
+            assert release.wait(5)
+            closing_during_commit.append(instance._closing)
+        events.append(event)
+
+    instance, _, _, _, _ = service(critic=Critic([accepted] * 3), audit=audit)
+
+    def stop():
+        stopping.set()
+        instance.shutdown()
+
+    with ThreadPoolExecutor(2) as pool:
+        answer = pool.submit(lambda: asyncio.run(instance.answer("question", [])))
+        try:
+            assert entered.wait(5)
+            shutdown = pool.submit(stop)
+            assert stopping.wait(5)
+            with pytest.raises(FutureTimeout):
+                shutdown.result(timeout=.05)
+        finally:
+            release.set()
+        reply = answer.result(timeout=5)
+        shutdown.result(timeout=5)
+    assert closing_during_commit == [False]
+    status = "approved" if accepted else "rejected"
+    assert reply.status == status and len(reply.history) == (2 if accepted else 0)
+    assert [event["status"] for event in events if event["event"] == "terminal"] == [status]
+
+
+def test_shutdown_deadline_includes_slow_terminal_publication():
+    entered, release = Event(), Event()
+
+    def audit(event):
+        if event["event"] == "terminal":
+            entered.set()
+            assert release.wait(5)
+
+    instance, _, _, _, _ = service(audit=audit)
+    with ThreadPoolExecutor(2) as pool:
+        answer = pool.submit(lambda: asyncio.run(instance.answer("question", [])))
+        try:
+            assert entered.wait(5)
+            shutdown = pool.submit(instance.shutdown, .02)
+            with pytest.raises(RuntimeError, match="timed out.*terminal publication"):
+                shutdown.result(timeout=1)
+        finally:
+            release.set()
+        assert answer.result(timeout=5).status == "approved"
+    instance.shutdown()
+
+
+def test_shutdown_during_attempt_audit_prevents_terminal_approval():
+    entered, release = Event(), Event()
+    events = []
+
+    def audit(event):
+        if event["event"] == "attempt":
+            entered.set()
+            assert release.wait(5)
+        events.append(event)
+
+    instance, _, _, _, _ = service(audit=audit)
+    with ThreadPoolExecutor(2) as pool:
+        answer = pool.submit(lambda: asyncio.run(instance.answer("question", [])))
+        try:
+            assert entered.wait(5)
+            shutdown = pool.submit(instance.shutdown)
+            deadline = monotonic() + 2
+            while not instance._closing and monotonic() < deadline:
+                sleep(.001)
+            assert instance._closing
+        finally:
+            release.set()
+        with pytest.raises(asyncio.CancelledError):
+            answer.result(timeout=5)
+        shutdown.result(timeout=5)
+    assert [event["status"] for event in events if event["event"] == "terminal"] == ["error"]
+
+
+@pytest.mark.parametrize("stage", ["snapshot", "attempt"])
+@pytest.mark.parametrize("failure", [OSError("disk unavailable"), ValueError("encoding unavailable")])
+def test_shutdown_reports_audit_failure_from_normal_error_path(stage, failure):
+    entered, release = Event(), Event()
+
+    def audit(event):
+        if event["event"] == stage:
+            entered.set()
+            assert release.wait(5)
+            raise failure
+        if event["event"] == "terminal":
+            raise failure
+
+    instance, _, _, _, _ = service(audit=audit)
+    with ThreadPoolExecutor(2) as pool:
+        answer = pool.submit(lambda: asyncio.run(instance.answer("question", [])))
+        try:
+            assert entered.wait(5)
+            shutdown = pool.submit(instance.shutdown)
+            deadline = monotonic() + 2
+            while not instance._closing and monotonic() < deadline:
+                sleep(.001)
+            assert instance._closing
+        finally:
+            release.set()
+        result = answer.result(timeout=5)
+        assert result.status == "error" and result.history == []
+        with pytest.raises(RuntimeError, match="persist.*audit"):
+            shutdown.result(timeout=5)
+
+
+@pytest.mark.parametrize("stage", ["capture", "actor", "critic"])
+def test_shutdown_waits_for_cancelled_question_audit_and_closes_admission(stage):
+    async def scenario():
+        started = asyncio.Event()
+        events = []
+
+        async def wait_here():
+            started.set()
+            await asyncio.Event().wait()
+
+        async def capture(question, history):
+            if stage == "capture":
+                await wait_here()
+            return snapshot()
+
+        class WaitingActor:
+            async def draft(self, *args):
+                if stage == "actor":
+                    await wait_here()
+                return "unapproved draft"
+
+        class WaitingCritic:
+            async def evaluate(self, *args):
+                await wait_here()
+
+        instance = ChatService(WaitingActor(), WaitingCritic(), capture, events.append)
+        history = [{"role": "user", "content": "old question"},
+                   {"role": "assistant", "content": "old approved answer"}]
+        original = deepcopy(history)
+        pending = asyncio.create_task(instance.answer("new question", history))
+        await started.wait()
+        await asyncio.to_thread(instance.shutdown)
+        with pytest.raises(asyncio.CancelledError):
+            await pending
+        assert events[-1]["event"] == "terminal" and events[-1]["status"] == "error"
+        assert events[-1]["error_type"] == "CancelledError" and events[-1]["error_stage"] == stage
+        assert sum(event["event"] == "terminal" for event in events) == 1
+        if stage != "capture":
+            assert events[-2]["event"] == "attempt"
+            assert events[-2]["draft"] == ("unapproved draft" if stage == "critic" else None)
+        count = len(events)
+        refused = await instance.answer("after shutdown", history)
+        assert refused.status == "error" and refused.answer is None
+        assert refused.history == history == original
+        assert len(events) == count  # No new question was admitted.
+
+    asyncio.run(scenario())
+
+
+@pytest.mark.parametrize("failure", [OSError("unavailable disk"), ValueError("invalid audit encoding")])
+def test_shutdown_reports_failed_cancellation_audit(failure):
+    async def scenario():
+        started = asyncio.Event()
+
+        class WaitingActor:
+            async def draft(self, *args):
+                started.set()
+                await asyncio.Event().wait()
+
+        def audit(event):
+            if event["event"] == "terminal":
+                raise failure
+
+        instance, _, _, _, _ = service(actor=WaitingActor(), audit=audit)
+        pending = asyncio.create_task(instance.answer("question", []))
+        await started.wait()
+        with pytest.raises(RuntimeError, match="audit"):
+            await asyncio.to_thread(instance.shutdown)
+        with pytest.raises(asyncio.CancelledError):
+            await pending
+
+    asyncio.run(scenario())
+
+
+def test_shutdown_timeout_cannot_publish_answer_from_model_that_ignores_cancellation():
+    async def scenario():
+        started, release = asyncio.Event(), asyncio.Event()
+
+        class StubbornActor:
+            async def draft(self, *args):
+                started.set()
+                try:
+                    await release.wait()
+                except asyncio.CancelledError:
+                    await release.wait()
+                return "must not be published after shutdown"
+
+        instance, _, events, _, critic = service(actor=StubbornActor())
+        pending = asyncio.create_task(instance.answer("question", []))
+        await started.wait()
+        try:
+            with pytest.raises(RuntimeError, match="timed out"):
+                await asyncio.to_thread(instance.shutdown, .02)
+        finally:
+            release.set()
+        with pytest.raises(asyncio.CancelledError):
+            await pending
+        assert not critic.calls
+        assert events[-1]["status"] == "error"
+        assert events[-2]["draft"] == "must not be published after shutdown"
+        await asyncio.to_thread(instance.shutdown)
+
+    asyncio.run(scenario())
+
+
+def test_shutdown_finalizes_each_concurrent_question():
+    async def scenario():
+        both_started = asyncio.Event()
+        calls = 0
+
+        class WaitingActor:
+            async def draft(self, *args):
+                nonlocal calls
+                calls += 1
+                if calls == 2:
+                    both_started.set()
+                await asyncio.Event().wait()
+
+        instance, _, events, _, _ = service(actor=WaitingActor())
+        tasks = [asyncio.create_task(instance.answer(question, [])) for question in ("one", "two")]
+        await both_started.wait()
+        await asyncio.to_thread(instance.shutdown)
+        for task in tasks:
+            with pytest.raises(asyncio.CancelledError):
+                await task
+        terminals = [event for event in events if event["event"] == "terminal"]
+        assert len({event["request_id"] for event in terminals}) == 2
+        assert len(terminals) == 2 and all(event["status"] == "error" for event in terminals)
+
+    asyncio.run(scenario())
 
 
 class Actor:

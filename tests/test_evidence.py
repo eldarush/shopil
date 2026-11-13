@@ -40,6 +40,34 @@ def test_evidence_rejects_window_without_checkpoint():
         EvidencePackage.model_validate_json(json.dumps(payload))
 
 
+@pytest.mark.parametrize("changes", [
+    {},
+    {"time_coverage": "no_observed_history", "time_start": "2026-01-01"},
+    {"time_coverage": "no_observed_history", "time_end": "2027-01-01"},
+    {"time_coverage": "no_observed_history", "checkpoint": 0},
+    {"time_coverage": "no_observed_history", "watermark": "2026-01-01T00:00:00Z"},
+    {"time_coverage": "no_observed_history", "window_state": "open"},
+])
+def test_null_coverage_is_explicit_paired_and_never_streaming(changes):
+    source = json.loads(FIXTURE.read_text(encoding="utf-8"))["sources"][0]
+    source.update(time_start=None, time_end=None)
+    source.update(changes)
+    with pytest.raises(ValidationError):
+        EvidenceSource.model_validate_json(json.dumps(source))
+
+
+@pytest.mark.parametrize("start,end", [
+    ("2026-01-01", "2026-01-01"),
+    ("2027-01-01", "2026-01-01"),
+    ("2026-01-01", "2027-01-01T00:00:00Z"),
+])
+def test_bounded_coverage_keeps_ordered_same_type_invariant(start, end):
+    source = json.loads(FIXTURE.read_text(encoding="utf-8"))["sources"][0]
+    source.update(time_start=start, time_end=end)
+    with pytest.raises(ValidationError, match="ordered time bounds"):
+        EvidenceSource.model_validate_json(json.dumps(source))
+
+
 def test_fixture_is_accepted_by_chat_capture_and_reused_on_retry():
     package = EvidencePackage.model_validate_json(FIXTURE.read_text(encoding="utf-8"))
     payload = package.model_dump(mode="json")

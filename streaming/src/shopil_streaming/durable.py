@@ -1,7 +1,7 @@
 """SHOPIL-23: read the DURABLE state straight from the SQLite file.
 
-`durable_state` opens the database read-only in a new connection, so it only
-sees committed data, never an in-memory Python object. Its fingerprint lets
+`durable_state` opens one read-only transaction in a new connection, so all
+tables describe the same committed snapshot even if ingestion advances. Its fingerprint lets
 experiments compare durable state byte for byte across replay, reopen and crashes.
 """
 from __future__ import annotations
@@ -19,11 +19,13 @@ TABLES = ("stream_meta", "counters", "seen_events", "order_state", "review_state
 def durable_state(db_path: Path | str) -> dict[str, list[list[Any]]]:
     con = sqlite3.connect(f"{Path(db_path).resolve().as_uri()}?mode=ro", uri=True)
     try:
+        con.execute("BEGIN")
         state = {}
         for table in TABLES:
             columns = [row[1] for row in con.execute(f"PRAGMA table_info({table})")]
             state[table] = [list(row) for row in con.execute(
                 f"SELECT * FROM {table} ORDER BY {', '.join(columns)}")]
+        con.commit()
         return state
     finally:
         con.close()

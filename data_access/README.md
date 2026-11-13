@@ -11,13 +11,21 @@ async capture function passes `package.model_dump(mode="json")` to
 attempt.
 
 Each source supplies a relation, metric, units, identifier columns, and a
-half-open time range. Use dates for historical calendar-day ranges and
+half-open time range (`time_coverage="bounded"`). Use dates for historical calendar-day ranges and
 timezone-aware datetimes for stream ranges. Streaming window sources include
 the committed checkpoint, watermark (which can be null before the first
 accepted event), and window state. Use separate sources for open and closed
 windows. Encode exact decimal ILS values as strings and stream amounts as
 integer agorot. An empty row list represents an empty result set. Zero is a
 value in a returned row.
+
+When no paid orders or cleaned reviews exist anywhere in the completed warehouse,
+product mart rows remain available with zero counts/revenue and a null average.
+Their `time_coverage="no_observed_history"` explicitly requires two null time bounds;
+it is historical-only and cannot carry streaming metadata. This avoids assigning
+the configured question dates to full-history metrics without observed coverage.
+Date-filtered aggregates still report their requested range, even when their value
+is zero. An absent product still has no metric rows.
 
 See the [shared contract](https://privaterelay-team-yb37vjhl.atlassian.net/browse/SHOPIL-9)
 and [synthetic payload](../tests/fixtures/evidence_snapshot.json). The payload

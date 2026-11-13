@@ -29,12 +29,30 @@ def _arguments(command: Sequence[str]) -> list[str]:
 def _launch(command: Sequence[str], *, controlled: bool = False) -> subprocess.Popen:
     environment = {key: value for key, value in os.environ.items() if key != "VIRTUAL_ENV"}
     environment.update(PYTHONUTF8="1", PYTHONIOENCODING="utf-8")
-    return subprocess.Popen(
-        _arguments(command), cwd=ROOT, env=environment,
-        stdin=subprocess.PIPE if controlled else subprocess.DEVNULL,
-        start_new_session=os.name != "nt",
-        creationflags=subprocess.CREATE_NEW_PROCESS_GROUP if os.name == "nt" else 0,
-    )
+    arguments = _arguments(command)
+    options = dict(cwd=ROOT, env=environment,
+                   stdin=subprocess.PIPE if controlled else subprocess.DEVNULL)
+    if os.name != "nt":
+        return subprocess.Popen(arguments, start_new_session=True, **options)
+    from .windows_job import Job
+    job = Job()
+    try:
+        os.set_handle_inheritable(job.handle, True)
+        startup = subprocess.STARTUPINFO(lpAttributeList={"handle_list": [job.handle]})
+        startup.dwFlags |= subprocess.STARTF_USESHOWWINDOW
+        startup.wShowWindow = subprocess.SW_HIDE
+        process = subprocess.Popen(
+            [sys.executable, str(ROOT / "integration/windows_job.py"), str(job.handle), *arguments],
+            startupinfo=startup, creationflags=subprocess.CREATE_NEW_PROCESS_GROUP,
+            close_fds=True, **options)
+        process._shopil_job = job
+        return process
+    except BaseException:
+        job.close()
+        raise
+    finally:
+        if job.handle is not None:
+            os.set_handle_inheritable(job.handle, False)
 
 
 def _checkpoint(database: Path) -> int | None:
@@ -52,10 +70,19 @@ def _checkpoint(database: Path) -> int | None:
         raise
 
 
-def _kill_group(process: subprocess.Popen) -> None:
-    if process.poll() is not None:
-        return
+def _kill_group(process: subprocess.Popen) -> bool:
+    if getattr(process, "_shopil_group_closed", False):
+        return False
+    job = getattr(process, "_shopil_job", None)
+    if job is not None:
+        remaining = job.close()
+        process.wait(timeout=5)
+        process._shopil_group_closed = True
+        return remaining
+    remaining = process.poll() is None
     if os.name == "nt":
+        if not remaining:
+            return False
         try:
             subprocess.run(["taskkill", "/PID", str(process.pid), "/T", "/F"],
                            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=5)
@@ -67,9 +94,12 @@ def _kill_group(process: subprocess.Popen) -> None:
     else:
         try:
             os.killpg(process.pid, signal.SIGKILL)
+            remaining = True
         except ProcessLookupError:
-            pass
+            remaining = False
     process.wait(timeout=5)
+    process._shopil_group_closed = True
+    return remaining
 
 
 def _stop(process: subprocess.Popen, label: str, timeout: float) -> None:
@@ -83,8 +113,11 @@ def _stop(process: subprocess.Popen, label: str, timeout: float) -> None:
     except (subprocess.TimeoutExpired, KeyboardInterrupt) as exc:
         _kill_group(process)
         raise StackError(f"{label} required forced termination; shutdown was not clean") from exc
+    descendants = _kill_group(process)
     if code != 0:
         raise StackError(f"{label} exited with code {code}")
+    if descendants:
+        raise StackError(f"{label} left descendants requiring forced termination")
 
 
 def run_stack(
@@ -118,6 +151,8 @@ def run_stack(
         batch = _launch(batch_command)
         if batch.wait() != 0:
             raise StackError(f"Batch failed with code {batch.returncode}; streaming and chat were not started")
+        if _kill_group(batch):
+            raise StackError("Batch left descendants requiring forced termination")
         initial_checkpoint = _checkpoint(database)
         if initial_checkpoint is None:
             raise StackError("Stream database is locked; cannot establish the starting checkpoint")
@@ -150,9 +185,14 @@ def run_stack(
                     _stop(process, label, shutdown_timeout)
                 except (StackError, OSError, subprocess.SubprocessError) as exc:
                     errors.append(f"{label}: {exc}")
-        if batch is not None and batch.poll() is None:
-            _kill_group(batch)
-            errors.append("Batch was interrupted and required termination")
+        if batch is not None:
+            interrupted = batch.poll() is None
+            try:
+                remaining = _kill_group(batch)
+                if interrupted or remaining:
+                    errors.append("Batch failed or left descendants requiring forced termination")
+            except (OSError, subprocess.SubprocessError) as exc:
+                errors.append(f"Batch cleanup: {exc}")
         if errors:
             raise StackError("; ".join(errors))
 

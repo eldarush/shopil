@@ -3,6 +3,7 @@
 from contextlib import closing
 import io
 import os
+import socket
 import sqlite3
 import subprocess
 import sys
@@ -188,3 +189,61 @@ def test_windows_tree_cleanup_failure_is_bounded_and_falls_back_to_child_kill(mo
     assert calls[0][1]["timeout"] == 5
     assert child.stdin.closed and child.killed
     assert child.waits == [0.1, 5]
+
+
+@pytest.mark.parametrize("component", ["batch", "chat"])
+@pytest.mark.parametrize("exit_code", [0, 7])
+def test_exited_leader_cannot_leave_a_descendant_running(tmp_path, component, exit_code):
+    # A socket held by the grandchild proves process exit, including on POSIX
+    # where an orphan can remain as an already-dead zombie until init reaps it.
+    with socket.socket() as listener:
+        listener.bind(("127.0.0.1", 0))
+        listener.listen()
+        listener.settimeout(10)
+        marker = tmp_path / "descendant-ready"
+        descendant = """
+import pathlib, socket, sys
+with socket.create_connection(('127.0.0.1', int(sys.argv[1]))) as connection:
+    pathlib.Path(sys.argv[2]).touch()
+    connection.recv(1)
+"""
+        command = python("""
+import pathlib, subprocess, sys, time
+# Keep a second generation alive too; all descendants must belong to the group.
+middle = "import subprocess,sys; raise SystemExit(subprocess.call(sys.argv[1:]))"
+subprocess.Popen([sys.executable, '-c', middle, sys.executable, '-c', sys.argv[1], sys.argv[2], sys.argv[3]])
+deadline = time.monotonic() + 8
+while not pathlib.Path(sys.argv[3]).exists():
+    if time.monotonic() >= deadline: raise TimeoutError('descendant not ready')
+    time.sleep(.01)
+raise SystemExit(int(sys.argv[4]))
+""", descendant, listener.getsockname()[1], marker, exit_code)
+        def execute():
+            run.run_stack(command if component == "batch" else python("pass"),
+                          command if component == "chat" else python("pass"),
+                          stream_db=tmp_path / "stream.db")
+        if exit_code:
+            with pytest.raises(run.StackError):
+                execute()
+        else:
+            try:
+                execute()
+            except run.StackError as error:
+                assert "descendants" in str(error)
+        assert marker.exists()
+        with listener.accept()[0] as connection:
+            connection.settimeout(5)
+            try:
+                assert connection.recv(1) == b"", "descendant survived supervisor cleanup"
+            except ConnectionResetError:
+                pass  # Windows forced process exit resets rather than closes the socket.
+
+
+def test_completed_group_cleanup_never_reuses_the_process_id(monkeypatch):
+    calls = []
+    child = SimpleNamespace(pid=1234, poll=lambda: 0, wait=lambda timeout: 0)
+    monkeypatch.setattr(run, "os", SimpleNamespace(name="posix", killpg=lambda *args: calls.append(args)))
+    monkeypatch.setattr(run, "signal", SimpleNamespace(SIGKILL=9))
+    assert run._kill_group(child) is True
+    assert run._kill_group(child) is False
+    assert calls == [(1234, run.signal.SIGKILL)]

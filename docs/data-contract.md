@@ -27,7 +27,7 @@ Stream `event_time` must carry a timezone. The engine converts it to UTC epoch m
 ## Per-question evidence payload
 
 - `snapshot_id`, `captured_at` in UTC, and `question`.
-- A `sources` list of result sets. Each has `table`, `metric`, `units`, `identifiers`, `time_start`, `time_end`, and `rows`. Time ranges are half-open. An empty result set and a numeric zero carry distinct meanings.
+- A `sources` list of result sets. Each has `table`, `metric`, `units`, `identifiers`, `time_start`, `time_end`, and `rows`. The default `time_coverage="bounded"` requires ordered, same-type half-open bounds. If the complete historical warehouse has no paid orders or cleaned reviews, product mart rows still retain known zero counts/revenue and null averages; they carry `time_coverage="no_observed_history"` and both time bounds are null. This explicit historical-only case does not invent a date range and cannot carry streaming checkpoint/watermark/window metadata. Date-filtered paid totals and review queries retain their configured bounds. An empty result set and a numeric zero carry distinct meanings.
 - For streaming result sets, include `checkpoint`, `watermark` and `window_state` for window results. Encode exact historical ILS amounts as decimal strings and streaming amounts as integer agorot. Read those fields and the corresponding rows in one SQLite read transaction.
 - Preserve this same immutable payload for Actor, Critic and every retry. Read a fresh payload for a new question. Calculate counts and sums in SQL or Python.
 
