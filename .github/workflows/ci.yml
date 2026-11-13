@@ -9,7 +9,7 @@ jobs:
   test:
     timeout-minutes: 15
     name: Application tests (${{ matrix.os }})
-    runs-on: ${{ matrix.os }}
+    runs-on: ${{ matrix.runner || matrix.os }}
     strategy:
       fail-fast: false
       matrix:
@@ -20,6 +20,8 @@ jobs:
           - os: windows-latest
             etl-python: etl/.venv/Scripts/python.exe
           - os: macos-latest
+            # Preserve the required check name; use Intel after repeated hosted ARM capacity failures.
+            runner: macos-26-intel
             etl-python: etl/.venv/bin/python
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262

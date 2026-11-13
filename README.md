@@ -123,9 +123,11 @@ uv run --directory streaming --locked python -m pytest -q
 uv run --locked python -m integration.smoke
 ```
 
-CI runs application tests, streaming tests, smoke checks and complete Batch preparation twice on Windows, macOS and Linux; inspect the current PR checks for their actual status. The verified Batch fixture produces eight models, 25 passing data tests, the one expected relationship warning and zero errors; all 14 course checks pass. Independent product metrics and revenue remain identical across reruns.
+CI runs application tests, streaming tests, smoke checks and complete Batch preparation twice on Windows, macOS and Linux; inspect the current PR checks for their actual status. The macOS job uses the standard `macos-26-intel` runner after hosted ARM capacity failures, retaining its existing required check name. The verified Batch fixture produces eight models, 25 passing data tests, the one expected relationship warning and zero errors; all 14 course checks pass. Independent product metrics and revenue remain identical across reruns.
 
 Server tests use explicitly scripted models and HTTP contract tests use mocked transport. They do not establish that a real Ollama endpoint is installed or functioning. The separate [teaching experiments](experiments/README.md) document real Actor/Critic correction and manual SQL comparisons; they are not a fallback backend for the application.
+
+The [architecture report](docs/report.md) explains loading policies, event-time processing, transaction and snapshot boundaries, Actor/Critic feedback, and verified results with their limits. Its two-page explanation is followed by separate architecture and results appendices in the generated submission PDF.
 
 ## Contributing
 
