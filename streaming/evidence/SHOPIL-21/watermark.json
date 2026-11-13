@@ -1,0 +1,236 @@
+{
+  "checks": {
+    "1.2 s of wall-clock idle time did not move the watermark": true,
+    "each window closed at the first record that satisfied the rule": true,
+    "engine matches independent model on every record (status, max time, watermark, closures)": true,
+    "every watermark-closed window satisfied watermark >= end + grace at emission": true,
+    "finalize_demo closed remaining windows as demo_end_of_input": true,
+    "finalize_demo did not change the watermark": true,
+    "invalid/duplicate/late records did not move max event time": true,
+    "watermark never decreases": true
+  },
+  "final_watermark": "2026-11-01T10:03:15.000+00:00",
+  "trace": [
+    {
+      "closed_now": "",
+      "event_id": "order-a",
+      "event_time": "10:00:05",
+      "max_event_time": "10:00:05",
+      "model_status": "accepted",
+      "model_watermark": "10:00:05",
+      "offset": 0,
+      "status": "accepted",
+      "watermark": "10:00:05"
+    },
+    {
+      "closed_now": "",
+      "event_id": "review-1",
+      "event_time": "10:00:10",
+      "max_event_time": "10:00:10",
+      "model_status": "accepted",
+      "model_watermark": "10:00:10",
+      "offset": 1,
+      "status": "accepted",
+      "watermark": "10:00:10"
+    },
+    {
+      "closed_now": "",
+      "event_id": "order-b",
+      "event_time": "10:01:05",
+      "max_event_time": "10:01:05",
+      "model_status": "accepted",
+      "model_watermark": "10:01:05",
+      "offset": 2,
+      "status": "accepted",
+      "watermark": "10:01:05"
+    },
+    {
+      "closed_now": "",
+      "event_id": "order-c",
+      "event_time": "10:00:20",
+      "max_event_time": "10:01:05",
+      "model_status": "accepted",
+      "model_watermark": "10:01:05",
+      "offset": 3,
+      "status": "accepted",
+      "watermark": "10:01:05"
+    },
+    {
+      "closed_now": "",
+      "event_id": "review-2",
+      "event_time": "10:00:12",
+      "max_event_time": "10:01:05",
+      "model_status": "accepted",
+      "model_watermark": "10:01:05",
+      "offset": 4,
+      "status": "accepted",
+      "watermark": "10:01:05"
+    },
+    {
+      "closed_now": "",
+      "event_id": "order-a",
+      "event_time": "10:00:05",
+      "max_event_time": "10:01:05",
+      "model_status": "duplicate",
+      "model_watermark": "10:01:05",
+      "offset": 5,
+      "status": "duplicate",
+      "watermark": "10:01:05"
+    },
+    {
+      "closed_now": "",
+      "event_id": "review-3",
+      "event_time": "10:00:15",
+      "max_event_time": "10:01:05",
+      "model_status": "accepted",
+      "model_watermark": "10:01:05",
+      "offset": 6,
+      "status": "accepted",
+      "watermark": "10:01:05"
+    },
+    {
+      "closed_now": "",
+      "event_id": "review-4",
+      "event_time": "10:00:18",
+      "max_event_time": "10:01:05",
+      "model_status": "accepted",
+      "model_watermark": "10:01:05",
+      "offset": 7,
+      "status": "accepted",
+      "watermark": "10:01:05"
+    },
+    {
+      "closed_now": "[10:00:00,10:01:00)",
+      "event_id": "order-d",
+      "event_time": "10:01:15",
+      "max_event_time": "10:01:15",
+      "model_status": "accepted",
+      "model_watermark": "10:01:15",
+      "offset": 8,
+      "status": "accepted",
+      "watermark": "10:01:15"
+    },
+    {
+      "closed_now": "",
+      "event_id": "order-late",
+      "event_time": "10:00:25",
+      "max_event_time": "10:01:15",
+      "model_status": "late",
+      "model_watermark": "10:01:15",
+      "offset": 9,
+      "status": "late",
+      "watermark": "10:01:15"
+    },
+    {
+      "closed_now": "",
+      "event_id": "order-e",
+      "event_time": "10:02:05",
+      "max_event_time": "10:02:05",
+      "model_status": "accepted",
+      "model_watermark": "10:02:05",
+      "offset": 10,
+      "status": "accepted",
+      "watermark": "10:02:05"
+    },
+    {
+      "closed_now": "",
+      "event_id": "bad-money",
+      "event_time": "(invalid)",
+      "max_event_time": "10:02:05",
+      "model_status": "invalid",
+      "model_watermark": "10:02:05",
+      "offset": 11,
+      "status": "invalid",
+      "watermark": "10:02:05"
+    },
+    {
+      "closed_now": "[10:01:00,10:02:00)",
+      "event_id": "order-f",
+      "event_time": "10:02:15",
+      "max_event_time": "10:02:15",
+      "model_status": "accepted",
+      "model_watermark": "10:02:15",
+      "offset": 12,
+      "status": "accepted",
+      "watermark": "10:02:15"
+    },
+    {
+      "closed_now": "",
+      "event_id": "review-5",
+      "event_time": "10:02:05",
+      "max_event_time": "10:02:15",
+      "model_status": "accepted",
+      "model_watermark": "10:02:15",
+      "offset": 13,
+      "status": "accepted",
+      "watermark": "10:02:15"
+    },
+    {
+      "closed_now": "",
+      "event_id": "order-late",
+      "event_time": "10:00:25",
+      "max_event_time": "10:02:15",
+      "model_status": "duplicate",
+      "model_watermark": "10:02:15",
+      "offset": 14,
+      "status": "duplicate",
+      "watermark": "10:02:15"
+    },
+    {
+      "closed_now": "",
+      "event_id": "order-boundary",
+      "event_time": "10:01:00",
+      "max_event_time": "10:02:15",
+      "model_status": "late",
+      "model_watermark": "10:02:15",
+      "offset": 15,
+      "status": "late",
+      "watermark": "10:02:15"
+    },
+    {
+      "closed_now": "[10:02:00,10:03:00)",
+      "event_id": "order-h",
+      "event_time": "10:03:15",
+      "max_event_time": "10:03:15",
+      "model_status": "accepted",
+      "model_watermark": "10:03:15",
+      "offset": 16,
+      "status": "accepted",
+      "watermark": "10:03:15"
+    }
+  ],
+  "windows": [
+    {
+      "close_threshold (end+grace)": "10:01:10",
+      "closure_reason": "watermark",
+      "emitted_at_watermark": "10:01:15",
+      "orders": 2,
+      "revenue_cents": 2500,
+      "window": "[10:00:00, 10:01:00)"
+    },
+    {
+      "close_threshold (end+grace)": "10:02:10",
+      "closure_reason": "watermark",
+      "emitted_at_watermark": "10:02:15",
+      "orders": 2,
+      "revenue_cents": 5000,
+      "window": "[10:01:00, 10:02:00)"
+    },
+    {
+      "close_threshold (end+grace)": "10:03:10",
+      "closure_reason": "watermark",
+      "emitted_at_watermark": "10:03:15",
+      "orders": 2,
+      "revenue_cents": 3500,
+      "window": "[10:02:00, 10:03:00)"
+    },
+    {
+      "close_threshold (end+grace)": "10:04:10",
+      "closure_reason": "demo_end_of_input",
+      "emitted_at_watermark": "10:03:15",
+      "orders": 1,
+      "revenue_cents": 1200,
+      "window": "[10:03:00, 10:04:00)"
+    }
+  ]
+}
