@@ -1,0 +1,169 @@
+{
+  "alerts": [
+    {
+      "emitted_at_watermark": "2026-11-01T10:00:15.000+00:00",
+      "negative_reviews_at_alert": 3,
+      "product_id": 5,
+      "trigger_event_id": "review-3",
+      "window_end": "2026-11-01T10:01:00.000+00:00",
+      "window_start": "2026-11-01T10:00:00.000+00:00"
+    },
+    {
+      "emitted_at_watermark": "2026-11-01T10:01:15.000+00:00",
+      "negative_reviews_at_alert": 3,
+      "product_id": 5,
+      "trigger_event_id": "p5-w2-3",
+      "window_end": "2026-11-01T10:02:00.000+00:00",
+      "window_start": "2026-11-01T10:01:00.000+00:00"
+    }
+  ],
+  "checks": {
+    "4th negative (review-4) raised the window counter to 4 without a second alert": true,
+    "alerts_emitted counter == alert rows": true,
+    "positive review (product 3) has no alert": true,
+    "product 2 with 2 negatives (below threshold) has no alert": true,
+    "product 5 next window gets its own single alert": true,
+    "product 5 window [10:00,10:01): exactly one alert, triggered by review-3 (3rd negative)": true,
+    "reopen + replay of every offset left alerts unchanged": true,
+    "retried review-1 is a duplicate and did not change the counter (stays 2)": true
+  },
+  "counters": [
+    {
+      "alerted": false,
+      "negative_reviews": 2,
+      "product_id": 2,
+      "reviews": 2,
+      "state": "closed",
+      "threshold": 3,
+      "window_start": "2026-11-01T10:00:00.000+00:00"
+    },
+    {
+      "alerted": true,
+      "negative_reviews": 4,
+      "product_id": 5,
+      "reviews": 4,
+      "state": "closed",
+      "threshold": 3,
+      "window_start": "2026-11-01T10:00:00.000+00:00"
+    },
+    {
+      "alerted": false,
+      "negative_reviews": 0,
+      "product_id": 3,
+      "reviews": 1,
+      "state": "open",
+      "threshold": 3,
+      "window_start": "2026-11-01T10:01:00.000+00:00"
+    },
+    {
+      "alerted": true,
+      "negative_reviews": 3,
+      "product_id": 5,
+      "reviews": 3,
+      "state": "open",
+      "threshold": 3,
+      "window_start": "2026-11-01T10:01:00.000+00:00"
+    }
+  ],
+  "trace": [
+    {
+      "alerts_total": 0,
+      "event_id": "review-1",
+      "offset": 0,
+      "product_id": 5,
+      "rating": 1,
+      "status": "accepted",
+      "window_negatives": 1
+    },
+    {
+      "alerts_total": 0,
+      "event_id": "review-2",
+      "offset": 1,
+      "product_id": 5,
+      "rating": 2,
+      "status": "accepted",
+      "window_negatives": 2
+    },
+    {
+      "alerts_total": 0,
+      "event_id": "review-1",
+      "offset": 2,
+      "product_id": 5,
+      "rating": 1,
+      "status": "duplicate",
+      "window_negatives": 2
+    },
+    {
+      "alerts_total": 1,
+      "event_id": "review-3",
+      "offset": 3,
+      "product_id": 5,
+      "rating": 1,
+      "status": "accepted",
+      "window_negatives": 3
+    },
+    {
+      "alerts_total": 1,
+      "event_id": "review-4",
+      "offset": 4,
+      "product_id": 5,
+      "rating": 1,
+      "status": "accepted",
+      "window_negatives": 4
+    },
+    {
+      "alerts_total": 1,
+      "event_id": "review-5",
+      "offset": 5,
+      "product_id": 3,
+      "rating": 5,
+      "status": "accepted",
+      "window_negatives": 0
+    },
+    {
+      "alerts_total": 1,
+      "event_id": "p2-neg-1",
+      "offset": 6,
+      "product_id": 2,
+      "rating": 1,
+      "status": "accepted",
+      "window_negatives": 1
+    },
+    {
+      "alerts_total": 1,
+      "event_id": "p2-neg-2",
+      "offset": 7,
+      "product_id": 2,
+      "rating": 1,
+      "status": "accepted",
+      "window_negatives": 2
+    },
+    {
+      "alerts_total": 1,
+      "event_id": "p5-w2-1",
+      "offset": 8,
+      "product_id": 5,
+      "rating": 1,
+      "status": "accepted",
+      "window_negatives": 1
+    },
+    {
+      "alerts_total": 1,
+      "event_id": "p5-w2-2",
+      "offset": 9,
+      "product_id": 5,
+      "rating": 1,
+      "status": "accepted",
+      "window_negatives": 2
+    },
+    {
+      "alerts_total": 2,
+      "event_id": "p5-w2-3",
+      "offset": 10,
+      "product_id": 5,
+      "rating": 1,
+      "status": "accepted",
+      "window_negatives": 3
+    }
+  ]
+}
