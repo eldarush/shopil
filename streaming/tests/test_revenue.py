@@ -5,7 +5,8 @@ import pytest
 
 from shopil_streaming.revenue import reconcile, revenue_windows, window_monitor
 from shopil_streaming.runs import shekels
-from streaming_lab import StreamEngine, generate_order_fixture, teaching_fixture
+from streaming_lab import Delivery, Event, StreamEngine, generate_order_fixture, teaching_fixture
+from streaming_lab.events import SQLITE_MAX_INTEGER, T0
 
 
 def test_teaching_reconciliation(tmp_path):
@@ -36,3 +37,29 @@ def test_shekels_is_exact():
     assert shekels(12_200) == "122.00" and shekels(5) == "0.05" and shekels(-150) == "-1.50"
     with pytest.raises(TypeError):
         shekels(1.5)
+
+
+def test_reconciliation_discloses_storage_rejections_without_counting_them_as_accepted(tmp_path):
+    data = [Delivery(0, Event("full", "order", T0, 1, amount_cents=SQLITE_MAX_INTEGER)),
+            Delivery(1, Event("overflow", "order", T0, 1, amount_cents=1))]
+    with StreamEngine(tmp_path / "bounded.db") as engine:
+        for item in data:
+            engine.ingest(item.event, offset=item.offset)
+        rec = reconcile(engine.snapshot(), data)
+    assert rec["orders_match"] and rec["revenue_match"]
+    assert rec["accepted_cents"] == rec["recomputed_cents"] == SQLITE_MAX_INTEGER
+    assert rec["input_schema_truth"]["revenue_cents"] == SQLITE_MAX_INTEGER + 1
+    assert rec["excluded_dead_letter_offsets"] == [1]
+
+
+def test_rejected_identity_can_later_be_accepted_with_corrected_payload(tmp_path):
+    data = [Delivery(0, Event("full", "order", T0, 1, amount_cents=SQLITE_MAX_INTEGER)),
+            Delivery(1, Event("corrected", "order", T0, 1, amount_cents=1)),
+            Delivery(2, Event("corrected", "order", T0, 1, amount_cents=0))]
+    with StreamEngine(tmp_path / "corrected.db") as engine:
+        for item in data:
+            engine.ingest(item.event, offset=item.offset)
+        rec = reconcile(engine.snapshot(), data)
+    assert rec["orders_match"] and rec["revenue_match"]
+    assert rec["recomputed_orders"] == 2
+    assert rec["excluded_dead_letter_offsets"] == [1]

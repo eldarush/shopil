@@ -38,11 +38,12 @@ available to your authenticated CLI; check your installed CLI configuration/help
 
 ```powershell
 uv run --locked python -m experiments.integrated_codex launch `
-  --course-checkout runs/course --etl-python etl/.venv/Scripts/python.exe `
+  --course-checkout ../etl-course-demo --etl-python "$etlPython" `
   --run-dir runs/integrated-live-review --model YOUR_AVAILABLE_CODEX_MODEL --port 7860
 ```
 
-On macOS/Linux use `etl/.venv/bin/python` and ordinary shell line continuation. Open
+Use the `$etlPython` variable set by the main README's platform-specific setup block.
+On macOS/Linux use ordinary shell line continuation. Open
 `http://127.0.0.1:7860` and ask these questions **in order**, in the same conversation:
 
 1. `מה ההכנסה מהזמנות ששולמו?`

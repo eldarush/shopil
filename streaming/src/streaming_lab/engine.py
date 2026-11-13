@@ -12,7 +12,7 @@ from pathlib import Path
 import sqlite3
 from typing import Any, Mapping
 
-from .events import Event, InvalidEvent, epoch_ms, iso_time, window_start_ms
+from .events import Event, InvalidEvent, SQLITE_MAX_INTEGER, epoch_ms, iso_time, window_start_ms
 
 
 class OffsetGapError(ValueError):
@@ -92,7 +92,8 @@ CREATE TABLE IF NOT EXISTS accepted_reviews (
 
 
 def _json(value: Any) -> str:
-    return json.dumps(value, ensure_ascii=False, sort_keys=True, default=str, allow_nan=False)
+    # Escaping retains malformed Unicode in dead-letter payloads without breaking SQLite TEXT.
+    return json.dumps(value, ensure_ascii=True, sort_keys=True, default=str, allow_nan=False)
 
 
 class StreamEngine:
@@ -110,8 +111,11 @@ class StreamEngine:
                   "out_of_order_seconds": out_of_order_seconds, "alert_threshold": alert_threshold}
         for key, value in config.items():
             minimum = 1 if key in ("window_seconds", "alert_threshold") else 0
-            if isinstance(value, bool) or not isinstance(value, int) or value < minimum:
-                raise ValueError(f"{key} must be an integer >= {minimum}")
+            # Time policies cannot exceed the complete datetime year 1..9999 domain.
+            maximum = SQLITE_MAX_INTEGER if key == "alert_threshold" else 315537897600
+            if (isinstance(value, bool) or not isinstance(value, int) or value < minimum
+                    or value > maximum):
+                raise ValueError(f"{key} must be an integer in [{minimum}, {maximum}]")
         self.path = str(db_path)
         if self.path != ":memory:":
             Path(self.path).parent.mkdir(parents=True, exist_ok=True)
@@ -185,9 +189,10 @@ class StreamEngine:
             try:
                 parsed = event if isinstance(event, Event) else Event.from_dict(event)
                 event_ms = epoch_ms(parsed.event_time)
+                self._validate_storage(parsed, event_ms, meta)
             except (InvalidEvent, ValueError, TypeError, OverflowError) as exc:
                 try:
-                    raw = _json(event)
+                    raw = _json(event.to_dict() if isinstance(event, Event) else event)
                 except (ValueError, TypeError):
                     raw = _json({"unserializable_payload": repr(event)})
                 self.con.execute("INSERT INTO dead_letters VALUES(?,?,?)", (offset, raw, str(exc)))
@@ -207,6 +212,29 @@ class StreamEngine:
             raise InjectedCrash(crash_at, offset)
         result["checkpoint"] = offset
         return result
+
+    def _validate_storage(self, event: Event, event_ms: int, meta: sqlite3.Row) -> None:
+        """Reject unrepresentable input before mutating dedupe, windows or time."""
+        if self.con.execute("SELECT 1 FROM seen_events WHERE event_id=?", (event.event_id,)).fetchone():
+            return
+        start = window_start_ms(event_ms, self.config["window_seconds"])
+        end = start + self.window_ms
+        previous_wm = meta["watermark_ms"]
+        maximum = max(event_ms, meta["max_event_time_ms"]) if meta["max_event_time_ms"] is not None else event_ms
+        watermark = max(previous_wm, maximum - self.delay_ms) if previous_wm is not None else maximum - self.delay_ms
+        try:
+            iso_time(start)
+            iso_time(end)
+            iso_time(end + self.grace_ms)
+            iso_time(watermark)
+        except (OverflowError, ValueError):
+            raise InvalidEvent("event_time produces a window or watermark outside supported years 1..9999") from None
+        late = previous_wm is not None and previous_wm >= end + self.grace_ms
+        if event.kind == "order" and not late:
+            row = self.con.execute("SELECT revenue_cents FROM order_state WHERE window_start_ms=?", (start,)).fetchone()
+            current = row[0] if row else 0
+            if current + event.amount_cents > SQLITE_MAX_INTEGER:
+                raise InvalidEvent("order exceeds SQLite signed 64-bit window revenue capacity")
 
     def _process_valid(self, event: Event, event_ms: int, offset: int, meta: sqlite3.Row) -> dict[str, Any]:
         if self.con.execute("SELECT 1 FROM seen_events WHERE event_id=?", (event.event_id,)).fetchone():
