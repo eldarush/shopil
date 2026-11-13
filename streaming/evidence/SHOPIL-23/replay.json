@@ -1,0 +1,338 @@
+{
+  "checks": {
+    "A: crash after COMMIT at every offset keeps exactly that record": true,
+    "A: crash before COMMIT at every offset leaves exactly the previous committed state": true,
+    "A: restart resumes at the durable checkpoint and finishes equal to the baseline": true,
+    "B: duplicate still advances the checkpoint": true,
+    "B: same event_id at a new offset does not add revenue": true,
+    "C: replay of saved offsets after reopen is a no-op": true,
+    "D: offset gap rejected and rolled back": true,
+    "baseline: 122.00 ILS accepted, 13.00 ILS late": true
+  },
+  "crash_matrix": [
+    {
+      "checkpoint_after_restart": -1,
+      "crash_offset": 0,
+      "durable_equals_clean_prefix": true,
+      "final_equals_baseline": true,
+      "replayed_on_resume": 0,
+      "stage": "before_commit"
+    },
+    {
+      "checkpoint_after_restart": 0,
+      "crash_offset": 1,
+      "durable_equals_clean_prefix": true,
+      "final_equals_baseline": true,
+      "replayed_on_resume": 1,
+      "stage": "before_commit"
+    },
+    {
+      "checkpoint_after_restart": 1,
+      "crash_offset": 2,
+      "durable_equals_clean_prefix": true,
+      "final_equals_baseline": true,
+      "replayed_on_resume": 2,
+      "stage": "before_commit"
+    },
+    {
+      "checkpoint_after_restart": 2,
+      "crash_offset": 3,
+      "durable_equals_clean_prefix": true,
+      "final_equals_baseline": true,
+      "replayed_on_resume": 3,
+      "stage": "before_commit"
+    },
+    {
+      "checkpoint_after_restart": 3,
+      "crash_offset": 4,
+      "durable_equals_clean_prefix": true,
+      "final_equals_baseline": true,
+      "replayed_on_resume": 4,
+      "stage": "before_commit"
+    },
+    {
+      "checkpoint_after_restart": 4,
+      "crash_offset": 5,
+      "durable_equals_clean_prefix": true,
+      "final_equals_baseline": true,
+      "replayed_on_resume": 5,
+      "stage": "before_commit"
+    },
+    {
+      "checkpoint_after_restart": 5,
+      "crash_offset": 6,
+      "durable_equals_clean_prefix": true,
+      "final_equals_baseline": true,
+      "replayed_on_resume": 6,
+      "stage": "before_commit"
+    },
+    {
+      "checkpoint_after_restart": 6,
+      "crash_offset": 7,
+      "durable_equals_clean_prefix": true,
+      "final_equals_baseline": true,
+      "replayed_on_resume": 7,
+      "stage": "before_commit"
+    },
+    {
+      "checkpoint_after_restart": 7,
+      "crash_offset": 8,
+      "durable_equals_clean_prefix": true,
+      "final_equals_baseline": true,
+      "replayed_on_resume": 8,
+      "stage": "before_commit"
+    },
+    {
+      "checkpoint_after_restart": 8,
+      "crash_offset": 9,
+      "durable_equals_clean_prefix": true,
+      "final_equals_baseline": true,
+      "replayed_on_resume": 9,
+      "stage": "before_commit"
+    },
+    {
+      "checkpoint_after_restart": 9,
+      "crash_offset": 10,
+      "durable_equals_clean_prefix": true,
+      "final_equals_baseline": true,
+      "replayed_on_resume": 10,
+      "stage": "before_commit"
+    },
+    {
+      "checkpoint_after_restart": 10,
+      "crash_offset": 11,
+      "durable_equals_clean_prefix": true,
+      "final_equals_baseline": true,
+      "replayed_on_resume": 11,
+      "stage": "before_commit"
+    },
+    {
+      "checkpoint_after_restart": 11,
+      "crash_offset": 12,
+      "durable_equals_clean_prefix": true,
+      "final_equals_baseline": true,
+      "replayed_on_resume": 12,
+      "stage": "before_commit"
+    },
+    {
+      "checkpoint_after_restart": 12,
+      "crash_offset": 13,
+      "durable_equals_clean_prefix": true,
+      "final_equals_baseline": true,
+      "replayed_on_resume": 13,
+      "stage": "before_commit"
+    },
+    {
+      "checkpoint_after_restart": 13,
+      "crash_offset": 14,
+      "durable_equals_clean_prefix": true,
+      "final_equals_baseline": true,
+      "replayed_on_resume": 14,
+      "stage": "before_commit"
+    },
+    {
+      "checkpoint_after_restart": 14,
+      "crash_offset": 15,
+      "durable_equals_clean_prefix": true,
+      "final_equals_baseline": true,
+      "replayed_on_resume": 15,
+      "stage": "before_commit"
+    },
+    {
+      "checkpoint_after_restart": 15,
+      "crash_offset": 16,
+      "durable_equals_clean_prefix": true,
+      "final_equals_baseline": true,
+      "replayed_on_resume": 16,
+      "stage": "before_commit"
+    },
+    {
+      "checkpoint_after_restart": 0,
+      "crash_offset": 0,
+      "durable_equals_clean_prefix": true,
+      "final_equals_baseline": true,
+      "replayed_on_resume": 1,
+      "stage": "after_commit"
+    },
+    {
+      "checkpoint_after_restart": 1,
+      "crash_offset": 1,
+      "durable_equals_clean_prefix": true,
+      "final_equals_baseline": true,
+      "replayed_on_resume": 2,
+      "stage": "after_commit"
+    },
+    {
+      "checkpoint_after_restart": 2,
+      "crash_offset": 2,
+      "durable_equals_clean_prefix": true,
+      "final_equals_baseline": true,
+      "replayed_on_resume": 3,
+      "stage": "after_commit"
+    },
+    {
+      "checkpoint_after_restart": 3,
+      "crash_offset": 3,
+      "durable_equals_clean_prefix": true,
+      "final_equals_baseline": true,
+      "replayed_on_resume": 4,
+      "stage": "after_commit"
+    },
+    {
+      "checkpoint_after_restart": 4,
+      "crash_offset": 4,
+      "durable_equals_clean_prefix": true,
+      "final_equals_baseline": true,
+      "replayed_on_resume": 5,
+      "stage": "after_commit"
+    },
+    {
+      "checkpoint_after_restart": 5,
+      "crash_offset": 5,
+      "durable_equals_clean_prefix": true,
+      "final_equals_baseline": true,
+      "replayed_on_resume": 6,
+      "stage": "after_commit"
+    },
+    {
+      "checkpoint_after_restart": 6,
+      "crash_offset": 6,
+      "durable_equals_clean_prefix": true,
+      "final_equals_baseline": true,
+      "replayed_on_resume": 7,
+      "stage": "after_commit"
+    },
+    {
+      "checkpoint_after_restart": 7,
+      "crash_offset": 7,
+      "durable_equals_clean_prefix": true,
+      "final_equals_baseline": true,
+      "replayed_on_resume": 8,
+      "stage": "after_commit"
+    },
+    {
+      "checkpoint_after_restart": 8,
+      "crash_offset": 8,
+      "durable_equals_clean_prefix": true,
+      "final_equals_baseline": true,
+      "replayed_on_resume": 9,
+      "stage": "after_commit"
+    },
+    {
+      "checkpoint_after_restart": 9,
+      "crash_offset": 9,
+      "durable_equals_clean_prefix": true,
+      "final_equals_baseline": true,
+      "replayed_on_resume": 10,
+      "stage": "after_commit"
+    },
+    {
+      "checkpoint_after_restart": 10,
+      "crash_offset": 10,
+      "durable_equals_clean_prefix": true,
+      "final_equals_baseline": true,
+      "replayed_on_resume": 11,
+      "stage": "after_commit"
+    },
+    {
+      "checkpoint_after_restart": 11,
+      "crash_offset": 11,
+      "durable_equals_clean_prefix": true,
+      "final_equals_baseline": true,
+      "replayed_on_resume": 12,
+      "stage": "after_commit"
+    },
+    {
+      "checkpoint_after_restart": 12,
+      "crash_offset": 12,
+      "durable_equals_clean_prefix": true,
+      "final_equals_baseline": true,
+      "replayed_on_resume": 13,
+      "stage": "after_commit"
+    },
+    {
+      "checkpoint_after_restart": 13,
+      "crash_offset": 13,
+      "durable_equals_clean_prefix": true,
+      "final_equals_baseline": true,
+      "replayed_on_resume": 14,
+      "stage": "after_commit"
+    },
+    {
+      "checkpoint_after_restart": 14,
+      "crash_offset": 14,
+      "durable_equals_clean_prefix": true,
+      "final_equals_baseline": true,
+      "replayed_on_resume": 15,
+      "stage": "after_commit"
+    },
+    {
+      "checkpoint_after_restart": 15,
+      "crash_offset": 15,
+      "durable_equals_clean_prefix": true,
+      "final_equals_baseline": true,
+      "replayed_on_resume": 16,
+      "stage": "after_commit"
+    },
+    {
+      "checkpoint_after_restart": 16,
+      "crash_offset": 16,
+      "durable_equals_clean_prefix": true,
+      "final_equals_baseline": true,
+      "replayed_on_resume": 17,
+      "stage": "after_commit"
+    }
+  ],
+  "dup_stats": {
+    "accepted": 12,
+    "accepted_orders": 7,
+    "accepted_reviews": 5,
+    "alerts_emitted": 1,
+    "duplicates": 2,
+    "invalid": 1,
+    "late": 2,
+    "received": 17,
+    "revenue_windows_emitted": 3,
+    "review_windows_emitted": 2
+  },
+  "duplicates": [
+    {
+      "checkpoint": 5,
+      "event_id": "order-a",
+      "first_seen_offset": 0,
+      "offset": 5,
+      "revenue_after": "45.00",
+      "revenue_before": "45.00"
+    },
+    {
+      "checkpoint": 14,
+      "event_id": "order-late",
+      "first_seen_offset": 9,
+      "offset": 14,
+      "revenue_after": "110.00",
+      "revenue_before": "110.00"
+    }
+  ],
+  "fingerprint_after_replay": "c35f73428746428f",
+  "fingerprint_before": "c35f73428746428f",
+  "offset_gap": "expected offset 17, received 20",
+  "replay_statuses": [
+    "replayed",
+    "replayed",
+    "replayed",
+    "replayed",
+    "replayed",
+    "replayed",
+    "replayed",
+    "replayed",
+    "replayed",
+    "replayed",
+    "replayed",
+    "replayed",
+    "replayed",
+    "replayed",
+    "replayed",
+    "replayed",
+    "replayed"
+  ]
+}
