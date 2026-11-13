@@ -1,0 +1,68 @@
+{
+  "checks": {
+    "control: sorting by event_time changes late counts (so we never sort)": true,
+    "orders300: loaded deliveries == generator output, same order": true,
+    "orders300: regenerated == committed file (sha256)": true,
+    "orders300: results match manifest expectations": true,
+    "orders300: two independent fresh DBs -> identical canonical_results": true,
+    "reviews: loaded deliveries == generator output, same order": true,
+    "reviews: regenerated == committed file (sha256)": true,
+    "reviews: results match manifest expectations": true,
+    "reviews: two independent fresh DBs -> identical canonical_results": true,
+    "teaching: loaded deliveries == generator output, same order": true,
+    "teaching: regenerated == committed file (sha256)": true,
+    "teaching: results match manifest expectations": true,
+    "teaching: two independent fresh DBs -> identical canonical_results": true
+  },
+  "fixtures": [
+    {
+      "accepted_ils": "122.00",
+      "alerts": 1,
+      "duplicates": 2,
+      "fixture": "teaching",
+      "invalid": 1,
+      "late": 2,
+      "late_ils": "13.00",
+      "records": 17,
+      "sha256": "2cd7612efb47eaf7"
+    },
+    {
+      "accepted_ils": "0.00",
+      "alerts": 1,
+      "duplicates": 1,
+      "fixture": "reviews",
+      "invalid": 0,
+      "late": 0,
+      "late_ils": "0.00",
+      "records": 6,
+      "sha256": "ee94597a90282524"
+    },
+    {
+      "accepted_ils": "57,954.30",
+      "alerts": 0,
+      "duplicates": 17,
+      "fixture": "orders300",
+      "invalid": 0,
+      "late": 14,
+      "late_ils": "3,287.40",
+      "records": 317,
+      "sha256": "045a29f9a5201ef4"
+    }
+  ],
+  "sorting_control": [
+    {
+      "fixture": "teaching",
+      "sorted_accepted_ils": "135.00",
+      "sorted_late": 0,
+      "source_order_accepted_ils": "122.00",
+      "source_order_late": 2
+    },
+    {
+      "fixture": "orders300",
+      "sorted_accepted_ils": "61,241.70",
+      "sorted_late": 0,
+      "source_order_accepted_ils": "57,954.30",
+      "source_order_late": 14
+    }
+  ]
+}

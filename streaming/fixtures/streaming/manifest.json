@@ -1,0 +1,90 @@
+{
+  "config": {
+    "alert_threshold": 3,
+    "grace_seconds": 10,
+    "out_of_order_seconds": 0,
+    "window_seconds": 60
+  },
+  "fixtures": {
+    "orders300": {
+      "expected_with_teaching_config": {
+        "accepted_orders": 286,
+        "accepted_revenue_cents": 5795430,
+        "alerts": 0,
+        "batch_truth": {
+          "invalid": 0,
+          "negative_reviews": 0,
+          "orders": 300,
+          "revenue_cents": 6124170,
+          "reviews": 0,
+          "unique_events": 300
+        },
+        "duplicates": 17,
+        "invalid": 0,
+        "late_order_cents": 328740,
+        "late_orders": 14,
+        "negative_reviews": 0,
+        "records": 317,
+        "revenue_windows": 10,
+        "reviews": 0
+      },
+      "file": "orders300.jsonl",
+      "generator": "streaming_lab.generate_order_fixture(n=300, seed=7)",
+      "sha256": "045a29f9a5201ef47a4786d74453e9c2d51a0c63920c747039e90cfd0626c06b"
+    },
+    "reviews": {
+      "expected_with_teaching_config": {
+        "accepted_orders": 0,
+        "accepted_revenue_cents": 0,
+        "alerts": 1,
+        "batch_truth": {
+          "invalid": 0,
+          "negative_reviews": 4,
+          "orders": 0,
+          "revenue_cents": 0,
+          "reviews": 5,
+          "unique_events": 5
+        },
+        "duplicates": 1,
+        "invalid": 0,
+        "late_order_cents": 0,
+        "late_orders": 0,
+        "negative_reviews": 4,
+        "records": 6,
+        "revenue_windows": 0,
+        "reviews": 5
+      },
+      "file": "reviews.jsonl",
+      "generator": "streaming_lab.generate_review_fixture()",
+      "sha256": "ee94597a902825247af0266479bcf58f5e94dd100e2d39455a0b6b509b4dd3a3"
+    },
+    "teaching": {
+      "expected_with_teaching_config": {
+        "accepted_orders": 7,
+        "accepted_revenue_cents": 12200,
+        "alerts": 1,
+        "batch_truth": {
+          "invalid": 1,
+          "negative_reviews": 4,
+          "orders": 9,
+          "revenue_cents": 13500,
+          "reviews": 5,
+          "unique_events": 14
+        },
+        "duplicates": 2,
+        "invalid": 1,
+        "late_order_cents": 1300,
+        "late_orders": 2,
+        "negative_reviews": 4,
+        "records": 17,
+        "revenue_windows": 4,
+        "reviews": 5
+      },
+      "file": "teaching.jsonl",
+      "generator": "streaming_lab.teaching_fixture()",
+      "sha256": "2cd7612efb47eaf74bfcc0cf208da945c6032465a955ba8791ee152c82149f3e"
+    }
+  },
+  "order": "source/arrival order; offsets 0..n-1; never sorted by event_time",
+  "source": "paulavrahami/streaming-course-demo@c27b4fc"
+}
