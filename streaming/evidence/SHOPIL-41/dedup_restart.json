@@ -1,0 +1,117 @@
+{
+  "altered_retry_status": "duplicate",
+  "checks": {
+    "A: accepted + late revenue == sum over unique event_ids (61,241.70 ILS)": true,
+    "A: exactly the 17 producer retries are duplicates": true,
+    "B: altered retry of ev-0000 at a new offset is a duplicate": true,
+    "B: revenue unchanged by the altered retry (first payload kept)": true,
+    "C: restart resumed exactly at the durable checkpoint": true,
+    "C: restarted result == uninterrupted result": true,
+    "C: stream was really interrupted mid-run": true,
+    "D: every durable table unchanged by the replay": true,
+    "D: every saved offset replayed after reopen": true
+  },
+  "duplicates": [
+    {
+      "event_id": "ev-0003",
+      "offset": 34,
+      "status": "duplicate"
+    },
+    {
+      "event_id": "ev-0064",
+      "offset": 63,
+      "status": "duplicate"
+    },
+    {
+      "event_id": "ev-0078",
+      "offset": 79,
+      "status": "duplicate"
+    },
+    {
+      "event_id": "ev-0085",
+      "offset": 86,
+      "status": "duplicate"
+    },
+    {
+      "event_id": "ev-0091",
+      "offset": 96,
+      "status": "duplicate"
+    },
+    {
+      "event_id": "ev-0109",
+      "offset": 115,
+      "status": "duplicate"
+    },
+    {
+      "event_id": "ev-0126",
+      "offset": 133,
+      "status": "duplicate"
+    },
+    {
+      "event_id": "ev-0125",
+      "offset": 134,
+      "status": "duplicate"
+    },
+    {
+      "event_id": "ev-0150",
+      "offset": 161,
+      "status": "duplicate"
+    },
+    {
+      "event_id": "ev-0156",
+      "offset": 166,
+      "status": "duplicate"
+    },
+    {
+      "event_id": "ev-0166",
+      "offset": 178,
+      "status": "duplicate"
+    },
+    {
+      "event_id": "ev-0201",
+      "offset": 212,
+      "status": "duplicate"
+    },
+    {
+      "event_id": "ev-0202",
+      "offset": 217,
+      "status": "duplicate"
+    },
+    {
+      "event_id": "ev-0254",
+      "offset": 267,
+      "status": "duplicate"
+    },
+    {
+      "event_id": "ev-0264",
+      "offset": 280,
+      "status": "duplicate"
+    },
+    {
+      "event_id": "ev-0297",
+      "offset": 308,
+      "status": "duplicate"
+    },
+    {
+      "event_id": "ev-0294",
+      "offset": 310,
+      "status": "duplicate"
+    }
+  ],
+  "restart": {
+    "checkpoint_at_cancel": 15,
+    "final_accepted_ils": "57,954.30",
+    "identical": true,
+    "records_after_restart": 301,
+    "resumed_from_offset": 16,
+    "uninterrupted_accepted_ils": "57,954.30"
+  },
+  "summary": {
+    "accepted_ils": "57,954.30",
+    "deliveries": 317,
+    "duplicates": 17,
+    "late_ils": "3,287.40",
+    "unique_orders": 300,
+    "unique_recompute_ils": "61,241.70"
+  }
+}
