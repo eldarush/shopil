@@ -1,0 +1,269 @@
+{
+  "checkpoint": 18,
+  "checks": {
+    "checkpoint advanced past every late and invalid record": true,
+    "dead_letters: offsets 11 (float money), 18 (naive time)": true,
+    "every side-output row has input, offset and reason": true,
+    "late negative review not counted toward the product-5 window/alert": true,
+    "late order side output totals 13.00 ILS (500 + 800 agorot)": true,
+    "late rows record the watermark at arrival and it was >= window_end + grace": true,
+    "late/invalid records did not change accepted revenue or the watermark": true,
+    "late_events: offsets 9 (order-late), 15 (order-boundary), 17 (review-late)": true,
+    "retry of a late event (offset 14) is a duplicate, not a second late row": true,
+    "side outputs survive reopening the DB": true
+  },
+  "dead_letters": [
+    {
+      "input": {
+        "amount_cents": 19.9,
+        "event_id": "bad-money",
+        "event_time": "2026-11-01T10:02:10+00:00",
+        "kind": "order",
+        "product_id": 5
+      },
+      "offset": 11,
+      "reason": "amount_cents must be an integer >= 0"
+    },
+    {
+      "input": {
+        "amount_cents": 700,
+        "event_id": "order-naive",
+        "event_time": "2026-11-01T10:03:20",
+        "kind": "order",
+        "product_id": 5
+      },
+      "offset": 18,
+      "reason": "event_time must include a timezone"
+    }
+  ],
+  "late_events": [
+    {
+      "amount_cents": 500,
+      "event_id": "order-late",
+      "event_time": "2026-11-01T10:00:25.000+00:00",
+      "input": {
+        "amount_cents": 500,
+        "event_id": "order-late",
+        "event_time": "2026-11-01T10:00:25+00:00",
+        "kind": "order",
+        "product_id": 5
+      },
+      "kind": "order",
+      "offset": 9,
+      "reason": "watermark >= window_end + grace",
+      "watermark_at_arrival": "2026-11-01T10:01:15.000+00:00",
+      "window_end": "2026-11-01T10:01:00.000+00:00",
+      "window_start": "2026-11-01T10:00:00.000+00:00"
+    },
+    {
+      "amount_cents": 800,
+      "event_id": "order-boundary",
+      "event_time": "2026-11-01T10:01:00.000+00:00",
+      "input": {
+        "amount_cents": 800,
+        "event_id": "order-boundary",
+        "event_time": "2026-11-01T10:01:00+00:00",
+        "kind": "order",
+        "product_id": 5
+      },
+      "kind": "order",
+      "offset": 15,
+      "reason": "watermark >= window_end + grace",
+      "watermark_at_arrival": "2026-11-01T10:02:15.000+00:00",
+      "window_end": "2026-11-01T10:02:00.000+00:00",
+      "window_start": "2026-11-01T10:01:00.000+00:00"
+    },
+    {
+      "amount_cents": null,
+      "event_id": "review-late",
+      "event_time": "2026-11-01T10:00:30.000+00:00",
+      "input": {
+        "event_id": "review-late",
+        "event_time": "2026-11-01T10:00:30+00:00",
+        "kind": "review",
+        "product_id": 5,
+        "rating": 1,
+        "text": "איחור בביקורת"
+      },
+      "kind": "review",
+      "offset": 17,
+      "reason": "watermark >= window_end + grace",
+      "watermark_at_arrival": "2026-11-01T10:03:15.000+00:00",
+      "window_end": "2026-11-01T10:01:00.000+00:00",
+      "window_start": "2026-11-01T10:00:00.000+00:00"
+    }
+  ],
+  "trace": [
+    {
+      "accepted_revenue_cents": 1000,
+      "checkpoint": 0,
+      "dead_rows": 0,
+      "late_rows": 0,
+      "offset": 0,
+      "status": "accepted",
+      "watermark_unchanged": false
+    },
+    {
+      "accepted_revenue_cents": 1000,
+      "checkpoint": 1,
+      "dead_rows": 0,
+      "late_rows": 0,
+      "offset": 1,
+      "status": "accepted",
+      "watermark_unchanged": false
+    },
+    {
+      "accepted_revenue_cents": 3000,
+      "checkpoint": 2,
+      "dead_rows": 0,
+      "late_rows": 0,
+      "offset": 2,
+      "status": "accepted",
+      "watermark_unchanged": false
+    },
+    {
+      "accepted_revenue_cents": 4500,
+      "checkpoint": 3,
+      "dead_rows": 0,
+      "late_rows": 0,
+      "offset": 3,
+      "status": "accepted",
+      "watermark_unchanged": true
+    },
+    {
+      "accepted_revenue_cents": 4500,
+      "checkpoint": 4,
+      "dead_rows": 0,
+      "late_rows": 0,
+      "offset": 4,
+      "status": "accepted",
+      "watermark_unchanged": true
+    },
+    {
+      "accepted_revenue_cents": 4500,
+      "checkpoint": 5,
+      "dead_rows": 0,
+      "late_rows": 0,
+      "offset": 5,
+      "status": "duplicate",
+      "watermark_unchanged": true
+    },
+    {
+      "accepted_revenue_cents": 4500,
+      "checkpoint": 6,
+      "dead_rows": 0,
+      "late_rows": 0,
+      "offset": 6,
+      "status": "accepted",
+      "watermark_unchanged": true
+    },
+    {
+      "accepted_revenue_cents": 4500,
+      "checkpoint": 7,
+      "dead_rows": 0,
+      "late_rows": 0,
+      "offset": 7,
+      "status": "accepted",
+      "watermark_unchanged": true
+    },
+    {
+      "accepted_revenue_cents": 7500,
+      "checkpoint": 8,
+      "dead_rows": 0,
+      "late_rows": 0,
+      "offset": 8,
+      "status": "accepted",
+      "watermark_unchanged": false
+    },
+    {
+      "accepted_revenue_cents": 7500,
+      "checkpoint": 9,
+      "dead_rows": 0,
+      "late_rows": 1,
+      "offset": 9,
+      "status": "late",
+      "watermark_unchanged": true
+    },
+    {
+      "accepted_revenue_cents": 10000,
+      "checkpoint": 10,
+      "dead_rows": 0,
+      "late_rows": 1,
+      "offset": 10,
+      "status": "accepted",
+      "watermark_unchanged": false
+    },
+    {
+      "accepted_revenue_cents": 10000,
+      "checkpoint": 11,
+      "dead_rows": 1,
+      "late_rows": 1,
+      "offset": 11,
+      "status": "invalid",
+      "watermark_unchanged": true
+    },
+    {
+      "accepted_revenue_cents": 11000,
+      "checkpoint": 12,
+      "dead_rows": 1,
+      "late_rows": 1,
+      "offset": 12,
+      "status": "accepted",
+      "watermark_unchanged": false
+    },
+    {
+      "accepted_revenue_cents": 11000,
+      "checkpoint": 13,
+      "dead_rows": 1,
+      "late_rows": 1,
+      "offset": 13,
+      "status": "accepted",
+      "watermark_unchanged": true
+    },
+    {
+      "accepted_revenue_cents": 11000,
+      "checkpoint": 14,
+      "dead_rows": 1,
+      "late_rows": 1,
+      "offset": 14,
+      "status": "duplicate",
+      "watermark_unchanged": true
+    },
+    {
+      "accepted_revenue_cents": 11000,
+      "checkpoint": 15,
+      "dead_rows": 1,
+      "late_rows": 2,
+      "offset": 15,
+      "status": "late",
+      "watermark_unchanged": true
+    },
+    {
+      "accepted_revenue_cents": 12200,
+      "checkpoint": 16,
+      "dead_rows": 1,
+      "late_rows": 2,
+      "offset": 16,
+      "status": "accepted",
+      "watermark_unchanged": false
+    },
+    {
+      "accepted_revenue_cents": 12200,
+      "checkpoint": 17,
+      "dead_rows": 1,
+      "late_rows": 3,
+      "offset": 17,
+      "status": "late",
+      "watermark_unchanged": true
+    },
+    {
+      "accepted_revenue_cents": 12200,
+      "checkpoint": 18,
+      "dead_rows": 2,
+      "late_rows": 3,
+      "offset": 18,
+      "status": "invalid",
+      "watermark_unchanged": true
+    }
+  ]
+}
