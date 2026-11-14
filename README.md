@@ -66,10 +66,6 @@ ShopIL uses the local [Ollama chat API](https://docs.ollama.com/api/chat), accep
 
 For a model supporting [thinking controls](https://docs.ollama.com/capabilities/thinking), add `--no-thinking` or `--thinking` to either chat or the coordinated launcher. Without either flag, the installed model's default is preserved. Disabling thinking can avoid exhausting the generation cap, but does not guarantee factual accuracy. Sampling defaults remain unchanged in both modes.
 
-The normal app was exercised with **`qwen3:4b-instruct` (Q4_K_M, about 2.5 GB)** on Ollama 0.40.16. Install it with `ollama pull qwen3:4b-instruct`, then replace `YOUR_INSTALLED_MODEL` with `qwen3:4b-instruct` and add `--no-thinking` to the launch command. This was the smallest download among the tested models that answered the three normal UI questions correctly; smaller 0.6B/0.8B/1.7B/2B candidates failed factual or completion checks. See the [real local validation and limitations](docs/local-ollama-validation.md).
-
-On the tested Windows GTX 1070 Ti machine, the existing NVIDIA driver could not run Ollama's CUDA kernels (`unsupported PTX toolchain`). Starting Ollama with `OLLAMA_LLM_LIBRARY=vulkan` worked without changing the driver or global CUDA settings. This is a host-specific workaround, not a required setting for every machine. Stop an existing Ollama server before restarting it with a different backend; verify a real generation, not just `/api/version`.
-
 ## 4. Run streaming and chat separately
 
 After Batch preparation, start either continuous streaming mode in its own terminal:
