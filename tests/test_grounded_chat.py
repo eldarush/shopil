@@ -380,6 +380,9 @@ def test_schema_only_citation_reports_absent_units_and_bounds(capture):
     prose = "אי אפשר לחשב את הרווח בלי נתוני הוצאות."
     citation = source_lines(evidence)
     assert not candidate_feedback(f"{prose}\n\n{citation}", evidence)
+    english = citation.replace("יחידות וטווח תצפיות: אינם זמינים למדד המבוקש.",
+                               "units unavailable; no observed bounds")
+    assert not candidate_feedback(f"{prose}\n\n{english}", evidence)
     invented = citation.replace("יחידות וטווח תצפיות: אינם זמינים למדד המבוקש.",
                                 "units: orders; time range: 2025")
     assert candidate_feedback(f"{prose}\n\n{invented}", evidence)

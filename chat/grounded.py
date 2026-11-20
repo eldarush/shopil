@@ -221,10 +221,14 @@ def candidate_feedback(draft, evidence):
         if not re.search(r"סכמ|schema|consulted_table", citation, re.IGNORECASE):
             problems.append("הציטוט אינו מזהה את המקור כבדיקת סכמה.")
         clauses = re.split(r"[,;\n]+", citation)
-        unavailable = r"\b(?:null|missing|unavailable|not available)\b|(?:אינ\w*|לא) זמי\w*|אין|חסר"
+        unavailable = (
+            r"\b(?:null|missing|unavailable|not available|not recorded|"
+            r"no (?:measurement units|units|observed (?:time )?(?:bounds|range|interval|dates)))\b"
+            r"|(?:אינ\w*|לא) (?:זמי\w*|נקבע\w*|נמדד\w*)|אין|חסר"
+        )
         for label, description in (
             (r"יחידות|\bunits\b", "יחידות המדידה"),
-            (r"טווח\s+ה?תצפי(?:ת|ות)|טווח זמן|interval|time range|time_(?:start|end)|bounds", "טווח התצפית"),
+            (r"טווח\s+ה?תצפי(?:ת|ות)|טווח זמן|interval|time range|time_(?:start|end)|bounds|observed dates", "טווח התצפית"),
         ):
             matching = [part for part in clauses if re.search(label, part, re.IGNORECASE)]
             if not matching or any(not re.search(unavailable, part, re.IGNORECASE) for part in matching):
