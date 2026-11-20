@@ -94,7 +94,7 @@ def test_missing_alert_retains_the_matching_window(tmp_path):
     q = "כמה ביקורות שליליות היו בעת ההתראה למוצר 5 בחלון הפתוח האחרון?"
     evidence = asyncio.run(capture(q, []))
     assert evidence["query_scope"]["availability"] == "missing"
-    assert "לא הופעלה" in evidence["query_scope"]["reason"]
+    assert evidence["query_scope"]["reason"] == "no_alert_in_matching_window"
     [window] = evidence["sources"]
     assert window["table"] == "review_state" and window["rows"][0]["negative_reviews"] == 1
     assert window["time_start"] in source_lines(evidence)
@@ -129,9 +129,7 @@ def test_stream_actor_uses_the_frozen_count_as_digits(capture):
     correct = "בחלון הסגור נקלטו 2 אירועי הזמנה."
 
     async def complete(messages, *, schema):
-        pattern = schema["properties"]["answer"]["pattern"]
-        assert re.fullmatch(pattern, correct)
-        assert not re.fullmatch(pattern, "בחלון הסגור נקלטו 5 אירועי הזמנה.")
+        assert all("enum" not in schema["properties"][name] for name in ("answer", "citation"))
         return json.dumps({"answer": correct, "citation": source_lines(evidence)})
 
     answer = asyncio.run(GroundedActor(SimpleNamespace(complete=complete)).draft(q, json.dumps(evidence), []))
@@ -159,7 +157,7 @@ def test_known_coverage_and_profit_are_not_zero_or_revenue(capture):
     for question in ("כמה הרווחנו מהזמנות ששולמו?", "מהן עלויות המשלוח?"):
         result = asyncio.run(capture(question, []))
         assert result["query_scope"]["availability"] == "missing"
-        assert result["query_scope"]["coverage_start"] == "2026-07-01"
+        assert result["query_scope"]["time_start"] is None
         assert result["query_scope"]["consulted_table"] == "marts.fct_orders"
         assert result["sources"] == []
     result = asyncio.run(capture("כמה הזמנות שולמו בשנת 1990?", []))
@@ -169,6 +167,7 @@ def test_known_coverage_and_profit_are_not_zero_or_revenue(capture):
 
 def test_ordinary_paraphrases():
     assert resolve_query("כמה שילמו לנו על ההזמנות?", []).metric == "paid_revenue"
+    assert resolve_query("מה היו ההכנסות מהזמנות ששולמו?", []).metric == "paid_revenue"
     current = resolve_query("כמה הזמנות שולמו השנה?", [])
     assert current.metric == "paid_orders"
     assert current.start == date(date.today().year, 1, 1)
@@ -225,7 +224,7 @@ def test_profit_cannot_reuse_history_revenue_or_invent_shipping_specificity(capt
     assert evidence_error("הרווח אינו ידוע כי נתוני עלויות המשלוח חסרים.", evidence)
     assert not evidence_error("אי אפשר לחשב את הרווח משום שנתוני העלויות חסרים.", evidence)
     year = asyncio.run(capture("כמה הזמנות שולמו בשנת 1990?", []))
-    assert not evidence_error("אין נתוני הזמנות לשנת 1990.", year)
+    assert evidence_error("אין נתוני הזמנות לשנת 1990.", year)
 
 
 def test_profit_retains_requested_scope_without_claiming_known_revenue(capture):
@@ -297,35 +296,39 @@ def test_actor_can_revise_its_citation(capture):
         assert draft == paragraph + "\n\n" + cited
         assert bool(candidate_feedback(draft, evidence)) != good
 
-def test_missing_answer_prompt_prohibits_numbers_and_hides_unrelated_amounts(capture):
+def test_actor_authors_missing_metric_without_prepared_wording(capture):
     question = "כמה הרווחנו מהזמנות ששולמו?"
     evidence = json.dumps(asyncio.run(capture(question, [])), ensure_ascii=False)
+    authored = "אין די נתונים על עלויות החנות לחישוב הרווח."
+
     async def complete(messages, *, schema):
-        assert "Never supply a number" in messages[0]["content"]
-        assert "97210.10" not in messages[1]["content"]
-        limit = json.loads(evidence)["query_scope"]["reason"]
-        assert limit in json.loads(messages[-1]["content"])["metric_guidance"]
-        assert "pattern" in schema["properties"]["answer"]
-        return json.dumps({"answer": "אין די נתונים על עלויות החנות לחישוב הרווח.",
-                           "citation": source_lines(json.loads(evidence))})
-    history = [{"role": "user", "content": "כמה הכנסנו?"}, {"role": "assistant", "content": "97210.10 ₪"}]
-    answer = asyncio.run(GroundedActor(SimpleNamespace(complete=complete)).draft(question, evidence, history))
-    assert "97210.10" not in answer
+        assert messages[2]["content"] is evidence
+        assert "ספרות" in messages[0]["content"]
+        assert json.loads(messages[-1]["content"]) == {
+            "question": question, "previous_draft": None, "feedback": None
+        }
+        assert all("enum" not in schema["properties"][field] for field in ("answer", "citation"))
+        assert authored not in " ".join(msg["content"] for msg in messages)
+        return json.dumps({"answer": authored, "citation": source_lines(json.loads(evidence))})
+
+    answer = asyncio.run(GroundedActor(SimpleNamespace(complete=complete)).draft(question, evidence, []))
+    assert answer.startswith(authored)
     assert "marts.fct_orders" in answer
 
 
 def test_missing_period_shows_the_requested_dates_only_in_the_citation(capture):
     q = "כמה הזמנות שולמו בשנת 1990?"
     evidence = asyncio.run(capture(q, []))
-    reason = evidence["query_scope"]["reason"]
 
     async def complete(messages, *, schema):
-        assert schema["properties"]["answer"]["enum"] == [reason]
-        return json.dumps({"answer": reason, "citation": source_lines(evidence)})
+        assert all("enum" not in schema["properties"][field] for field in ("answer", "citation"))
+        return json.dumps({"answer": "מספר ההזמנות ששולמו אינו זמין לתקופה המבוקשת.",
+                           "citation": source_lines(evidence)})
 
     draft = asyncio.run(GroundedActor(SimpleNamespace(complete=complete)).draft(q, json.dumps(evidence), []))
     assert "1990" not in draft.split("\n\n")[0]
     assert "1990-01-01" in draft and not candidate_feedback(draft, evidence)
+
 
 @pytest.mark.parametrize("garbled", ["קיבл", "ה忚נסה", "נגمר", "ההכנסa"])
 def test_foreign_script_inside_hebrew_is_rejected(capture, garbled):
@@ -339,3 +342,13 @@ def test_product_identifier_cannot_substitute_for_the_measured_value(capture):
     evidence = asyncio.run(capture(q, []))
     assert evidence_error("ההכנסה ממוצר 115 הסתכמה ב־5 ₪.", evidence)
     assert not evidence_error("ההכנסה ממוצר 5 הסתכמה ב־115.35 ₪.", evidence)
+
+
+def test_audit_detects_extra_currency_and_wrong_product_scope(capture):
+    from chat.grounded import evidence_error
+
+    stream = asyncio.run(capture("כמה אירועי הזמנה נקלטו בחלון הפתוח האחרון?", []))
+    value = stream["sources"][0]["rows"][0]["orders"]
+    assert evidence_error(f"בחלון הפתוח נקלטו {value} אירועי הזמנה בשווי {value} ₪.", stream)
+    product = asyncio.run(capture("כמה הכנסנו מהזמנות ששולמו עבור מוצר 5?", []))
+    assert evidence_error("ההכנסה מהזמנות ששולמו לכלל המוצרים הסתכמה ב־115.35 ₪.", product)

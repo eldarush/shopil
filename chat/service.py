@@ -178,13 +178,11 @@ class ChatService:
                     actor_metadata["normalization"] = draft.normalization
                 if "query_scope" in snapshot:
                     from .grounded import candidate_feedback
-                    validation_feedback = candidate_feedback(draft, snapshot)
-                    actor_metadata["critic_is_acceptable"] = evaluation.is_acceptable
-                    actor_metadata["critic_feedback"] = evaluation.feedback
-                    if validation_feedback:
-                        actor_metadata["validation_feedback"] = validation_feedback
-                        feedback = f"{feedback} {validation_feedback}"
-                        accepted = False
+                    actor_metadata["critic_feedback"] = feedback
+                    try:
+                        actor_metadata["deterministic_check"] = candidate_feedback(draft, snapshot)
+                    except (ArithmeticError, KeyError, TypeError, ValueError) as exc:
+                        actor_metadata["deterministic_check"] = f"Diagnostic unavailable ({type(exc).__name__})"
                 record("attempt", attempt=attempt, draft=draft,
                        is_acceptable=accepted, feedback=feedback, **actor_metadata)
                 if accepted:

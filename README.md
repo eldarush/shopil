@@ -144,7 +144,7 @@ The default chat recognizes Hebrew paraphrases for paid revenue, paid-order coun
 
 The question scope selects the predefined read-only query and its parameters before capture. Streaming questions select the most recent matching open or closed event-time window for order-event counts or amounts, product negative-review counts, or the trigger count of a product alert. Every stream read carries its committed checkpoint and watermark. Historical paid amounts and stream event amounts stay separate.
 
-The default Actor writes the Hebrew answer and supplies its citation in a structured response. The Critic sees both and may request corrections to either. The application checks both parts against the frozen evidence before publication and logs that validation separately from the model's verdict. Known zero, NULL average, missing row and unsupported scope are distinct. Older modes remain available via --standard, --structured or --hybrid. [Evidence contract](docs/data-contract.md).
+The default Actor writes the Hebrew answer and supplies its citation in a structured response. The Critic sees both and may request corrections to either. Only the Critic's verdict decides whether the draft is approved or revised. Its feedback is sent back unchanged. The deterministic check is recorded separately for audit. Known zero, NULL average, missing row and unsupported scope are distinct. Older modes remain available via --standard, --structured or --hybrid. [Evidence contract](docs/data-contract.md).
 
 CLI options override environment defaults: `--warehouse`, `--history-start`, `--history-end`, `--model`, `--stream-db`, `--ollama-url`, and `--audit-dir`. `.env.example` lists their corresponding `SHOPIL_*` variables. **The file is not loaded automatically**: set variables in your shell, or use the explicit flags above. For example:
 
@@ -174,7 +174,7 @@ CI runs application tests, streaming tests, smoke checks and complete Batch prep
 
 Server tests use explicitly scripted models and HTTP contract tests use mocked transport. They do not establish that a real Ollama endpoint is installed or functioning. The separate [teaching experiments](experiments/README.md) document real Actor/Critic correction and manual SQL comparisons; they are not a fallback backend for the application.
 
-The submission ZIP includes an architecture report under evidence/ that explains loading policies, event-time processing, transaction and snapshot boundaries, Actor/Critic feedback, and verified results with their limits. Its two-page explanation is followed by separate architecture and results appendices in the generated submission PDF.
+The submission ZIP includes an architecture report under evidence/ that explains loading policies, event-time processing, transaction and snapshot boundaries, Actor/Critic feedback, and verified results with their limits. The PDF contains a short explanation, an experiment results table and an architecture diagram.
 
 Use the README at the root of the submission ZIP to locate the required logs, screenshots and report, then package them with an exact committed source revision. Review the evidence and its real-model limitations before submission; the packaging command only checks files and hashes and does not upload anything.
 

@@ -12,13 +12,14 @@ import sys
 from chat.audit import JsonlAudit
 from chat.capture import build_capture
 from chat.critic import Critic
-from chat.grounded import GroundedActor, candidate_feedback, source_lines
+from chat.grounded import GroundedActor, candidate_feedback
 from chat.model import ModelError
 from chat.service import ChatService
 from chat.transport import OllamaModel
 
 ROOT = Path(__file__).resolve().parents[1]
-BAD_DRAFT = "ההכנסה מהזמנות ששולמו היא 1.00 ש״ח."
+PROFIT_QUESTION = "כמה הרווחנו מהזמנות ששולמו?"
+PROFIT_FOLLOWUP = "ומה לגבי הרווח, האם אפשר להשתמש בהכנסה מההזמנות ששולמו בתור רווח?"
 PAID_QUESTION = "כמה הכנסנו מהזמנות ששולמו?"
 STREAM_QUESTION = "כמה אירועי הזמנה נקלטו בחלון הפתוח האחרון?"
 
@@ -70,18 +71,6 @@ class RecordedModel:
             save(self.output / f"call-{index:02}.json", call)
 
 
-class InjectedDraft:
-    def __init__(self, actor):
-        self.actor = actor
-
-    async def draft(self, question, evidence_json, history, previous_draft=None, feedback=None):
-        if previous_draft is None:
-            citation = source_lines(json.loads(evidence_json))
-            wrong_citation = citation.replace("marts.fct_orders", "raw.orders").replace("2026-09-28", "2026-12-31")
-            return f"{BAD_DRAFT}\n\n{wrong_citation}"
-        return await self.actor.draft(question, evidence_json, history, previous_draft, feedback)
-
-
 def insert_order(database, offset):
     python = ROOT / "streaming/.venv" / ("Scripts/python.exe" if sys.platform == "win32" else "bin/python")
     child = subprocess.run([str(python), "-X", "utf8", "-c", """
@@ -123,6 +112,46 @@ def evidence_value(output, snapshot_id, key):
     return None
 
 
+async def run_correction(service, model, output, model_name):
+    history = []
+    result = {"case": "correction", "model": model_name, "thinking": False,
+              "injected_first_draft": None, "passed": False, "turns": []}
+    for question in (PROFIT_QUESTION, PROFIT_FOLLOWUP):
+        reply = await service.answer(question, history)
+        history = reply.history
+        result["turns"].append({"question": question, "status": reply.status,
+                                "answer": reply.answer, "snapshot_id": reply.snapshot_id})
+        events = next((events for events in read_audits(output)
+                       if events[0]["snapshot_id"] == reply.snapshot_id), [])
+        attempts = [event for event in events if event["event"] == "attempt"]
+        if reply.status != "approved" or len(attempts) < 2:
+            continue
+        frozen = events[0]["evidence_json"]
+        calls = [call for call in model.calls if call["messages"][2]["content"] == frozen]
+        actor_calls = [call for call in calls if call["role"] == "actor"]
+        critic_calls = [call for call in calls if call["role"] == "critic"]
+        matched = len(actor_calls) == len(critic_calls) == len(attempts) and all(
+            actor["response"] == attempt["actor_output_json"]
+            and json.loads(critic["response"]) == {
+                "is_acceptable": attempt["is_acceptable"], "feedback": attempt["feedback"]
+            }
+            for actor, critic, attempt in zip(actor_calls, critic_calls, attempts)
+        )
+        evidence = json.loads(frozen)
+        initial_issue = candidate_feedback(attempts[0]["draft"], evidence)
+        final_issue = candidate_feedback(attempts[-1]["draft"], evidence)
+        result.update(snapshot_id=reply.snapshot_id, attempts=attempts,
+                      calls_match_frozen_snapshots=matched, initial_issue=initial_issue,
+                      final_issue=final_issue, passed=matched and bool(initial_issue) and not final_issue
+                      and attempts[0]["is_acceptable"] is False and attempts[-1]["is_acceptable"] is True)
+        if result["passed"]:
+            break
+    save(output / "results.json", result)
+    if not result["passed"]:
+        raise SystemExit(f"No spontaneous correction met the verification criteria. Inspect {output / 'results.json'}")
+    print(f"Recorded spontaneous correction for independent verification: {output / 'results.json'}")
+
+
 async def run(args):
     output = args.output.resolve()
     output.mkdir(parents=True)
@@ -138,14 +167,16 @@ async def run(args):
     capture = build_capture(args.warehouse, database, start=date(2026, 1, 1), end=date(2027, 1, 1),
                             question_scoped=True)
     actor = GroundedActor(model)
-    service = ChatService(InjectedDraft(actor) if args.case == "correction" else actor, Critic(model),
-                          capture, JsonlAudit(output / "audit"))
-    questions = [PAID_QUESTION] if args.case == "correction" else [STREAM_QUESTION, STREAM_QUESTION]
+    service = ChatService(actor, Critic(model), capture, JsonlAudit(output / "audit"))
+    if args.case == "correction":
+        await run_correction(service, model, output, args.model)
+        return
+    questions = [STREAM_QUESTION, STREAM_QUESTION]
     if args.case == "conversation":
         questions = [PAID_QUESTION, "ומה לגבי מוצר 5?", "מהן עלויות המשלוח?",
                      "כמה הזמנות שולמו?", "לאיזה מוצר יש הכי הרבה ביקורות שליליות?",
                      "כמה הרווחנו מהזמנות ששולמו?", "כמה הזמנות שולמו בשנת 1990?",
-                     "מה ההכנסה מההזמנות ששולמו?"]
+                     "כמה הזמנות שולמו בין 2026-09-20 עד 2026-12-10?"]
 
     turns = []
     history = []
@@ -155,8 +186,6 @@ async def run(args):
         history = reply.history
 
     expected = {
-        "correction": {"initial_model_rejection": True, "paid_revenue": "97210.10",
-                       "actor_repaired_source_and_bounds": True},
         "concurrent": {"counts": [1, 2], "checkpoints": [0, 1], "actor_pending_after_update": True},
         "conversation": {"paid_revenue": "97210.10", "product_5_revenue": "8925.00", "paid_orders": 402,
                          "missing_shipping": True, "top_negative_product_id": 6},
@@ -165,17 +194,7 @@ async def run(args):
     approved = all(turn["status"] == "approved" for turn in turns)
     known_hashes = {hashlib.sha256(event["evidence_json"].encode()).hexdigest() for event in snapshots}
     calls_match_snapshots = len(known_hashes) == len(questions) and {call["evidence_sha256"] for call in model.calls} == known_hashes
-    if args.case == "correction":
-        attempts = [event for events in read_audits(output) for event in events if event["event"] == "attempt"]
-        final = attempts[-1]
-        actual_citation = json.loads(final.get("actor_output_json", "{}")).get("citation")
-        correct_citation = source_lines(json.loads(snapshots[0]["evidence_json"]))
-        observed = {"initial_model_rejection": attempts[0].get("critic_is_acceptable") is False,
-                    "paid_revenue": evidence_value(output, turns[0]["snapshot_id"], "paid_revenue"),
-                    "actor_repaired_source_and_bounds": (
-                        actual_citation == correct_citation and "raw.orders" in attempts[0]["draft"])}
-
-    elif stream:
+    if stream:
         observed = {"counts": [evidence_value(output, turn["snapshot_id"], "orders") for turn in turns],
                     "checkpoints": [json.loads(next(event["evidence_json"] for event in snapshots
                                                    if event["snapshot_id"] == turn["snapshot_id"]))["stream"]["checkpoint"]
@@ -203,7 +222,7 @@ async def run(args):
     passed = approved and calls_match_snapshots and observed == expected and not any(check["error"] for check in authored_checks)
     save(output / "results.json", {"case": args.case, "model": args.model, "thinking": False, "expected": expected, "authored_checks": authored_checks,
                                   "observed": observed, "turns": turns, "calls_match_frozen_snapshots": calls_match_snapshots,
-                                  "injected_first_draft": attempts[0]["draft"] if args.case == "correction" else None, "passed": passed})
+                                  "injected_first_draft": None, "passed": passed})
     if not passed:
         raise SystemExit(f"Model experiment failed. Inspect {output / 'results.json'}")
     print(f"PASS {args.case}: {output / 'results.json'}")

@@ -345,6 +345,33 @@ def test_rejection_passes_previous_draft_and_feedback_then_approves():
     assert events[1]["draft"] == "טיוטה שגויה"
 
 
+def test_critic_approval_publishes_even_with_a_diagnostic(monkeypatch):
+    monkeypatch.setattr("chat.grounded.candidate_feedback", lambda *_: "Diagnostic problem")
+    instance, _, events, actor, _ = service(evidence={**snapshot(), "query_scope": {}})
+    reply = asyncio.run(instance.answer("שאלה", []))
+    assert reply.status == "approved" and len(actor.calls) == 1
+    assert reply.history[-1]["content"] == reply.answer
+    attempt = events[1]
+    assert attempt["is_acceptable"] is True
+    assert attempt["feedback"] == attempt["critic_feedback"] == "Use the current source"
+    assert attempt["deterministic_check"] == "Diagnostic problem"
+
+
+def test_critic_rejection_retries_with_only_critic_feedback(monkeypatch):
+    monkeypatch.setattr("chat.grounded.candidate_feedback", lambda *_: "")
+    instance, _, events, actor, _ = service(
+        actor=Actor(["first draft", "revision"]), critic=Critic([False, True]),
+        evidence={**snapshot(), "query_scope": {}},
+    )
+    reply = asyncio.run(instance.answer("שאלה", []))
+    assert reply.status == "approved" and reply.answer == "revision"
+    assert "first draft" not in [item["content"] for item in reply.history]
+    assert actor.calls[1][3:] == ("first draft", "Use the current source")
+    attempt = events[1]
+    assert attempt["is_acceptable"] is False and attempt["deterministic_check"] == ""
+    assert attempt["feedback"] == attempt["critic_feedback"] == "Use the current source"
+
+
 def test_three_rejections_stop_without_returning_any_draft():
     instance, captures, events, actor, critic = service(
         Actor(["bad1", "bad2", "bad3"]), Critic([False, False, False]))

@@ -165,7 +165,7 @@ late_events output:
 ## 3–4. Grace policy change on the same input (orders300 fixture, 317 deliveries, source order)
 {md_table(p3)}
 
-**Explanation.** A window is emitted once the watermark passes `end + grace`. With grace 0, windows close as soon as event time reaches their end, so every out-of-order order that arrives later (the fixture delays ~10 % of orders by 20–90 s) is late: 21 late orders. Grace 10 waits 10 s longer, which rescues the orders delayed by less than that margin past the window end: 14 late. Grace 120 is longer than the largest delay, so nothing is late, but each window is emitted at least 120 s of event time after it ends, and more windows are still open when input stops (they only close via `finalize_demo`). The trade-off is completeness against latency. In every case accepted + late equals the full recomputation of the same valid, unique events.
+**Explanation.** A delivery is late when its window is already closed, which happens when the watermark reaches or exceeds `window_end + grace`. An order can arrive out of event-time order at Grace 0 and still be accepted if its window remains open. This fixture has 21 late orders at Grace 0 and 14 at Grace 10. At Grace 120 no orders are late, and three windows remain open when input ends. Larger Grace allows more out-of-order deliveries into open windows while postponing closure. Accepted plus late matches the independent sum for each policy.
 
 ## Checks
 {md_table([{'check': k, 'result': 'PASS' if v else 'FAIL'} for k, v in checks.items()])}
