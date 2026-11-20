@@ -253,6 +253,20 @@ def test_missing_answer_prompt_prohibits_numbers_and_hides_unrelated_amounts(cap
     assert "97210.10" not in answer
     assert "marts.fct_orders" in answer
 
+
+def test_missing_period_shows_the_requested_dates_only_in_the_citation(capture):
+    q = "כמה הזמנות שולמו בשנת 1990?"
+    evidence = asyncio.run(capture(q, []))
+    reason = evidence["query_scope"]["reason"]
+
+    async def complete(messages, *, schema):
+        assert schema["properties"]["answer"]["enum"] == [reason]
+        return json.dumps({"answer": reason, "citation": source_lines(evidence)})
+
+    draft = asyncio.run(GroundedActor(SimpleNamespace(complete=complete)).draft(q, json.dumps(evidence), []))
+    assert "1990" not in draft.split("\n\n")[0]
+    assert "1990-01-01" in draft and not candidate_feedback(draft, evidence)
+
 @pytest.mark.parametrize("garbled", ["קיבл", "ה忚נסה", "נגمר", "ההכנסa"])
 def test_foreign_script_inside_hebrew_is_rejected(capture, garbled):
     from chat.grounded import evidence_error
