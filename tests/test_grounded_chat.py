@@ -407,3 +407,19 @@ def test_open_window_citation_rejects_conflicting_state(capture):
     assert not candidate_feedback(f"{prose}\n\n{citation}", evidence)
     conflicting = citation.replace("מצב החלון: פתוח", "מצב החלון: סגור, לא פתוח")
     assert candidate_feedback(f"{prose}\n\n{conflicting}", evidence)
+
+
+def test_missing_prose_names_the_resolved_metric(capture):
+    evidence = asyncio.run(capture("כמה הזמנות שולמו בשנת 1990?", []))
+    citation = source_lines(evidence)
+    wrong = "אין נתוני ביקורות בתקופה המבוקשת."
+    assert candidate_feedback(f"{wrong}\n\n{citation}", evidence)
+
+
+def test_measured_source_must_be_the_complete_cited_table(capture):
+    evidence = asyncio.run(capture("כמה הזמנות שולמו?", []))
+    prose = "בתקופה זו שולמו 3 הזמנות."
+    citation = source_lines(evidence)
+    assert not candidate_feedback(f"{prose}\n\n{citation}", evidence)
+    wrong = citation.replace("marts.fct_orders", "archive_marts.fct_orders_backup")
+    assert candidate_feedback(f"{prose}\n\n{wrong}", evidence)

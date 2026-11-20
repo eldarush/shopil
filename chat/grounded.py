@@ -17,7 +17,7 @@ INSTRUCTIONS = """אתם יוצר תשובה לעוזר העסקי ShopIL. כת�
 operating_costs_not_recorded מציין שחסרים נתוני הוצאות לחישוב רווח.
 shipping_cost_not_recorded מציין שאין שדה המתעד עלות משלוח.
 אין להציג הכנסה כרווח, לחבר הכנסה היסטורית בשקלים לסכומי הזרם באגורות, או להציג אירועי זרם כהזמנות ששולמו.
-בציטוט כתבו את שם הטבלה, היחידות ומזהה המוצר אם רלוונטי. העתיקו את ערכי time_start ו-time_end
+בציטוט סמנו במפורש את טבלת המקור, היחידות ומזהה המוצר אם רלוונטי. העתיקו את ערכי time_start ו-time_end
 מהמקור עם משמעות מפורשת: כולל בהתחלה, לא כולל בסוף. שמרו על פורמט התאריכים המקורי.
 חובה לכלול בציטוט את ערכי snapshot_id ו-captured_at בדיוק כפי שהם מופיעים בחבילה.
 לנתוני זרם ציינו גם checkpoint, watermark ומצב החלון. חלון פתוח עדיין יכול להשתנות.
@@ -88,6 +88,22 @@ def source_lines(evidence):
     return "\n".join(lines)
 
 
+MISSING_METRIC_TERMS = {
+    "paid_revenue": (r"הכנס", r"הזמנ", r"שולמ|תשלום"),
+    "paid_orders": (r"הזמנ", r"שולמ|תשלום"),
+    "avg_rating": (r"דירוג", r"ממוצע"),
+    "review_count": (r"ביקור(?:ת|ות)|חוות דעת",),
+    "negative_reviews": (r"ביקור(?:ת|ות)|חוות דעת", r"שלילי"),
+    "top_negative_reviews": (r"ביקור(?:ת|ות)|חוות דעת", r"שלילי", r"מוצר"),
+    "stream_order_amount": (r"אירוע", r"הזמנ", r"סכום|כסף"),
+    "stream_order_count": (r"אירוע", r"הזמנ"),
+    "stream_negative_reviews": (r"ביקור(?:ת|ות)|חוות דעת", r"שלילי"),
+    "stream_alert_trigger_count": (r"התרא", r"ביקור(?:ת|ות)|חוות דעת"),
+    "shipping_cost": (r"משלוח", r"עלות|עלויות|הוצאות"),
+    "profit": (r"רווח", r"עלות|עלויות|הוצאות"),
+}
+
+
 def evidence_error(prose, evidence):
     """Verify claims in the authored sentence before the citation is attached."""
     scope = evidence["query_scope"]
@@ -106,6 +122,14 @@ def evidence_error(prose, evidence):
         if scope["availability"] == "missing":
             if re.search(r"\d", prose):
                 return "תשובה על נתון חסר מכילה ספרות."
+            terms = MISSING_METRIC_TERMS.get(scope.get("metric"), ())
+            if any(not re.search(term, prose) for term in terms):
+                return "חסר שם המדד המבוקש או הסיבה לחוסר במידע."
+            if scope.get("reason") == "requested_period_outside_observed_coverage" and not re.search(
+                r"תקופ|טווח|כיסוי", prose
+            ):
+                return "לא הוסבר שהחוסר מתייחס לתקופה המבוקשת."
+
             if scope.get("metric") == "shipping_cost" and "משלוח" not in prose:
                 return "הסבירו במפורש שעלויות המשלוח חסרות."
             if scope.get("metric") == "profit" and re.search(r"(?:^|\s)הרווח (?:לא ניתן|אי אפשר) (?:לקבוע|לחשב)", prose):
@@ -192,8 +216,18 @@ def candidate_feedback(draft, evidence):
     problems = []
     scope = evidence["query_scope"]
     required = [evidence["snapshot_id"], evidence["captured_at"]]
+    tables = {source["table"] for source in evidence["sources"]}
+    if scope.get("consulted_table"):
+        tables.add(scope["consulted_table"])
+    names = re.findall(
+        r"""(?<!\w)(?:מקור|טבלה|source|table|consulted_table|schema(?: checked)?|סכמה(?: שנבדקה)?)["']?"""
+        r"""\s*[:=]\s*(?:סכמת\s+)?[`"']?([A-Za-z_]\w*(?:\.[A-Za-z_]\w*)*)""",
+        citation, re.IGNORECASE,
+    )
+    if tables and set(names) != tables:
+        problems.append("שמות הטבלאות המצוטטים אינם תואמים לראיות.")
     for source in evidence["sources"]:
-        required.extend([source["table"], source["units"]])
+        required.append(source["units"])
         for field, boundary in (("time_start", r"כולל"), ("time_end", r"לא\s*כולל")):
             if source[field] is not None and not re.search(
                 re.escape(source[field]) + r"[^\w\n]*" + boundary, citation
@@ -219,7 +253,6 @@ def candidate_feedback(draft, evidence):
                 problems.append("חסר גבול כולל או לא כולל לתקופה המבוקשת.")
                 break
     if scope.get("consulted_table"):
-        required.append(scope["consulted_table"])
         if not re.search(r"סכמ|schema|consulted_table", citation, re.IGNORECASE):
             problems.append("הציטוט אינו מזהה את המקור כבדיקת סכמה.")
         clauses = re.split(r"[,;\n]+", citation)
