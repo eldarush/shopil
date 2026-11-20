@@ -132,10 +132,13 @@ def evidence_error(prose, evidence):
             number_text = number_text.replace(scope[key], "")
     numbers = {Decimal(token.replace(",", "")) for token in re.findall(r"-?\d+(?:,\d{3})*(?:\.\d+)?", number_text)}
     if field == "orders" and expected == {Decimal(1)}:
+        singular = "השתמשו בלשון יחיד: בחלון נקלט אירוע הזמנה אחד."
         if re.search(r"\b1\s+אירועי|נקלטו\s+(?:רק\s+)?(?:אירוע הזמנה אחד|1\s+אירוע)", prose):
-            return "השתמשו בלשון יחיד: בחלון הפתוח נקלט אירוע הזמנה אחד. הנתון עשוי להשתנות."
-        if "אירוע הזמנה אחד" in prose or "הזמנה אחת" in prose:
+            return singular
+        if any(wording in prose for wording in ("אירוע הזמנה אחד", "אירוע אחד של הזמנה", "הזמנה אחת")):
             numbers.add(Decimal(1))
+        if numbers != expected:
+            return singular
     if field == "orders" and expected == {Decimal(2)} and any(text in prose for text in ("שני אירועי הזמנה", "שתי הזמנות")):
         numbers.add(Decimal(2))
     if numbers != expected:
@@ -169,9 +172,14 @@ class GroundedActor:
             "paid_revenue": "תארו את ההכנסה מההזמנות ששולמו. השתמשו במונח הכנסה ובסכום בשקלים.",
             "paid_orders": "דווחו כמה הזמנות שולמו. הזמנות נמדדות במספר, ולא בשקלים.",
             "profit": "הסבירו שחסרים נתוני העלויות של החנות לחישוב הרווח. אין סכום רווח בצילום הזה.",
-            "stream_order_count": "דווחו כמה אירועי הזמנה נקלטו. בלשון יחיד: נקלט אירוע הזמנה אחד. בלשון רבים: נקלטו שני אירועי הזמנה. בחרו את המספר לפי הנתונים וציינו אם החלון עדיין פתוח.",
             "top_negative_reviews": "ציינו איזה מוצר קיבל את מספר הביקורות השליליות הגבוה ביותר וכמה היו.",
         }.get(evidence["query_scope"].get("metric"))
+        if (evidence["query_scope"].get("metric") == "stream_order_count"
+                and evidence["query_scope"]["availability"] == "available"):
+            count = evidence["sources"][0]["rows"][0]["orders"]
+            guidance = f"בצילום הנוכחי נקלטו {count} אירועי הזמנה. השתמשו במספר הזה וציינו את מצב החלון."
+            if count == 1:
+                guidance = "בצילום הנוכחי המספר הוא 1. כתבו בלשון יחיד: נקלט אירוע הזמנה אחד. ציינו את מצב החלון."
         instructions = INSTRUCTIONS
         citation = source_lines(evidence)
         schema = Explanation.model_json_schema()

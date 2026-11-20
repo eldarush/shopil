@@ -109,6 +109,15 @@ def test_stream_amount_guard_rejects_payment_status_and_wrong_finality():
     assert evidence_error("סכום אירועי ההזמנה בחלון הסגור הוא 10 ₪.", evidence)
 
 
+def test_stream_count_revision_explains_the_correct_singular_grammar():
+    from chat.grounded import evidence_error
+
+    evidence = {"query_scope": {"availability": "available", "field": "orders", "window_state": "open"},
+                "sources": [{"rows": [{"orders": 1}]}], "stream": {"checkpoint": 0}}
+    assert "נקלט אירוע הזמנה אחד" in evidence_error("נקלט אחד אירועי הזמנה.", evidence)
+    assert not evidence_error("בחלון נקלט אירוע אחד של הזמנה.", evidence)
+
+
 def test_actor_owns_numbers_and_numeric_guard_checks_only_authored_prose(capture):
     from chat.grounded import evidence_error
 
