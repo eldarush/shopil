@@ -10,7 +10,8 @@ from decimal import Decimal
 
 import duckdb
 
-from chat.grounded import candidate_feedback
+from chat.critic import Evaluation
+from chat.grounded import Explanation, candidate_feedback
 from experiments.ollama_assignment import CONVERSATION_QUESTIONS, PROFIT_FOLLOWUP, PROFIT_QUESTION, STREAM_QUESTION
 
 
@@ -56,12 +57,10 @@ def verify_case(directory, expected_case):
         assert [record["attempt"] for record in attempts[sid]] == list(range(1, count + 1))
         assert all(attempt["is_acceptable"] is False for attempt in attempts[sid][:-1])
         last = attempts[sid][-1]
-        assert last["is_acceptable"] and last["draft"] == turns[sid]["answer"]
-        actor = json.loads(last["actor_output_json"])
-        assert last["draft"] == actor["answer"].strip() + "\n\n" + actor["citation"].strip()
+        assert last["is_acceptable"] is True and last["draft"] == turns[sid]["answer"]
         assert not candidate_feedback(last["draft"], json.loads(snapshots[sid])), last["draft"]
     assert snapshots.keys() == turns.keys()
-    seen = {key: {"actor": [], "critic": []} for key in snapshots}
+    seen = {key: {"actor": [], "critic": [], "order": []} for key in snapshots}
     stream_updates = []
     for path in sorted(directory.glob("call-*.json")):
         call = read(path)
@@ -69,8 +68,8 @@ def verify_case(directory, expected_case):
         evidence = json.loads(frozen)
         sid = evidence["snapshot_id"]
         seen[sid][call["role"]].append(call)
-        if call["role"] == "actor":
-            assert not has_fixed_value(call["schema"]), path
+        seen[sid]["order"].append(call["role"])
+        assert not has_fixed_value(call["schema"]), path
         assert turns[sid]["question"] == evidence["question"]
         assert snapshots[sid] == frozen and sha256(frozen.encode()).hexdigest() == call["evidence_sha256"]
         if "stream_update" in call:
@@ -91,13 +90,24 @@ def verify_case(directory, expected_case):
         ] == [[1], [2]]
     for sid, records in attempts.items():
         calls = seen[sid]
-        assert records and len(records) == len(calls["actor"]) == len(calls["critic"]), sid
-        for attempt, actor, critic in zip(records, calls["actor"], calls["critic"]):
+        assert calls["order"] == ["actor", "critic"] * len(records), sid
+        question = turns[sid]["question"]
+        for index, (attempt, actor, critic) in enumerate(zip(records, calls["actor"], calls["critic"])):
             assert actor["response"] == attempt["actor_output_json"]
-            assert json.loads(critic["response"]) == {
-                "is_acceptable": attempt.get("critic_is_acceptable", attempt["is_acceptable"]),
-                "feedback": attempt["critic_feedback"],
-            }
+            actor_output = Explanation.model_validate_json(actor["response"])
+            assert attempt["draft"] == actor_output.answer.strip() + "\n\n" + actor_output.citation.strip()
+            assert json.loads(actor["messages"][3]["content"]) == {"question": question}
+            assert json.loads(critic["messages"][1]["content"]) == {"question": question}
+            answer, _, citation = attempt["draft"].partition("\n\n")
+            assert json.loads(critic["messages"][-1]["content"]) == {"answer": answer, "citation": citation}
+            if index:
+                assert actor["messages"][4] == {"role": "assistant", "content": records[index - 1]["draft"]}
+                assert json.loads(actor["messages"][5]["content"]) == {"feedback": records[index - 1]["feedback"]}
+            else:
+                assert len(actor["messages"]) == 4
+            evaluation = Evaluation.model_validate_json(critic["response"])
+            assert evaluation.is_acceptable is attempt["is_acceptable"]
+            assert evaluation.feedback == attempt["feedback"] == attempt["critic_feedback"]
     if correction:
         sid = result["snapshot_id"]
         selected = attempts[sid]
@@ -105,20 +115,6 @@ def verify_case(directory, expected_case):
         assert selected == result["attempts"] and 2 <= len(selected) <= 3
         assert selected[-1]["is_acceptable"] is True
         frozen = json.loads(snapshots[sid])
-        assert len(selected) == len(seen[sid]["actor"]) == len(seen[sid]["critic"])
-        for index, (attempt, actor, critic) in enumerate(zip(selected, seen[sid]["actor"], seen[sid]["critic"])):
-            assert json.loads(critic["response"]) == {
-                "is_acceptable": attempt["is_acceptable"], "feedback": attempt["feedback"]
-            }
-            assert attempt["critic_feedback"] == attempt["feedback"]
-            messages = actor["messages"]
-            assert json.loads(messages[3]["content"]) == {"question": frozen["question"]}
-            if index:
-                assert messages[4] == {"role": "assistant", "content": selected[index - 1]["draft"]}
-                assert json.loads(messages[5]["content"]) == {"feedback": selected[index - 1]["feedback"]}
-            else:
-                assert len(messages) == 4
-            assert attempt["is_acceptable"] is (index == len(selected) - 1)
         assert candidate_feedback(selected[0]["draft"], frozen), "First draft needs an independently checkable error"
         assert not candidate_feedback(selected[-1]["draft"], frozen), selected[-1]["draft"]
         prose = json.loads(selected[-1]["actor_output_json"])["answer"]

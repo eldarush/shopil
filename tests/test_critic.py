@@ -138,8 +138,10 @@ def test_grounded_critic_sees_the_authored_answer_and_citation_separately():
     evidence = '{"query_scope":{"availability":"available","partial_period":true},"sources":[]}'
     model = FakeModel('{"feedback":"Disclose partial coverage","is_acceptable":false}')
     asyncio.run(Critic(model).evaluate("How many?", evidence, "שולמו הזמנות.\n\nהמקור מצוין כאן."))
-    messages, _ = model.calls[0]
+    messages, schema = model.calls[0]
     assert messages[2]["content"] is evidence
+    assert schema["properties"]["feedback"]["maxLength"] == 600
+    assert "pattern" not in schema["properties"]["feedback"]
     assert json.loads(messages[-1]["content"]) == {
         "answer": "שולמו הזמנות.", "citation": "המקור מצוין כאן."
     }
