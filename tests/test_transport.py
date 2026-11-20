@@ -86,6 +86,19 @@ def test_explicit_thinking_setting_preserves_sampling_defaults(think):
     assert asyncio.run(model.complete(MESSAGES)) == VALID["message"]["content"]
 
 
+def test_non_reasoning_actor_schema_leaves_sampling_to_the_model():
+    from chat.grounded import Explanation
+
+    def handler(request):
+        payload = json.loads(request.content)
+        assert payload["think"] is False
+        assert payload["options"] == {"num_predict": 1024, "num_ctx": 16384}
+        return httpx.Response(200, json=VALID)
+
+    model = OllamaModel("qwen3:8b", think=False, transport=model_transport(handler))
+    asyncio.run(model.complete(MESSAGES, schema=Explanation.model_json_schema()))
+
+
 @pytest.mark.parametrize("think", [0, 1, "false"])
 def test_invalid_thinking_override_is_rejected(think):
     with pytest.raises(ValueError, match="think"):

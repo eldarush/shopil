@@ -98,7 +98,7 @@ class OllamaModel:
                 # The assignment's non-reasoning model produces one short Hebrew sentence.
                 # Cap the generation so a degenerate reply cannot occupy the worker indefinitely.
                 max_tokens = 1024 if "citation" in short_response else 384
-                payload["options"].update(num_predict=max_tokens, temperature=0.15, seed=37)
+                payload["options"]["num_predict"] = max_tokens
         if self.think is not None:
             payload["think"] = self.think
         try:

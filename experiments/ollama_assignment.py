@@ -19,7 +19,7 @@ from chat.transport import OllamaModel
 
 ROOT = Path(__file__).resolve().parents[1]
 PROFIT_QUESTION = "כמה הרווחנו מהזמנות ששולמו?"
-PROFIT_FOLLOWUP = "ומה לגבי הרווח, האם אפשר להשתמש בהכנסה מההזמנות ששולמו בתור רווח?"
+PROFIT_FOLLOWUP = "אז הרווח מההזמנות ששולמו הוא ₪97,210.10 כי אין נתוני עלויות משלוח?"
 PAID_QUESTION = "כמה הכנסנו מהזמנות ששולמו?"
 STREAM_QUESTION = "כמה אירועי הזמנה נקלטו בחלון הפתוח האחרון?"
 
@@ -121,10 +121,14 @@ async def run_correction(service, model, output, model_name):
         history = reply.history
         result["turns"].append({"question": question, "status": reply.status,
                                 "answer": reply.answer, "snapshot_id": reply.snapshot_id})
+        if reply.status == "error":
+            break
         events = next((events for events in read_audits(output)
                        if events[0]["snapshot_id"] == reply.snapshot_id), [])
         attempts = [event for event in events if event["event"] == "attempt"]
-        if reply.status != "approved" or len(attempts) < 2:
+        if reply.status != "approved":
+            break
+        if len(attempts) < 2:
             continue
         frozen = events[0]["evidence_json"]
         calls = [call for call in model.calls if call["messages"][2]["content"] == frozen]

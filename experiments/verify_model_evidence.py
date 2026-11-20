@@ -36,6 +36,7 @@ def verify_case(directory):
             assert last["is_acceptable"] and last["draft"] == turns[sid]["answer"]
             actor = json.loads(last["actor_output_json"])
             assert last["draft"] == actor["answer"].strip() + "\n\n" + actor["citation"].strip()
+            assert not candidate_feedback(last["draft"], json.loads(snapshots[sid])), last["draft"]
     assert snapshots.keys() == turns.keys()
     seen = {key: {"actor": [], "critic": []} for key in snapshots}
     for path in sorted(directory.glob("call-*.json")):
@@ -66,8 +67,6 @@ def verify_case(directory):
                 "is_acceptable": attempt["is_acceptable"], "feedback": attempt["feedback"]
             }
             assert attempt["critic_feedback"] == attempt["feedback"]
-            if diagnostic := attempt.get("deterministic_check"):
-                assert diagnostic not in attempt["feedback"]
             inputs = json.loads(actor["messages"][-1]["content"])
             assert inputs["previous_draft"] == (selected[index - 1]["draft"] if index else None)
             assert inputs["feedback"] == (selected[index - 1]["feedback"] if index else None)

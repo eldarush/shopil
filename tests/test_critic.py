@@ -132,3 +132,15 @@ def test_critic_repeats_current_question_beside_candidate_to_preserve_relevance(
     assert "before checking" in messages[0]["content"]
     assert "another metric, even when every number is correct" in messages[0]["content"]
     # This checks context construction, not real-model semantic accuracy.
+
+
+def test_grounded_critic_sees_the_authored_answer_and_citation_separately():
+    evidence = '{"query_scope":{"availability":"available","partial_period":true},"sources":[]}'
+    model = FakeModel('{"feedback":"Disclose partial coverage","is_acceptable":false}')
+    asyncio.run(Critic(model).evaluate("How many?", evidence, "שולמו הזמנות.\n\nהמקור מצוין כאן."))
+    messages, _ = model.calls[0]
+    assert messages[2]["content"] is evidence
+    assert json.loads(messages[-1]["content"]) == {
+        "question": "How many?", "answer": "שולמו הזמנות.", "citation": "המקור מצוין כאן."
+    }
+    assert "explicit partial-coverage caveat" in messages[0]["content"]

@@ -352,3 +352,13 @@ def test_audit_detects_extra_currency_and_wrong_product_scope(capture):
     assert evidence_error(f"בחלון הפתוח נקלטו {value} אירועי הזמנה בשווי {value} ₪.", stream)
     product = asyncio.run(capture("כמה הכנסנו מהזמנות ששולמו עבור מוצר 5?", []))
     assert evidence_error("ההכנסה מהזמנות ששולמו לכלל המוצרים הסתכמה ב־115.35 ₪.", product)
+
+
+def test_partial_coverage_is_a_separate_audit_check(tmp_path):
+    capture = build_capture(warehouse(tmp_path), database(tmp_path), start=date(2026, 7, 1),
+                            end=date(2026, 7, 4), question_scoped=True)
+    q = "כמה הזמנות שולמו בין 2026-07-01 עד 2026-07-20?"
+    evidence = asyncio.run(capture(q, []))
+    citation = "\n".join(line for line in source_lines(evidence).splitlines() if "כיסוי" not in line)
+    assert candidate_feedback("שולמו 3 הזמנות.\n\n" + citation, evidence)
+    assert not candidate_feedback("הכיסוי חלקי ובנתונים שנצפו שולמו 3 הזמנות.\n\n" + citation, evidence)

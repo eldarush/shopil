@@ -12,8 +12,7 @@ uv run --locked --group batch python -m experiments.rejection_limit --warehouse 
 uv run --locked --group batch python -m experiments.verify_model_evidence --warehouse WAREHOUSE --evidence ../evidence/chat
 ```
 
-- **Correction.** Ask about profit on paid orders. If needed, ask whether paid revenue could be used
-  as profit. Every draft comes from the live Actor. The Critic's verdict alone decides publication,
+- **Correction.** Ask about profit on paid orders. If needed, ask whether a remembered revenue figure can be reported as profit when shipping costs are missing. Every draft comes from the live Actor. The Critic's verdict alone decides publication,
   and its feedback is passed verbatim. Look for a first draft with a factual or provenance error,
   a Critic rejection, and a later factually correct approval on that same snapshot. A first-pass
   approval or three rejections may occur naturally. Keep looking in a fresh run if no qualifying
