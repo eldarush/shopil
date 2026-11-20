@@ -31,7 +31,7 @@ shipping_cost_not_recorded מציין שאין שדה המתעד עלות משל
 
 SCHEMA_ONLY_INSTRUCTIONS = """כתבו תשובה קצרה בעברית על המדד שהתבקש. אם הוא חסר, הסבירו את סיבת החוסר
 בלי להשתמש בספרות. רווח אינו ניתן לחישוב בלי נתוני הוצאות. הסתמכו רק על הראיות והימנעו מלהשתמש במדד אחר.
-ב-citation כתבו במילים שלכם: שם הסכמה שנבדקה, זמינות היחידות, זמינות טווח התצפית,
+ב-citation כתבו במילים שלכם, בעברית או באנגלית: שם הסכמה שנבדקה, זמינות היחידות, זמינות טווח התצפית,
 מזהה צילום הנתונים וזמן הצילום. השתמשו ב-consulted_table, units, time_start, time_end,
 snapshot_id ו-captured_at. null הוא פרט שאינו זמין. שמרו את ערכי המזהה והזמן המקוריים.
 אם הראיות כוללות מזהה מוצר או תאריכי בקשה, ציינו אותם בציטוט. תאריכי הבקשה מופרדים מטווח
@@ -199,10 +199,20 @@ def candidate_feedback(draft, evidence):
                 re.escape(source[field]) + r"[^\w\n]*" + boundary, citation
             ):
                 problems.append(f"חסר גבול זמן תקין עבור {source['table']}: {source[field]}.")
+    product_ids = {str(row["product_id"]) for source in evidence["sources"] for row in source["rows"]
+                   if "product_id" in row}
+    if scope.get("product_id") is not None:
+        product_ids.add(str(scope["product_id"]))
+    product_refs = re.findall(
+        r"(?:מזהי המוצרים|המוצר שהתבקש|מזהה מוצר|מוצר(?: מספר)?|product(?:_ids?| ID)?)"
+        r"\s*[:=]?\s*(\d+(?:\s*,\s*\d+)*)",
+        citation, re.IGNORECASE,
+    )
+    cited_ids = {identifier for refs in product_refs for identifier in re.findall(r"\d+", refs)}
+    if product_ids and cited_ids != product_ids:
+        problems.append("מזהי המוצרים בציטוט אינם תואמים לראיות.")
     if scope.get("consulted_table"):
         required.append(scope["consulted_table"])
-        if scope.get("product_id") is not None:
-            required.append(str(scope["product_id"]))
         if scope.get("requested_start"):
             required.extend([scope["requested_start"], scope["requested_end"]])
         if not re.search(r"סכמ|schema|consulted_table", citation, re.IGNORECASE):

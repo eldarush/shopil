@@ -51,7 +51,15 @@ def verify_case(directory):
             update = call["stream_update"]
             assert datetime.fromisoformat(call["started"]) < datetime.fromisoformat(update["at"]) < datetime.fromisoformat(call["completed"])
             assert update["result"]["status"] == "accepted" and call["actor_pending_after_update"]
-    assert all(roles["actor"] and roles["critic"] for roles in seen.values())
+    for sid, records in attempts.items():
+        calls = seen[sid]
+        assert records and len(records) == len(calls["actor"]) == len(calls["critic"]), sid
+        for attempt, actor, critic in zip(records, calls["actor"], calls["critic"]):
+            assert actor["response"] == attempt["actor_output_json"]
+            assert json.loads(critic["response"]) == {
+                "is_acceptable": attempt.get("critic_is_acceptable", attempt["is_acceptable"]),
+                "feedback": attempt["critic_feedback"],
+            }
     if correction:
         sid = result["snapshot_id"]
         selected = attempts[sid]
@@ -61,7 +69,6 @@ def verify_case(directory):
         frozen = json.loads(snapshots[sid])
         assert len(selected) == len(seen[sid]["actor"]) == len(seen[sid]["critic"])
         for index, (attempt, actor, critic) in enumerate(zip(selected, seen[sid]["actor"], seen[sid]["critic"])):
-            assert attempt["actor_output_json"] == actor["response"]
             assert all("enum" not in actor["schema"]["properties"][field] for field in ("answer", "citation"))
             assert json.loads(critic["response"]) == {
                 "is_acceptable": attempt["is_acceptable"], "feedback": attempt["feedback"]

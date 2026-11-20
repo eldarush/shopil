@@ -360,3 +360,15 @@ def test_partial_coverage_is_a_separate_audit_check(tmp_path):
     citation = "\n".join(line for line in source_lines(evidence).splitlines() if "כיסוי" not in line)
     assert candidate_feedback("שולמו 3 הזמנות.\n\n" + citation, evidence)
     assert not candidate_feedback("הכיסוי חלקי ובנתונים שנצפו שולמו 3 הזמנות.\n\n" + citation, evidence)
+
+
+def test_measured_citation_requires_the_correct_product_id(capture):
+    q = "כמה הכנסנו מהזמנות ששולמו עבור מוצר 5?"
+    evidence = asyncio.run(capture(q, []))
+    prose = "ההכנסה מהזמנות ששולמו הסתכמה ב־115.35 ₪."
+    citation = source_lines(evidence)
+    assert not candidate_feedback(f"{prose}\n\n{citation}", evidence)
+    incomplete = citation.replace("מזהי המוצרים: 5", "")
+    assert candidate_feedback(f"{prose}\n\n{incomplete}", evidence)
+    wrong = citation.replace("מזהי המוצרים: 5", "מזהי המוצרים: 9")
+    assert candidate_feedback(f"{prose}\n\n{wrong}", evidence)
