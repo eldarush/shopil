@@ -211,13 +211,15 @@ def candidate_feedback(draft, evidence):
     cited_ids = {identifier for refs in product_refs for identifier in re.findall(r"\d+", refs)}
     if cited_ids != product_ids:
         problems.append("מזהי המוצרים בציטוט אינם תואמים לראיות.")
+    if scope.get("requested_start") and (scope.get("partial_period") or scope["availability"] == "missing"):
+        if not re.search(r"תקופ\w*.{0,16}(?:מבוקש|התבקש)|\brequested\b", citation, re.IGNORECASE):
+            problems.append("חסר סימון נפרד לתקופה המבוקשת.")
+        for field, boundary in (("requested_start", r"כולל"), ("requested_end", r"לא\s*כולל")):
+            if not re.search(re.escape(scope[field]) + r"[^\w\n]*" + boundary, citation):
+                problems.append("חסר גבול כולל או לא כולל לתקופה המבוקשת.")
+                break
     if scope.get("consulted_table"):
         required.append(scope["consulted_table"])
-        if scope.get("requested_start"):
-            for field, boundary in (("requested_start", r"כולל"), ("requested_end", r"לא\s*כולל")):
-                if not re.search(re.escape(scope[field]) + r"[^\w\n]*" + boundary, citation):
-                    problems.append("חסר גבול כולל או לא כולל לתקופה המבוקשת.")
-                    break
         if not re.search(r"סכמ|schema|consulted_table", citation, re.IGNORECASE):
             problems.append("הציטוט אינו מזהה את המקור כבדיקת סכמה.")
         clauses = re.split(r"[,;\n]+", citation)
@@ -248,7 +250,18 @@ def candidate_feedback(draft, evidence):
         ):
             problems.append("נקודת ההתקדמות חסרה בציטוט.")
         if evidence["sources"] and scope.get("window_state"):
-            required.append("פתוח" if scope["window_state"] == "open" else "סגור")
+            labels = re.findall(r"(?:מצב החלון|window state)\s*[:=]\s*([^\n]+)", citation, re.IGNORECASE)
+            is_open = scope["window_state"] == "open"
+            expected, conflicting = (r"פתוח|\bopen\b", r"סגור|סופי|\b(?:closed|final)\b") if is_open else (
+                r"סגור|\bclosed\b", r"פתוח|\bopen\b"
+            )
+            if len(labels) != 1:
+                problems.append("חסר מצב חלון מפורש בציטוט.")
+            else:
+                state = re.sub(rf"(?:לא|אינו|\bnot)\s+(?:{conflicting})", "", labels[0], flags=re.IGNORECASE)
+                if (not re.match(expected, state, re.IGNORECASE) or "?" in state
+                        or re.search(conflicting, state, re.IGNORECASE)):
+                    problems.append("מצב החלון המצוטט אינו תואם לראיות.")
     if scope.get("partial_period") and scope["availability"] == "available" and not re.search(
         r"כיסוי.{0,45}חלקי|חלק.{0,38}(?:נצפה|זמין)|רק.{0,45}(?:נצפו|נצפה|נתוני|רשומות)|נתונים.{0,35}חלקיים",
         draft,
@@ -273,6 +286,9 @@ class GroundedActor:
                              "החלק שנצפה. הפרידו בציטוט בין תקופת התצפית לתקופה שהתבקשה.")
         schema = Explanation.model_json_schema()
         if scope["availability"] == "missing":
+            if scope.get("requested_start") and not scope.get("consulted_table"):
+                instructions += ("\nציינו את התקופה המבוקשת רק בציטוט עם גבולות כולל ולא כולל, "
+                                 "בנפרד מתקופת התצפית.")
             schema["properties"]["answer"]["pattern"] = r"^[א-ת .,!?״׳־()'-]+$"
         context = [{"role": turn["role"], "content": turn["content"].split("\n\n", 1)[0]} for turn in history]
         messages = [

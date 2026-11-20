@@ -30,13 +30,12 @@ def verify_case(directory):
         assert all(event["snapshot_id"] == sid for event in events)
         snapshots[sid] = stamp["evidence_json"]
         attempts[sid] = [event for event in events if event["event"] == "attempt"]
-        assert terminal["status"] == turns[sid]["status"]
-        if terminal["status"] == "approved":
-            last = attempts[sid][-1]
-            assert last["is_acceptable"] and last["draft"] == turns[sid]["answer"]
-            actor = json.loads(last["actor_output_json"])
-            assert last["draft"] == actor["answer"].strip() + "\n\n" + actor["citation"].strip()
-            assert not candidate_feedback(last["draft"], json.loads(snapshots[sid])), last["draft"]
+        assert terminal["status"] == turns[sid]["status"] == "approved"
+        last = attempts[sid][-1]
+        assert last["is_acceptable"] and last["draft"] == turns[sid]["answer"]
+        actor = json.loads(last["actor_output_json"])
+        assert last["draft"] == actor["answer"].strip() + "\n\n" + actor["citation"].strip()
+        assert not candidate_feedback(last["draft"], json.loads(snapshots[sid])), last["draft"]
     assert snapshots.keys() == turns.keys()
     seen = {key: {"actor": [], "critic": []} for key in snapshots}
     for path in sorted(directory.glob("call-*.json")):

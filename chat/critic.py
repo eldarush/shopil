@@ -119,7 +119,9 @@ and "no observed bounds" are correct. Do not demand currency, product ID or a me
 when the evidence supplies none. The source is the consulted table's schema. Any configured reporting
 dates must be labeled as such and their endpoints stated as inclusive start and exclusive end.
 For every measured source require the actual time_start and time_end, labeled כולל at the start
-and לא כולל at the end. Partial coverage must explicitly limit the figure to the observed slice.
+and לא כולל at the end. For partial or outside-coverage requests, label the requested bounds separately
+from the observed ones, with inclusive start and exclusive end. Partial coverage must explicitly limit
+the figure to the observed slice.
 3. For streaming, verify checkpoint, watermark and open/closed state. Reject calling an open
 window final. Check stream units against the selected field: revenue_cents is agorot and
 revenue_ils is the supplied normalized ILS amount. Keep the selected stream metric separate from

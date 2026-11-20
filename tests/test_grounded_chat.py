@@ -386,3 +386,24 @@ def test_schema_only_citation_reports_absent_units_and_bounds(capture):
     invented = citation.replace("יחידות וטווח תצפיות: אינם זמינים למדד המבוקש.",
                                 "units: orders; time range: 2025")
     assert candidate_feedback(f"{prose}\n\n{invented}", evidence)
+
+
+def test_missing_period_citation_requires_requested_bounds(capture):
+    question = "כמה הזמנות שולמו בשנת 1990?"
+    evidence = asyncio.run(capture(question, []))
+    prose = "מספר ההזמנות ששולמו אינו זמין לתקופה המבוקשת."
+    citation = source_lines(evidence)
+    assert not candidate_feedback(f"{prose}\n\n{citation}", evidence)
+    incomplete = "\n".join(line for line in citation.splitlines() if "1990" not in line)
+    assert candidate_feedback(f"{prose}\n\n{incomplete}", evidence)
+
+
+def test_open_window_citation_rejects_conflicting_state(capture):
+    question = "כמה אירועי הזמנה נקלטו בחלון הפתוח האחרון?"
+    evidence = asyncio.run(capture(question, []))
+    assert evidence["sources"][0]["rows"][0]["orders"] == 1
+    prose = "בחלון הפתוח נקלט אירוע הזמנה אחד."
+    citation = source_lines(evidence)
+    assert not candidate_feedback(f"{prose}\n\n{citation}", evidence)
+    conflicting = citation.replace("מצב החלון: פתוח", "מצב החלון: סגור, לא פתוח")
+    assert candidate_feedback(f"{prose}\n\n{conflicting}", evidence)
