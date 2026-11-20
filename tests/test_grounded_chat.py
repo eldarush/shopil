@@ -434,3 +434,14 @@ def test_measured_citation_rejects_wrong_units_and_swapped_range_labels(capture)
     wrong_range = citation.replace("מ־2026-07-01 (כולל) עד 2026-07-04 (לא כולל)",
                                    "סוף הטווח: 2026-07-01 (כולל); תחילת הטווח: 2026-07-04 (לא כולל)")
     assert candidate_feedback(f"{prose}\n\n{wrong_range}", evidence)
+
+
+def test_each_stream_citation_groups_its_units_with_its_table(capture):
+    question = "כמה ביקורות שליליות היו בעת ההתראה למוצר 5 בחלון הפתוח האחרון?"
+    evidence = asyncio.run(capture(question, []))
+    prose = "בעת ההתראה היו 3 ביקורות שליליות למוצר 5."
+    citation = source_lines(evidence)
+    assert not candidate_feedback(f"{prose}\n\n{citation}", evidence)
+    swapped = citation.replace("מקור: review_state", "PLACEHOLDER")
+    swapped = swapped.replace("מקור: review_alerts", "מקור: review_state").replace("PLACEHOLDER", "מקור: review_alerts")
+    assert candidate_feedback(f"{prose}\n\n{swapped}", evidence)

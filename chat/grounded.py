@@ -231,27 +231,35 @@ def candidate_feedback(draft, evidence):
         tables.add(scope["consulted_table"])
     elif not tables and "stream" in evidence:
         tables.add(scope.get("checked_window_table", "stream_meta"))
-    names = re.findall(
+    source_labels = list(re.finditer(
         r"""(?<!\w)(?:מקור|טבלה|source|table|consulted_table|schema(?: checked)?|סכמה(?: שנבדקה)?)["']?"""
         r"""\s*[:=]\s*(?:סכמת\s+)?[`"']?([A-Za-z_]\w*(?:\.[A-Za-z_]\w*)*)""",
         citation, re.IGNORECASE,
-    )
-    if tables and set(names) != tables:
-        problems.append("שמות הטבלאות המצוטטים אינם תואמים לראיות.")
-    if evidence["sources"]:
-        cited_units = re.findall(r"(?:יחידות(?: המקור)?|\bunits)\s*[:=]\s*([^\n]+)", citation, re.IGNORECASE)
-        expected_units = [source["units"] for source in evidence["sources"]]
-        if [unit.strip().rstrip(".") for unit in cited_units] != expected_units:
-            problems.append("יחידות המדידה המצוטטות אינן תואמות לראיות.")
-    expected_ranges = {
-        (source["time_start"], source["time_end"]) for source in evidence["sources"]
-        if source["time_start"] is not None
+    ))
+    block_ends = [label.start() for label in source_labels[1:]] + [len(citation)]
+    blocks = {
+        label.group(1): citation[label.end():end]
+        for label, end in zip(source_labels, block_ends)
     }
-    cited_ranges = set(re.findall(
+    if tables and (blocks.keys() != tables or len(source_labels) != len(tables)):
+        problems.append("שמות הטבלאות המצוטטים אינם תואמים לראיות.")
+    range_pattern = re.compile(
         r"(?:מ[-־]|from\s+|(?:time_start|תחילת הטווח)\s*[:=])\s*(\S+)\s*\((?:כולל|inclusive)\)"
         r"\s*(?:עד|to|[,;]\s*(?:time_end|סוף הטווח)\s*[:=])\s*(\S+)\s*\((?:לא\s*כולל|exclusive)\)",
-        citation, re.IGNORECASE,
-    ))
+        re.IGNORECASE,
+    )
+    expected_ranges = set()
+    cited_ranges = set(range_pattern.findall(citation))
+    for source in evidence["sources"]:
+        block = blocks.get(source["table"], "")
+        units = re.findall(r"(?:יחידות(?: המקור)?|\bunits)\s*[:=]\s*([^\n]+)", block, re.IGNORECASE)
+        if [unit.strip().rstrip(".") for unit in units] != [source["units"]]:
+            problems.append(f"יחידות המדידה המצוטטות עבור {source['table']} אינן תואמות לראיות.")
+        if source["time_start"] is not None:
+            bounds = (source["time_start"], source["time_end"])
+            expected_ranges.add(bounds)
+            if bounds not in range_pattern.findall(block):
+                problems.append(f"טווח התצפית של {source['table']} חסר או שגוי.")
     product_ids = {str(row["product_id"]) for source in evidence["sources"] for row in source["rows"]
                    if "product_id" in row}
     if scope.get("product_id") is not None:
