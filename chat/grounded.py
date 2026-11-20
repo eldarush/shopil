@@ -211,14 +211,26 @@ def evidence_error(prose, evidence):
     return ""
 
 
+def cited_values(citation, label):
+    return [
+        value.strip('`\'".')
+        for value in re.findall(rf"(?<!\w)(?:{label})\s*[:=]\s*([^\s,;]+)", citation, re.IGNORECASE)
+    ]
+
+
 def candidate_feedback(draft, evidence):
     prose, separator, citation = draft.partition("\n\n")
     problems = []
     scope = evidence["query_scope"]
-    required = [evidence["snapshot_id"], evidence["captured_at"]]
+    if cited_values(citation, r"מזהה צילום(?: הנתונים)?|snapshot[_ ]id") != [evidence["snapshot_id"]]:
+        problems.append("מזהה הצילום המצוטט אינו תואם לראיות.")
+    if cited_values(citation, r"(?:מועד|זמן) צילום(?: הנתונים)?|captured_at|capture time") != [evidence["captured_at"]]:
+        problems.append("זמן הצילום המצוטט אינו תואם לראיות.")
     tables = {source["table"] for source in evidence["sources"]}
     if scope.get("consulted_table"):
         tables.add(scope["consulted_table"])
+    elif not tables and "stream" in evidence:
+        tables.add(scope.get("checked_window_table", "stream_meta"))
     names = re.findall(
         r"""(?<!\w)(?:מקור|טבלה|source|table|consulted_table|schema(?: checked)?|סכמה(?: שנבדקה)?)["']?"""
         r"""\s*[:=]\s*(?:סכמת\s+)?[`"']?([A-Za-z_]\w*(?:\.[A-Za-z_]\w*)*)""",
@@ -226,13 +238,20 @@ def candidate_feedback(draft, evidence):
     )
     if tables and set(names) != tables:
         problems.append("שמות הטבלאות המצוטטים אינם תואמים לראיות.")
-    for source in evidence["sources"]:
-        required.append(source["units"])
-        for field, boundary in (("time_start", r"כולל"), ("time_end", r"לא\s*כולל")):
-            if source[field] is not None and not re.search(
-                re.escape(source[field]) + r"[^\w\n]*" + boundary, citation
-            ):
-                problems.append(f"חסר גבול זמן תקין עבור {source['table']}: {source[field]}.")
+    if evidence["sources"]:
+        cited_units = re.findall(r"(?:יחידות(?: המקור)?|\bunits)\s*[:=]\s*([^\n]+)", citation, re.IGNORECASE)
+        expected_units = [source["units"] for source in evidence["sources"]]
+        if [unit.strip().rstrip(".") for unit in cited_units] != expected_units:
+            problems.append("יחידות המדידה המצוטטות אינן תואמות לראיות.")
+    expected_ranges = {
+        (source["time_start"], source["time_end"]) for source in evidence["sources"]
+        if source["time_start"] is not None
+    }
+    cited_ranges = set(re.findall(
+        r"(?:מ[-־]|from\s+|(?:time_start|תחילת הטווח)\s*[:=])\s*(\S+)\s*\((?:כולל|inclusive)\)"
+        r"\s*(?:עד|to|[,;]\s*(?:time_end|סוף הטווח)\s*[:=])\s*(\S+)\s*\((?:לא\s*כולל|exclusive)\)",
+        citation, re.IGNORECASE,
+    ))
     product_ids = {str(row["product_id"]) for source in evidence["sources"] for row in source["rows"]
                    if "product_id" in row}
     if scope.get("product_id") is not None:
@@ -248,10 +267,9 @@ def candidate_feedback(draft, evidence):
     if scope.get("requested_start") and (scope.get("partial_period") or scope["availability"] == "missing"):
         if not re.search(r"תקופ\w*.{0,16}(?:מבוקש|התבקש)|\brequested\b", citation, re.IGNORECASE):
             problems.append("חסר סימון נפרד לתקופה המבוקשת.")
-        for field, boundary in (("requested_start", r"כולל"), ("requested_end", r"לא\s*כולל")):
-            if not re.search(re.escape(scope[field]) + r"[^\w\n]*" + boundary, citation):
-                problems.append("חסר גבול כולל או לא כולל לתקופה המבוקשת.")
-                break
+        expected_ranges.add((scope["requested_start"], scope["requested_end"]))
+    if cited_ranges != expected_ranges:
+        problems.append("טווחי הזמן המצוטטים אינם תואמים לגבולות הכולל והלא כולל בראיות.")
     if scope.get("consulted_table"):
         if not re.search(r"סכמ|schema|consulted_table", citation, re.IGNORECASE):
             problems.append("הציטוט אינו מזהה את המקור כבדיקת סכמה.")
@@ -275,13 +293,15 @@ def candidate_feedback(draft, evidence):
         if re.search(r"₪|\bILS\b|שקלים|שקל|אגור|\b\d{4}-\d{2}-\d{2}\b", remaining, re.IGNORECASE):
             problems.append("ציטוט הסכמה מייחס יחידה או טווח תצפית למדד חסר.")
     if stream := evidence.get("stream"):
-        if stream["watermark"] is not None:
-            required.append(stream["watermark"])
-        if not re.search(
-            rf"(?:checkpoint|נקודת (?:התקדמות|המשך))\s*[:=]?\s*{stream['checkpoint']}(?!\d)",
-            citation, re.IGNORECASE,
-        ):
-            problems.append("נקודת ההתקדמות חסרה בציטוט.")
+        watermark = cited_values(citation, r"watermark|סף זמן האירוע")
+        if stream["watermark"] is None:
+            watermark = [value.lower() for value in watermark]
+            if len(watermark) != 1 or watermark[0] not in {"none", "null", "missing", "unavailable"}:
+                problems.append("סף זמן האירוע המצוטט אינו תואם לראיות.")
+        elif watermark != [stream["watermark"]]:
+            problems.append("סף זמן האירוע המצוטט אינו תואם לראיות.")
+        if cited_values(citation, r"checkpoint|נקודת (?:התקדמות|המשך)") != [str(stream["checkpoint"])]:
+            problems.append("נקודת ההתקדמות המצוטטת אינה תואמת לראיות.")
         if evidence["sources"] and scope.get("window_state"):
             labels = re.findall(r"(?:מצב החלון|window state)\s*[:=]\s*([^\n]+)", citation, re.IGNORECASE)
             is_open = scope["window_state"] == "open"
@@ -300,8 +320,8 @@ def candidate_feedback(draft, evidence):
         draft,
     ):
         problems.append("חסר הסבר שהמדד מכסה רק את התקופה שנצפתה.")
-    if not separator or "\n" in prose or any(value not in citation for value in required):
-        problems.append("פרטי המקור או צילום הנתונים חסרים בציטוט.")
+    if not separator or "\n" in prose:
+        problems.append("התשובה צריכה לכלול משפט עסקי וציטוט נפרדים.")
     if problem := evidence_error(prose, evidence):
         problems.append(problem)
     return " ".join(problems)

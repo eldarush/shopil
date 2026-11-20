@@ -423,3 +423,14 @@ def test_measured_source_must_be_the_complete_cited_table(capture):
     assert not candidate_feedback(f"{prose}\n\n{citation}", evidence)
     wrong = citation.replace("marts.fct_orders", "archive_marts.fct_orders_backup")
     assert candidate_feedback(f"{prose}\n\n{wrong}", evidence)
+
+
+def test_measured_citation_rejects_wrong_units_and_swapped_range_labels(capture):
+    evidence = asyncio.run(capture("כמה הזמנות שולמו?", []))
+    prose = "בתקופה זו שולמו 3 הזמנות."
+    citation = source_lines(evidence)
+    wrong_units = citation.replace("יחידות המקור: orders", "יחידות המקור: אגורות, לא orders")
+    assert candidate_feedback(f"{prose}\n\n{wrong_units}", evidence)
+    wrong_range = citation.replace("מ־2026-07-01 (כולל) עד 2026-07-04 (לא כולל)",
+                                   "סוף הטווח: 2026-07-01 (כולל); תחילת הטווח: 2026-07-04 (לא כולל)")
+    assert candidate_feedback(f"{prose}\n\n{wrong_range}", evidence)

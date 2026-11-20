@@ -38,6 +38,7 @@ def verify_case(directory):
         assert not candidate_feedback(last["draft"], json.loads(snapshots[sid])), last["draft"]
     assert snapshots.keys() == turns.keys()
     seen = {key: {"actor": [], "critic": []} for key in snapshots}
+    stream_updates = []
     for path in sorted(directory.glob("call-*.json")):
         call = read(path)
         frozen = call["messages"][2]["content"]
@@ -50,6 +51,18 @@ def verify_case(directory):
             update = call["stream_update"]
             assert datetime.fromisoformat(call["started"]) < datetime.fromisoformat(update["at"]) < datetime.fromisoformat(call["completed"])
             assert update["result"]["status"] == "accepted" and call["actor_pending_after_update"]
+            assert call["role"] == "actor"
+            stream_updates.append((sid, update["result"]["offset"], update["result"]["checkpoint"]))
+    if result["case"] == "concurrent":
+        before, after = [turn["snapshot_id"] for turn in result["turns"]]
+        assert stream_updates == [(before, 1, 1)]
+        evidence = [json.loads(snapshots[sid]) for sid in (before, after)]
+        assert [snapshot["stream"]["checkpoint"] for snapshot in evidence] == [0, 1]
+        assert [
+            [row["orders"] for source in snapshot["sources"] if source["table"] == "order_state"
+             for row in source["rows"]]
+            for snapshot in evidence
+        ] == [[1], [2]]
     for sid, records in attempts.items():
         calls = seen[sid]
         assert records and len(records) == len(calls["actor"]) == len(calls["critic"]), sid
