@@ -226,8 +226,11 @@ async def capture_question(warehouse, stream_database, default_start, default_en
         plan = {"availability": "unsupported", "reason": "The requested metric or scope is outside the supported questions."}
     elif scope.metric in {"shipping_cost", "profit"}:
         reason = ("בנתוני ההזמנות חסרות עלויות המשלוח." if scope.metric == "shipping_cost"
-                  else "ההכנסה ידועה אך נתוני העלויות חסרים, ולכן אי אפשר לחשב רווח.")
-        plan = {"metric": scope.metric, "availability": "missing", "reason": reason}
+                  else "חסרים נתוני עלויות לחישוב הרווח.")
+        plan = {"metric": scope.metric, "availability": "missing", "reason": reason,
+                "product_id": scope.product_id}
+        if scope.start is not None:
+            plan.update(requested_start=scope.start.isoformat(), requested_end=scope.end.isoformat())
     else:
         field = STREAM_FIELDS.get(scope.metric, "negative_reviews" if scope.metric == "top_negative_reviews" else scope.metric)
         plan = {"metric": scope.metric, "field": field, "product_id": scope.product_id, "window_state": scope.window_state}

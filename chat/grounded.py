@@ -47,6 +47,8 @@ def source_lines(evidence):
     if not evidence["sources"] and "consulted_table" in scope:
         lines.extend([f"מקור: {scope['consulted_table']} (תחום המדדים הזמינים)",
                       f"טווח המקור: מ־{scope['coverage_start']} (כולל) עד {scope['coverage_end']} (לא כולל)"])
+        if scope.get("product_id") is not None:
+            lines.append(f"המוצר שהתבקש: {scope['product_id']}")
     if not evidence["sources"] and "stream" in evidence:
         table = scope.get("checked_window_table", "stream_meta")
         lines.append(f"מקור: {table}")
@@ -95,6 +97,8 @@ def evidence_error(prose, evidence):
                 return "תקנו את סדר המילים: אי אפשר לחשב את הרווח, כי חסרים נתוני עלויות."
             if scope.get("metric") == "profit" and "משלוח" in prose:
                 return "נתוני העלויות הכוללים חסרים. אל תייחסו את חוסר המידע דווקא למשלוח."
+            if scope.get("metric") == "profit" and "הכנסה" in prose:
+                return "ציינו את היעדר נתוני העלויות בלי לטעון שההכנסה נבדקה."
             if scope.get("metric") == "profit" and not re.search(r"רווח|הרווח", prose):
                 return "ציינו שאין אפשרות לחשב את הרווח ללא עלויות."
             if not re.search(r"חסר|לא |אין |אינ|אי[־ ]אפשר|מחוץ|חורג", prose):
@@ -117,12 +121,26 @@ def evidence_error(prose, evidence):
         return "ההזמנות הן ששולמו. נסחו את המשפט כך שההכנסה מהן הסתכמה בסכום הנקוב בשקלים."
     if field == "paid_revenue" and re.search(r"רווח נקי|הרווח", prose):
         return "ציינו הכנסה מהזמנות ששולמו. אין נתוני עלויות לחישוב רווח."
+    if field in {"avg_rating", "review_count", "negative_reviews", "negative_reviews_at_trigger"}:
+        has_rating = bool(re.search(r"דירוג|ציון ממוצע", prose))
+        has_reviews = bool(re.search(r"ביקור(?:ת|ות)|חוות דעת", prose))
+        has_negative = "שלילי" in prose
+        if field == "avg_rating" and (not has_rating or "ממוצע" not in prose or has_negative):
+            return "ציינו שהערך הוא דירוג ממוצע."
+        if field != "avg_rating" and (has_rating or not has_reviews or has_negative != (field != "review_count")):
+            return ("ציינו את מספר הביקורות הכולל." if field == "review_count"
+                    else "ציינו את מספר הביקורות השליליות.")
     rows = [row for source in evidence["sources"] for row in source["rows"] if field in row]
     expected = {Decimal(str(row[field])) for row in rows if row[field] is not None}
     product_ids = {int(row["product_id"]) for row in rows if "product_id" in row}
     product_ref = r"מוצר(?: מספר)?\s*(\d+)"
-    if any(int(pid) not in product_ids for pid in re.findall(product_ref, prose)):
+    named_ids = {int(pid) for pid in re.findall(product_ref, prose)}
+    if named_ids - product_ids:
         return "זהו את המוצר לפי מזהה המוצר שבשורות הראיה."
+    if scope.get("metric") == "top_negative_reviews":
+        named_ids.update(row["product_id"] for row in rows if row.get("product_name") and row["product_name"] in prose)
+        if named_ids != product_ids:
+            return "זהו כל מוצר שמופיע בתוצאת הדירוג. אם יש שוויון, ציינו את כל המוצרים החולקים את המקום הראשון."
     number_text = re.sub(product_ref, "", prose)
     for row in rows:
         if row.get("product_name"):
@@ -172,7 +190,7 @@ class GroundedActor:
             "paid_revenue": "תארו את ההכנסה מההזמנות ששולמו. השתמשו במונח הכנסה ובסכום בשקלים.",
             "paid_orders": "דווחו כמה הזמנות שולמו. הזמנות נמדדות במספר, ולא בשקלים.",
             "profit": "הסבירו שחסרים נתוני העלויות של החנות לחישוב הרווח. אין סכום רווח בצילום הזה.",
-            "top_negative_reviews": "ציינו איזה מוצר קיבל את מספר הביקורות השליליות הגבוה ביותר וכמה היו.",
+            "top_negative_reviews": "ציינו כל מוצר שמופיע בתוצאת הדירוג בשמו המדויק או כמוצר ואחריו המזהה שלו. אם יש שוויון, ציינו את כל המוצרים ואת מספר הביקורות השליליות המשותף.",
         }.get(evidence["query_scope"].get("metric"))
         order_count = None
         if (evidence["query_scope"].get("metric") == "stream_order_count"

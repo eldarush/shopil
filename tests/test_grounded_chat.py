@@ -225,6 +225,46 @@ def test_profit_cannot_reuse_history_revenue_or_invent_shipping_specificity(capt
     assert not evidence_error("אין נתוני הזמנות לשנת 1990.", year)
 
 
+def test_profit_retains_requested_scope_without_claiming_known_revenue(capture):
+    from chat.grounded import evidence_error
+
+    evidence = asyncio.run(capture("כמה הרווחנו עבור מוצר 99 בשנת 1990?", []))
+    scope = evidence["query_scope"]
+    assert scope["availability"] == "missing"
+    assert scope["product_id"] == 99 and scope["requested_start"] == "1990-01-01"
+    assert "הכנסה" not in scope["reason"]
+    assert "המוצר שהתבקש: 99" in source_lines(evidence) and "1990-01-01" in source_lines(evidence)
+    assert evidence_error("ההכנסה ידועה אבל חסרים נתוני עלויות לחישוב הרווח.", evidence)
+
+
+@pytest.mark.parametrize(("field", "valid", "wrong"), [
+    ("avg_rating", "הדירוג הממוצע של מוצר 5 הוא 4.", "למוצר 5 יש 4 ביקורות."),
+    ("review_count", "למוצר 5 יש 4 ביקורות.", "למוצר 5 יש 4 ביקורות שליליות."),
+    ("negative_reviews", "למוצר 5 יש 4 ביקורות שליליות.", "הדירוג הממוצע של מוצר 5 הוא 4."),
+    ("negative_reviews_at_trigger", "בעת ההתראה היו 4 ביקורות שליליות למוצר 5.", "למוצר 5 יש 4 ביקורות."),
+])
+def test_review_value_is_valid_only_for_the_requested_metric(field, valid, wrong):
+    from chat.grounded import evidence_error
+
+    evidence = {"query_scope": {"availability": "available", "field": field},
+                "sources": [{"rows": [{"product_id": 5, field: 4}]}]}
+    assert not evidence_error(valid, evidence)
+    assert evidence_error(wrong, evidence)
+
+
+def test_ranking_requires_all_tied_products(capture):
+    from chat.grounded import evidence_error
+
+    evidence = asyncio.run(capture("לאיזה מוצר יש הכי הרבה ביקורות שליליות?", []))
+    evidence["sources"][0]["rows"] = [
+        {"product_id": 5, "product_name": "בקבוק", "negative_reviews": 4},
+        {"product_id": 6, "product_name": "ספל", "negative_reviews": 4},
+    ]
+    assert evidence_error("מוצר 5 קיבל 4 ביקורות שליליות.", evidence)
+    assert not evidence_error("מוצר 5 ומוצר 6 קיבלו 4 ביקורות שליליות כל אחד.", evidence)
+    assert not evidence_error("לבקבוק ולספל 4 ביקורות שליליות כל אחד.", evidence)
+
+
 def test_actor_can_revise_its_citation(capture):
     from chat.grounded import source_lines
     question = "כמה הזמנות שולמו?"
