@@ -1,0 +1,17 @@
+name: shop_il
+version: "1.0.0"
+config-version: 2
+profile: shop_il
+
+model-paths: ["models"]
+test-paths: ["tests"]
+macro-paths: ["macros"]
+
+models:
+  shop_il:
+    staging:
+      +schema: staging
+      +materialized: view      # שכבת ניקוי - views זולים
+    marts:
+      +schema: marts
+      +materialized: table     # שכבת עסקית - טבלאות מוכנות לצריכה

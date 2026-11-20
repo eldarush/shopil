@@ -94,3 +94,41 @@ def test_evaluation_is_immutable():
     result = Evaluation(is_acceptable=False, feedback="Use the correct units")
     with pytest.raises(ValidationError):
         result.is_acceptable = True
+
+
+def test_critic_receives_explicit_half_open_bounds_and_boundary_check():
+    from chat.actor import ACTOR_INSTRUCTIONS
+    from chat.critic import CRITIC_INSTRUCTIONS
+
+    evidence = json.dumps({"sources": [{
+        "table": "marts.mart_product_reviews", "time_start": "2026-01-01",
+        "time_end": "2026-10-09", "time_bounds": "[)", "rows": [],
+    }]})
+    model = FakeModel('{"is_acceptable":false,"feedback":"End must be exclusive"}')
+    asyncio.run(Critic(model).evaluate("Revenue?", evidence, "מ־1.1.2026 עד 9.10.2026"))
+    messages, _ = model.calls[0]
+    ranges = json.loads(messages[-2]["content"])["source_time_ranges"]
+    assert ranges[0]["time_bounds"] == "[)"
+    assert ranges[0]["time_end"] == "2026-10-09"
+    assert messages[2]["content"] == evidence
+    # Contract test only: this mock does not prove a real model rejects the wording.
+    for instructions in (ACTOR_INSTRUCTIONS, CRITIC_INSTRUCTIONS):
+        assert 'time_bounds="[)"' in instructions
+        assert "לא כולל" in instructions
+        assert "legacy" in instructions
+
+
+def test_critic_repeats_current_question_beside_candidate_to_preserve_relevance():
+    question = "מהן עלויות המשלוח?"
+    draft = "ההכנסה מהזמנות ששולמו היא 97,210.10 ש״ח."
+    model = FakeModel('{"is_acceptable":false,"feedback":"Wrong metric"}')
+    evidence = '{"sources":[{"table":"marts.fct_orders","metric":"paid_revenue"}]}'
+    asyncio.run(Critic(model).evaluate(question, evidence, draft))
+    messages, _ = model.calls[0]
+    for index in (3, -1):
+        assert json.loads(messages[index]["content"]) == {
+            "question": question, "candidate_answer": draft}
+    assert messages[2]["content"] == evidence
+    assert "before checking" in messages[0]["content"]
+    assert "another metric, even when every number is correct" in messages[0]["content"]
+    # This checks context construction, not real-model semantic accuracy.

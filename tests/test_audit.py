@@ -56,3 +56,18 @@ def test_nonfinite_values_are_rejected_before_writing(tmp_path):
     with pytest.raises(ValueError):
         JsonlAudit(tmp_path)({"event": "snapshot", "request_id": uuid4().hex, "value": float("nan")})
     assert list(tmp_path.iterdir()) == []
+
+def test_interrupted_attempt_and_terminal_are_flushed_before_one_fsync(tmp_path, monkeypatch):
+    request_id = uuid4().hex
+    records = [{"event": "attempt", "request_id": request_id},
+               {"event": "terminal", "request_id": request_id, "status": "error"}]
+    syncs = []
+
+    def observe_sync(descriptor):
+        output = (tmp_path / f"{request_id}.jsonl").read_text(encoding="utf-8")
+        assert [json.loads(line) for line in output.splitlines()] == records
+        syncs.append(descriptor)
+
+    monkeypatch.setattr("chat.audit.os.fsync", observe_sync)
+    JsonlAudit(tmp_path).write_many(records)
+    assert len(syncs) == 1

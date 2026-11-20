@@ -5,10 +5,9 @@ for display (`shekels`). Accepted revenue = closed windows + still-open windows;
 summing only closed windows under-reports while the stream is live.
 
 Reconciliation is INSIDE the stream: accepted + late (side output) must equal a
-recomputation over the same valid, unique order events. Recorded dead-letter
-offsets are excluded before `batch_truth`; the independent schema-only input
-truth and excluded offsets are also reported so storage rejection is visible.
-This arithmetic check does not independently prove the rejection classification.
+recomputation over the same valid, unique order events. Expected invalid offsets
+come from the input contract and explicit storage controls supplied by the
+experiment. Recorded dead letters are compared with that independent result.
 This is NOT the ShopIL historical Batch revenue
 (fct_orders, status='paid', ILS): stream order events have no payment status,
 so the two are reported separately and never summed.
@@ -20,11 +19,12 @@ from typing import Any, Iterable
 from streaming_lab import Delivery, batch_truth
 from streaming_lab.events import iso_time
 
+from .contract import check
 from .runs import shekels
 
-SCOPE_NOTE = ("Stream reconciliation only: accepted + late vs. valid unique input after recorded dead-letter "
-              "offsets are excluded. Input schema-only truth and exclusions are reported separately; "
-              "this does not prove rejection classification. Not additive with Batch paid revenue (fct_orders).")
+SCOPE_NOTE = ("Stream reconciliation compares accepted plus late to independently validated, unique input. "
+              "Schema-invalid offsets and any explicit expected storage rejections must match the recorded "
+              "dead letters. Historical paid revenue (fct_orders) is a separate measure.")
 
 
 def revenue_windows(snapshot: dict[str, Any]) -> list[dict[str, Any]]:
@@ -55,11 +55,15 @@ def window_monitor(snapshot: dict[str, Any]) -> dict[str, Any]:
             "next_close_at_watermark": min((r["closes_at_watermark"] for r in open_), default=None)}
 
 
-def reconcile(snapshot: dict[str, Any], deliveries: Iterable[Delivery]) -> dict[str, Any]:
+def reconcile(snapshot: dict[str, Any], deliveries: Iterable[Delivery],
+              *, expected_storage_rejections: Iterable[int] = ()) -> dict[str, Any]:
     deliveries = list(deliveries)
     input_truth = batch_truth(deliveries)
-    rejected_offsets = {row["source_offset"] for row in snapshot["dead_letters"]}
-    truth = batch_truth(item for item in deliveries if item.offset not in rejected_offsets)
+    observed_invalid = {row["source_offset"] for row in snapshot["dead_letters"]}
+    expected_invalid = {item.offset for item in deliveries if check(item.event) is not None}
+    expected_invalid.update(expected_storage_rejections)
+    truth = batch_truth(item for item in deliveries if item.offset not in expected_invalid)
+    classifications_match = observed_invalid == expected_invalid
     t = snapshot["totals"]
     accepted, late = t["revenue_cents"], t["late_order_cents"]
     return {"accepted_orders": t["orders"], "accepted_cents": accepted, "accepted_ils": shekels(accepted),
@@ -68,6 +72,7 @@ def reconcile(snapshot: dict[str, Any], deliveries: Iterable[Delivery]) -> dict[
             "recomputed_orders": truth["orders"], "recomputed_cents": truth["revenue_cents"],
             "recomputed_ils": shekels(truth["revenue_cents"]),
             "input_schema_truth": input_truth,
-            "excluded_dead_letter_offsets": sorted(rejected_offsets),
-            "orders_match": t["orders"] + t["late_orders"] == truth["orders"],
-            "revenue_match": accepted + late == truth["revenue_cents"], "scope": SCOPE_NOTE}
+            "excluded_dead_letter_offsets": sorted(observed_invalid),
+            "expected_invalid_offsets": sorted(expected_invalid), "dead_letters_match": classifications_match,
+            "orders_match": classifications_match and t["orders"] + t["late_orders"] == truth["orders"],
+            "revenue_match": classifications_match and accepted + late == truth["revenue_cents"], "scope": SCOPE_NOTE}

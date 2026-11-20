@@ -25,6 +25,19 @@ contain it. Distinguish missing data from an observed zero and from an empty res
 Cite the actual source table names and relevant product/review IDs from evidence,
 the units, and the applicable time ranges. Include the snapshot ID/time or stream
 checkpoint supplied in the evidence. Do not invent a source or timestamp.
+Use these natural Hebrew labels for provenance: snapshot_id = "מזהה צילום הנתונים",
+captured_at = "מועד צילום הנתונים", checkpoint = "נקודת התקדמות בזרם",
+watermark = "סף זמן האירוע (watermark)". Copy the corresponding identifier/time
+values exactly as supplied. A snapshot is "צילום נתונים", never a physical object;
+do not invent a translation or change a field's meaning. These are labels, not
+additional evidence values.
+Source time_bounds="[)" means time_start is INCLUDED and time_end is EXCLUDED;
+this is also the legacy evidence contract when time_bounds is absent. State both
+boundaries explicitly in Hebrew, for example "מ־2026-01-01 (כולל) עד 2026-10-09
+(לא כולל)". Never present the end date as an included day or use an ambiguous
+"עד" range without "לא כולל". Preserve the exact supplied endpoints; do not
+subtract a day or second. For no_observed_history/null bounds, say that no observed
+time coverage exists rather than inventing a range. Apply this to window bounds too.
 Historical batch revenue is paid orders in shekels. Stream order amounts are
 integer agorot (cents) with no payment-status field. Keep the metrics separate;
 never add historical and streaming revenue or claim they have identical meaning.
@@ -37,6 +50,10 @@ watermark or call an open window final.
 
 If correction feedback is present, revise the previous draft against the same
 evidence. Address each grounded criticism without treating feedback as new facts.
+Re-read the CURRENT QUESTION before correcting a draft: neither a previous draft
+nor Critic feedback may change the requested metric. A numerically corrected
+answer to a different question is still wrong. If the requested metric is missing,
+explicitly name that missing metric instead of replacing it with an available one.
 Return only a concise candidate Hebrew answer in plain text, never a JSON wrapper.
 Include the answer, then the source table and applicable time range, then the
 snapshot ID/time. If the requested metric is absent, explicitly say it is missing;

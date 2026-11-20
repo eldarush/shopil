@@ -1,3 +1,7 @@
+# Default grounded mode
+
+The command-line launcher uses question-scoped SQL and the model-authored Hebrew Actor by default. See the [runtime instructions](../README.md#evidence-scope-and-configuration) and [assignment experiments](../experiments/README.md#ollama-assignment-experiments). The capture and modes below document the original optional paths.
+
 # Hebrew chat
 
 SHOPIL-31–36 implement the Gradio interface, Actor/Critic and at most three attempts per question. Only approved answers enter conversation history; all attempts retain the same evidence snapshot and are logged separately.

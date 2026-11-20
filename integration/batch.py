@@ -1,7 +1,9 @@
 """Run the complete course Batch preparation before the application opens DuckDB."""
 
 import argparse
+from hashlib import sha256
 from io import BytesIO
+import json
 import os
 from pathlib import Path
 import shutil
@@ -12,6 +14,23 @@ ROOT = Path(__file__).resolve().parents[1]
 COURSE_REVISION = "6788526695bbb20ac40f46a947413fff3545b86a"
 MODELS = ("staging/stg_reviews.sql", "staging/_stg_reviews.yml",
           "marts/mart_product_reviews.sql", "marts/_mart_product_reviews.yml")
+MART_TEST = "tests/assert_product_mart_reconciles.sql"
+
+
+def bundled_files(lab_dir: Path) -> list[Path] | None:
+    manifest = lab_dir / "course-manifest.json"
+    if not manifest.is_file():
+        return None
+    metadata = json.loads(manifest.read_text(encoding="utf-8"))
+    if metadata["revision"] != COURSE_REVISION:
+        raise ValueError("Unexpected bundled course revision")
+    files = []
+    for relative, expected in metadata["sha256"].items():
+        path = lab_dir / relative
+        if not path.resolve().is_relative_to(lab_dir.resolve()) or sha256(path.read_bytes()).hexdigest() != expected:
+            raise ValueError(f"Course input differs from the published snapshot: {relative}")
+        files.append(path)
+    return files
 
 
 def prepare_batch(lab_dir: Path, etl_python: Path, run_dir: Path) -> Path:
@@ -25,20 +44,30 @@ def prepare_batch(lab_dir: Path, etl_python: Path, run_dir: Path) -> Path:
                  *(ROOT / "etl/dbt/models" / name for name in MODELS)):
         if not path.is_file():
             raise FileNotFoundError(f"Required Batch component is missing: {path}")
-    revision = subprocess.check_output(["git", "-C", str(lab_dir), "rev-parse", "HEAD"], text=True).strip()
-    if revision != COURSE_REVISION:
-        raise ValueError(f"Course checkout must be at {COURSE_REVISION}")
-    # Export only tracked base models, excluding any local exercise solution or old dbt output.
-    base_project = subprocess.check_output(
-        ["git", "-C", str(lab_dir), "archive", "--format=zip", COURSE_REVISION, "dbt_project"])
-    run_dir.mkdir(parents=True, exist_ok=False)
-    with ZipFile(BytesIO(base_project)) as archive:
-        archive.extractall(run_dir)
+    files = bundled_files(lab_dir)
+    if files is None:
+        revision = subprocess.check_output(["git", "-C", str(lab_dir), "rev-parse", "HEAD"], text=True).strip()
+        if revision != COURSE_REVISION:
+            raise ValueError(f"Course checkout must be at {COURSE_REVISION}")
+        base_project = subprocess.check_output(
+            ["git", "-C", str(lab_dir), "archive", "--format=zip", COURSE_REVISION, "dbt_project"])
+        run_dir.mkdir(parents=True, exist_ok=False)
+        with ZipFile(BytesIO(base_project)) as archive:
+            archive.extractall(run_dir)
+    else:
+        run_dir.mkdir(parents=True, exist_ok=False)
+        for path in files:
+            if path.is_relative_to(lab_dir / "dbt_project"):
+                target = run_dir / path.relative_to(lab_dir)
+                target.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copyfile(path, target)
     project = run_dir / "dbt_project"
     for name in MODELS:
         target = project / "models" / name
         target.parent.mkdir(parents=True, exist_ok=True)
         shutil.copyfile(ROOT / "etl/dbt/models" / name, target)
+    (project / "tests").mkdir(exist_ok=True)
+    shutil.copyfile(ROOT / "etl/dbt" / MART_TEST, project / MART_TEST)
     warehouse = lab_dir / "warehouse.duckdb"
     environment = dict(os.environ, PYTHONUTF8="1", PYTHONIOENCODING="utf-8",
                        DBT_SEND_ANONYMOUS_USAGE_STATS="false", WAREHOUSE_PATH=str(warehouse))

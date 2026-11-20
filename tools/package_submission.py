@@ -13,7 +13,7 @@ from tools.workflow_guard import check_paths
 SECTIONS = {"etl", "streaming", "chat", "screenshots", "report"}
 
 
-def package_submission(repo: Path, evidence: Path, output: Path) -> dict:
+def package_submission(repo: Path, evidence: Path, output: Path, readme: Path | None = None) -> dict:
     """Validate presence and hashes, not experimental correctness or screenshot content."""
     repo, evidence, output = repo.resolve(), evidence.resolve(), output.resolve()
     if output.exists():
@@ -29,6 +29,11 @@ def package_submission(repo: Path, evidence: Path, output: Path) -> dict:
     if not isinstance(sections, dict) or set(sections) != SECTIONS:
         raise ValueError("selection.json must list etl, streaming, chat, screenshots and report")
     files = {}
+    if readme is not None:
+        guide = readme.read_text(encoding="utf-8").strip()
+        if not guide:
+            raise ValueError("The submission README cannot be empty")
+        files["README.md"] = (guide + "\n").encode("utf-8")
     selected_paths = set()
     for section, names in sections.items():
         if not isinstance(names, list) or not names:
@@ -85,8 +90,9 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--evidence", type=Path, required=True, help="Directory containing selection.json")
     parser.add_argument("--output", type=Path, required=True, help="New ZIP path; existing files are preserved")
+    parser.add_argument("--readme", type=Path, help="UTF-8 submission guide at the archive root")
     args = parser.parse_args()
-    package_submission(Path(__file__).resolve().parents[1], args.evidence, args.output)
+    package_submission(Path(__file__).resolve().parents[1], args.evidence, args.output, readme=args.readme)
     print(args.output.resolve())
 
 

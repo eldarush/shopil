@@ -1,0 +1,11 @@
+version: 2
+
+sources:
+  - name: raw            # הסכמה ש-dlt יצר
+    schema: raw
+    tables:
+      - name: customers
+      - name: orders
+      - name: products
+      - name: github_issues
+      - name: reviews        # מתווסף בתרגיל הכיתה

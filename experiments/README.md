@@ -86,3 +86,16 @@ The runner's deterministic boundary and real-process cleanup tests require no mo
 ```text
 uv run --locked python -m pytest tests/test_integrated_codex.py -q
 ```
+
+
+## Ollama assignment experiments
+
+From the source root, prepare the pinned course warehouse and both uv environments. Start Ollama and install the tested model with `ollama pull qwen3:4b-instruct`. Set `--ollama-url` if the local server uses a different port. Use a new output directory for each run.
+
+```text
+uv run --locked python -m experiments.ollama_assignment correction --warehouse ../etl-course-demo/warehouse.duckdb --output runs/ollama-correction
+uv run --locked python -m experiments.ollama_assignment concurrent --warehouse ../etl-course-demo/warehouse.duckdb --output runs/ollama-concurrent
+uv run --locked python -m experiments.ollama_assignment conversation --warehouse ../etl-course-demo/warehouse.duckdb --output runs/ollama-conversation
+```
+
+All three use the default grounded Actor/Critic and frozen capture. The correction injects a deliberately wrong ILS 1.00 draft, then requires real Critic rejection, real Actor correction, and real approval of ILS 97,210.10. The concurrent case uses a fresh SQLite file, UTC event time, 60-second windows, Grace 10 and out-of-order allowance 0. It inserts a second unique order while the real Actor response is pending. The first turn must keep count 1/checkpoint 0 and the second report count 2/checkpoint 1. The conversation checks a paraphrased overall paid-revenue question, a product follow-up, missing shipping data, paid-order count and the product with the most negative reviews. Each result file records expected and observed values. Raw messages, schemas, responses, SHA-256 of the frozen evidence, and per-question audit records are retained for independent checking.

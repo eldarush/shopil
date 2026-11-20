@@ -1,0 +1,2 @@
+# Preserve the bytes verified by course_inputs/course-manifest.json.
+course_inputs/** -text whitespace=cr-at-eol

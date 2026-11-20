@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import asyncio
 from itertools import islice
+import pytest
 
 from shopil_streaming.contract import check
 from shopil_streaming.service import DEFAULT_CONFIG, progress_line, run
@@ -40,3 +41,30 @@ def test_live_run_then_resume_continues_from_checkpoint(tmp_path):
                                 batch_size=3, max_wait_s=0.05, processing_delay_s=0, finalize=False))
         assert engine.checkpoint == first_checkpoint + state["consumed"]
         assert engine.snapshot()["stats"]["received"] == engine.checkpoint + 1
+
+
+@pytest.mark.parametrize("mode", ["live", "microbatch"])
+def test_active_monitor_samples_committed_totals_and_avoids_history_scans(tmp_path, mode):
+    from shopil_streaming.service import periodic_progress
+
+    with StreamEngine(tmp_path / "monitor.db", **DEFAULT_CONFIG) as engine:
+        # Populate closed windows before opening the monitor, as on process restart.
+        for offset in range(75):
+            engine.ingest(delivery_at(offset).event, offset=offset)
+        full_snapshot = engine.snapshot
+        full_calls = []
+        def counted():
+            full_calls.append(True)
+            return full_snapshot()
+        engine.snapshot = counted
+        def observe(sample):
+            expected = full_snapshot()
+            assert sample["totals"]["revenue_cents"] == expected["totals"]["revenue_cents"]
+            assert sample["totals"]["orders"] == expected["totals"]["orders"]
+            assert sample["checkpoint"] == expected["checkpoint"]
+        state = asyncio.run(run(engine, mode=mode, seconds=.3, interval_s=0, queue_size=2,
+                                batch_size=3, max_wait_s=.03, processing_delay_s=.002, finalize=False,
+                                on_snapshot=observe, progress_reader=periodic_progress(engine, .02)))
+        assert state["produced"] == state["consumed"] > 5
+        assert state["backpressure_waits"] > 0
+        assert len(full_calls) == 1  # terminal state returned to the caller

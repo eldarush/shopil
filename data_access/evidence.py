@@ -21,6 +21,8 @@ class EvidenceSource(BaseModel):
     identifiers: tuple[str, ...]
     time_start: AwareDatetime | date | None
     time_end: AwareDatetime | date | None
+    # All readers use half-open intervals; retain this default for older evidence JSON.
+    time_bounds: Literal["[)"] = "[)"
     time_coverage: Literal["bounded", "no_observed_history"] = "bounded"
     rows: tuple[tuple[tuple[str, Cell], ...], ...]
     checkpoint: int | None = Field(default=None, ge=-1)

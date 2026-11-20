@@ -100,3 +100,20 @@ def test_fixture_is_accepted_by_chat_capture_and_reused_on_retry():
     assert len(set(evidence_used)) == 1
     assert json.loads(evidence_used[0])["sources"][1]["checkpoint"] == 17
     assert reply.sources[1]["window_state"] == "open"
+
+
+def test_half_open_bounds_are_explicit_and_legacy_evidence_still_loads():
+    payload = json.loads(FIXTURE.read_text(encoding="utf-8"))
+    assert all("time_bounds" not in source for source in payload["sources"])
+    package = EvidencePackage.model_validate_json(json.dumps(payload))
+    serialized = package.model_dump(mode="json")
+    assert all(source["time_bounds"] == "[)" for source in serialized["sources"])
+    assert EvidencePackage.model_validate_json(json.dumps(serialized)) == package
+
+
+@pytest.mark.parametrize("bounds", ["[]", "(]", "()", "", None])
+def test_evidence_rejects_incompatible_boundary_semantics(bounds):
+    source = json.loads(FIXTURE.read_text(encoding="utf-8"))["sources"][0]
+    source["time_bounds"] = bounds
+    with pytest.raises(ValidationError):
+        EvidenceSource.model_validate_json(json.dumps(source))
