@@ -133,7 +133,7 @@ def evidence_error(prose, evidence):
     rows = [row for source in evidence["sources"] for row in source["rows"] if field in row]
     expected = {Decimal(str(row[field])) for row in rows if row[field] is not None}
     product_ids = {int(row["product_id"]) for row in rows if "product_id" in row}
-    product_ref = r"מוצר(?: מספר)?\s*(\d+)"
+    product_ref = r"(?:מוצר(?: מספר)?|מזהה(?: מוצר)?)\s*(\d+)"
     named_ids = {int(pid) for pid in re.findall(product_ref, prose)}
     if named_ids - product_ids:
         return "זהו את המוצר לפי מזהה המוצר שבשורות הראיה."

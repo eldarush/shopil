@@ -264,6 +264,8 @@ def test_ranking_requires_all_tied_products(capture):
     assert not evidence_error("מוצר 5 ומוצר 6 קיבלו 4 ביקורות שליליות כל אחד.", evidence)
     assert not evidence_error("לבקבוק ולספל 4 ביקורות שליליות כל אחד.", evidence)
 
+    assert not evidence_error("לבקבוק (מזהה 5) ולספל (מזהה 6) יש 4 ביקורות שליליות כל אחד.", evidence)
+
 
 def test_actor_can_revise_its_citation(capture):
     from chat.grounded import source_lines
@@ -284,7 +286,8 @@ def test_missing_answer_prompt_prohibits_numbers_and_hides_unrelated_amounts(cap
     async def complete(messages, *, schema):
         assert "Never supply a number" in messages[0]["content"]
         assert "97210.10" not in messages[1]["content"]
-        assert "נתוני העלויות" in messages[-1]["content"]
+        limit = json.loads(evidence)["query_scope"]["reason"]
+        assert limit in json.loads(messages[-1]["content"])["metric_guidance"]
         assert "pattern" in schema["properties"]["answer"]
         return json.dumps({"answer": "אין די נתונים על עלויות החנות לחישוב הרווח.",
                            "citation": source_lines(json.loads(evidence))})
