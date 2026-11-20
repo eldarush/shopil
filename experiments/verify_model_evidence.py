@@ -31,7 +31,7 @@ def verify_case(directory, expected_case):
     elif expected_case == "concurrent":
         assert questions == (STREAM_QUESTION, STREAM_QUESTION)
     else:
-        assert questions in (CONVERSATION_QUESTIONS, CONVERSATION_QUESTIONS[:2])
+        assert questions == CONVERSATION_QUESTIONS
     turns = dict(zip(ids, result["turns"]))
     snapshots, attempts = {}, {}
     for path in (directory / "audit").glob("*.jsonl"):
