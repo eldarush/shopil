@@ -225,6 +225,11 @@ UNAVAILABLE_CITATION = (
 OBSERVATION_LABEL = r"טווח\s+(?:ה?תצפי(?:ת|ות)|המקור|זמן)|interval|time range|time_(?:start|end)|bounds|observed dates"
 
 
+def labeled_ranges(citation, labels, range_pattern):
+    lines = re.findall(rf"(?:{labels})\s*[:=]\s*([^\n]+)", citation, re.IGNORECASE)
+    return [match.groups() for line in lines if (match := range_pattern.match(line))]
+
+
 def candidate_feedback(draft, evidence):
     prose, separator, citation = draft.partition("\n\n")
     problems = []
@@ -265,7 +270,10 @@ def candidate_feedback(draft, evidence):
         if source["time_start"] is not None:
             bounds = (source["time_start"], source["time_end"])
             expected_ranges.add(bounds)
-            if bounds not in range_pattern.findall(block):
+            observed = labeled_ranges(
+                block, r"טווח המקור|טווח התצפית|observed (?:range|bounds)|source range", range_pattern
+            )
+            if observed != [bounds]:
                 problems.append(f"טווח התצפית של {source['table']} חסר או שגוי.")
         elif not any(
             re.search(OBSERVATION_LABEL, clause, re.IGNORECASE)
@@ -286,9 +294,13 @@ def candidate_feedback(draft, evidence):
     if cited_ids != product_ids:
         problems.append("מזהי המוצרים בציטוט אינם תואמים לראיות.")
     if scope.get("requested_start") and (scope.get("partial_period") or scope["availability"] == "missing"):
-        if not re.search(r"תקופ\w*.{0,16}(?:מבוקש|התבקש)|\brequested\b", citation, re.IGNORECASE):
-            problems.append("חסר סימון נפרד לתקופה המבוקשת.")
-        expected_ranges.add((scope["requested_start"], scope["requested_end"]))
+        requested_bounds = (scope["requested_start"], scope["requested_end"])
+        requested = labeled_ranges(
+            citation, r"התקופה המבוקשת|טווח הבקשה|requested (?:range|period|bounds)", range_pattern
+        )
+        if requested != [requested_bounds]:
+            problems.append("התקופה המבוקשת חסרה בציטוט או אינה תואמת לראיות.")
+        expected_ranges.add(requested_bounds)
     if cited_ranges != expected_ranges:
         problems.append("טווחי הזמן המצוטטים אינם תואמים לגבולות הכולל והלא כולל בראיות.")
     if scope.get("consulted_table"):

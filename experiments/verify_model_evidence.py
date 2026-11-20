@@ -18,6 +18,14 @@ def read(path):
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+def has_fixed_value(schema):
+    if isinstance(schema, dict):
+        return "enum" in schema or "const" in schema or any(has_fixed_value(value) for value in schema.values())
+    if isinstance(schema, list):
+        return any(has_fixed_value(value) for value in schema)
+    return False
+
+
 def verify_case(directory, expected_case):
     result = read(directory / "results.json")
     assert result["passed"] and result["case"] == expected_case, directory
@@ -61,6 +69,8 @@ def verify_case(directory, expected_case):
         evidence = json.loads(frozen)
         sid = evidence["snapshot_id"]
         seen[sid][call["role"]].append(call)
+        if call["role"] == "actor":
+            assert not has_fixed_value(call["schema"]), path
         assert turns[sid]["question"] == evidence["question"]
         assert snapshots[sid] == frozen and sha256(frozen.encode()).hexdigest() == call["evidence_sha256"]
         if "stream_update" in call:
@@ -97,7 +107,6 @@ def verify_case(directory, expected_case):
         frozen = json.loads(snapshots[sid])
         assert len(selected) == len(seen[sid]["actor"]) == len(seen[sid]["critic"])
         for index, (attempt, actor, critic) in enumerate(zip(selected, seen[sid]["actor"], seen[sid]["critic"])):
-            assert all("enum" not in actor["schema"]["properties"][field] for field in ("answer", "citation"))
             assert json.loads(critic["response"]) == {
                 "is_acceptable": attempt["is_acceptable"], "feedback": attempt["feedback"]
             }

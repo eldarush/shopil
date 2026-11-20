@@ -457,3 +457,16 @@ def test_empty_source_citation_discloses_unavailable_observation_bounds(tmp_path
     assert not candidate_feedback(f"{prose}\n\n{citation}", evidence)
     missing_bounds = "\n".join(line for line in citation.splitlines() if "טווח המקור" not in line)
     assert candidate_feedback(f"{prose}\n\n{missing_bounds}", evidence)
+
+
+def test_citation_rejects_swapping_the_requested_and_observed_ranges(tmp_path):
+    capture = build_capture(warehouse(tmp_path), database(tmp_path), start=date(2026, 7, 1),
+                            end=date(2026, 7, 4), question_scoped=True)
+    question = "כמה הזמנות שולמו בין 2026-07-01 עד 2026-07-20?"
+    evidence = asyncio.run(capture(question, []))
+    prose = "הכיסוי חלקי ובנתונים שנצפו שולמו 3 הזמנות."
+    citation = source_lines(evidence)
+    assert not candidate_feedback(f"{prose}\n\n{citation}", evidence)
+    swapped = citation.replace("טווח המקור:", "TEMP").replace("התקופה המבוקשת:", "טווח המקור:")
+    swapped = swapped.replace("TEMP", "התקופה המבוקשת:")
+    assert candidate_feedback(f"{prose}\n\n{swapped}", evidence)
