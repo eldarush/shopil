@@ -121,6 +121,8 @@ def evidence_error(prose, evidence):
         return "ההזמנות הן ששולמו. נסחו את המשפט כך שההכנסה מהן הסתכמה בסכום הנקוב בשקלים."
     if field == "paid_revenue" and re.search(r"רווח נקי|הרווח", prose):
         return "ציינו הכנסה מהזמנות ששולמו. אין נתוני עלויות לחישוב רווח."
+    if field == "orders" and ("הזמנ" not in prose or re.search(r"ביקור(?:ת|ות)", prose)):
+        return "ציינו את מספר אירועי ההזמנה שנקלטו בחלון."
     if field in {"avg_rating", "review_count", "negative_reviews", "negative_reviews_at_trigger"}:
         has_rating = bool(re.search(r"דירוג|ציון ממוצע", prose))
         has_reviews = bool(re.search(r"ביקור(?:ת|ות)|חוות דעת", prose))

@@ -8,10 +8,10 @@ Install Git, uv, Python 3.14.10 and 3.13.12, and Ollama. Start Ollama, then inst
 
 ```text
 ollama pull qwen3:8b
-uv run --locked --group batch python -m integration.demo --demonstrate-backpressure
+uv run --locked python -m integration.demo --demonstrate-backpressure
 ```
 
-Run these from the repository root or the ZIP's `source/` directory. The demo prepares the pinned Batch warehouse, runs the streaming producer in its own Python environment, then opens Gradio at http://127.0.0.1:7860. Watch the terminal for live counters. Add `--mode microbatch` to run collection by size and timer. Ctrl+C drains admitted deliveries.
+Run these from the repository root or the ZIP's `source/` directory. The demo prepares the pinned Batch warehouse in a dedicated locked environment and starts the producer in the isolated Python 3.13.12 environment. Gradio runs in the root Python 3.14.10 environment at http://127.0.0.1:7860. Watch the terminal for live counters. Add `--mode microbatch` to run collection by size and timer. Ctrl+C drains admitted deliveries.
 
 Try **מה ההכנסה מההזמנות ששולמו?**, **ומה לגבי מוצר 5?**, **מהן עלויות המשלוח?** or **כמה אירועי הזמנה נקלטו בחלון הפתוח האחרון?**. Historical queries with an overlapping date range report the observed subset and label the coverage. Dates in the citation are start-inclusive and end-exclusive.
 

@@ -117,6 +117,9 @@ def test_stream_count_revision_explains_the_correct_singular_grammar():
                 "sources": [{"rows": [{"orders": 1}]}], "stream": {"checkpoint": 0}}
     assert "נקלט אירוע הזמנה אחד" in evidence_error("נקלט אחד אירועי הזמנה.", evidence)
     assert not evidence_error("בחלון נקלט אירוע אחד של הזמנה.", evidence)
+    evidence["sources"][0]["rows"][0]["orders"] = 3
+    assert evidence_error("בחלון הפתוח התקבלו 3 ביקורות.", evidence)
+    assert not evidence_error("בחלון הפתוח נקלטו 3 אירועי הזמנה.", evidence)
 
 
 def test_stream_actor_uses_the_frozen_count_as_digits(capture):
@@ -235,6 +238,20 @@ def test_profit_retains_requested_scope_without_claiming_known_revenue(capture):
     assert "הכנסה" not in scope["reason"]
     assert "המוצר שהתבקש: 99" in source_lines(evidence) and "1990-01-01" in source_lines(evidence)
     assert evidence_error("ההכנסה ידועה אבל חסרים נתוני עלויות לחישוב הרווח.", evidence)
+
+
+def test_missing_profit_with_invalid_warehouse_returns_audited_error(tmp_path):
+    from chat.service import ChatService
+
+    corrupt = tmp_path / "warehouse.duckdb"
+    corrupt.write_text("invalid warehouse")
+    capture = build_capture(corrupt, tmp_path / "unused.db", start=date(2026, 1, 1),
+                            end=date(2027, 1, 1), question_scoped=True)
+    audit = []
+    service = ChatService(None, None, capture, audit.append)
+    result = asyncio.run(service.answer("כמה הרווחנו?", []))
+    assert result.status == "error" and result.history == []
+    assert audit[-1]["error_stage"] == "capture" and audit[-1]["error_type"] == "ModelError"
 
 
 @pytest.mark.parametrize(("field", "valid", "wrong"), [

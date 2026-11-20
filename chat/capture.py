@@ -273,7 +273,10 @@ async def capture_question(warehouse, stream_database, default_start, default_en
     payload = EvidencePackage(question=question, sources=sources).model_dump(mode="json")
     if not sources and scope and scope.metric in HISTORICAL:
         table = "staging.stg_reviews" if scope.metric in {"avg_rating", "review_count", "negative_reviews", "top_negative_reviews"} else "marts.fct_orders"
-        plan["available_columns"] = await asyncio.to_thread(available_columns, warehouse, table)
+        try:
+            plan["available_columns"] = await asyncio.to_thread(available_columns, warehouse, table)
+        except (duckdb.Error, OSError, ValueError):
+            raise ModelError("Unable to read valid historical evidence") from None
         if not plan["available_columns"]:
             raise ModelError("Historical source schema unavailable")
         plan["consulted_table"] = table
