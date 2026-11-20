@@ -141,6 +141,6 @@ def test_grounded_critic_sees_the_authored_answer_and_citation_separately():
     messages, _ = model.calls[0]
     assert messages[2]["content"] is evidence
     assert json.loads(messages[-1]["content"]) == {
-        "question": "How many?", "answer": "שולמו הזמנות.", "citation": "המקור מצוין כאן."
+        "answer": "שולמו הזמנות.", "citation": "המקור מצוין כאן."
     }
     assert "explicit partial-coverage caveat" in messages[0]["content"]

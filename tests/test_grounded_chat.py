@@ -304,9 +304,7 @@ def test_actor_authors_missing_metric_without_prepared_wording(capture):
     async def complete(messages, *, schema):
         assert messages[2]["content"] is evidence
         assert "ספרות" in messages[0]["content"]
-        assert json.loads(messages[-1]["content"]) == {
-            "question": question, "previous_draft": None, "feedback": None
-        }
+        assert json.loads(messages[-1]["content"]) == {"question": question}
         assert all("enum" not in schema["properties"][field] for field in ("answer", "citation"))
         assert authored not in " ".join(msg["content"] for msg in messages)
         return json.dumps({"answer": authored, "citation": source_lines(json.loads(evidence))})

@@ -242,14 +242,20 @@ class GroundedActor:
         if scope.get("partial_period"):
             instructions += ("\nהכיסוי לשאלה זו חלקי. במשפט העסקי עצמו ציינו במפורש שהערך מבוסס רק על "
                              "החלק שנצפה. הפרידו בציטוט בין תקופת התצפית לתקופה שהתבקשה.")
+        schema = Explanation.model_json_schema()
+        if scope["availability"] == "missing":
+            schema["properties"]["answer"]["pattern"] = r"^[א-ת .,!?״׳־()'-]+$"
         context = [{"role": turn["role"], "content": turn["content"].split("\n\n", 1)[0]} for turn in history]
-        raw = await self.model.complete([
+        messages = [
             {"role": "system", "content": instructions},
             {"role": "user", "content": json.dumps({"approved_history": context}, ensure_ascii=False)},
             {"role": "user", "content": evidence_json},
-            {"role": "user", "content": json.dumps({"question": question, "previous_draft": previous_draft,
-                                                     "feedback": feedback}, ensure_ascii=False)},
-        ], schema=Explanation.model_json_schema())
+            {"role": "user", "content": json.dumps({"question": question}, ensure_ascii=False)},
+        ]
+        if previous_draft is not None:
+            messages.append({"role": "assistant", "content": previous_draft})
+            messages.append({"role": "user", "content": json.dumps({"feedback": feedback}, ensure_ascii=False)})
+        raw = await self.model.complete(messages, schema=schema)
         authored = Explanation.model_validate_json(raw)
         draft = RenderedDraft(authored.answer.strip() + "\n\n" + authored.citation.strip(), raw)
         draft.rendering = "authored_hebrew"

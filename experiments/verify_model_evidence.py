@@ -67,9 +67,13 @@ def verify_case(directory):
                 "is_acceptable": attempt["is_acceptable"], "feedback": attempt["feedback"]
             }
             assert attempt["critic_feedback"] == attempt["feedback"]
-            inputs = json.loads(actor["messages"][-1]["content"])
-            assert inputs["previous_draft"] == (selected[index - 1]["draft"] if index else None)
-            assert inputs["feedback"] == (selected[index - 1]["feedback"] if index else None)
+            messages = actor["messages"]
+            assert json.loads(messages[3]["content"]) == {"question": frozen["question"]}
+            if index:
+                assert messages[4] == {"role": "assistant", "content": selected[index - 1]["draft"]}
+                assert json.loads(messages[5]["content"]) == {"feedback": selected[index - 1]["feedback"]}
+            else:
+                assert len(messages) == 4
             assert attempt["is_acceptable"] is (index == len(selected) - 1)
         assert candidate_feedback(selected[0]["draft"], frozen), "First draft needs an independently checkable error"
         assert not candidate_feedback(selected[-1]["draft"], frozen), selected[-1]["draft"]
