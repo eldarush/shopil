@@ -40,7 +40,8 @@ def _positive_finite(value: float, name: str, allow_zero: bool = False) -> float
 async def run_live(engine: StreamEngine, deliveries: Iterable[Delivery] | None = None, *,
                    duration_s: float | None = 4.0, interval_s: float = 0.05,
                    processing_delay_s: float = 0.0, queue_maxsize: int = 8,
-                   finalize: bool = False, on_snapshot: Callable[[dict[str, Any]], Any] | None = None) -> dict[str, Any]:
+                   finalize: bool = False, on_snapshot: Callable[[dict[str, Any]], Any] | None = None,
+                   progress_reader: Callable[[], dict[str, Any] | None] | None = None) -> dict[str, Any]:
     """Produce, consume, and gracefully drain a bounded queue.
 
     duration_s limits admission by the producer. Already queued records drain
@@ -127,7 +128,9 @@ async def run_live(engine: StreamEngine, deliveries: Iterable[Delivery] | None =
                 engine.ingest(item.event, offset=item.offset)
                 state["consumed"] += 1
                 if on_snapshot is not None:
-                    snapshot = engine.snapshot()
+                    snapshot = progress_reader() if progress_reader else engine.snapshot()
+                    if snapshot is None:
+                        continue
                     snapshot["queue"] = {
                         "depth": state["produced"] - state["consumed"],
                         "maxsize": queue_maxsize,

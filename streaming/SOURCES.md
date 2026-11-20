@@ -1,11 +1,18 @@
-# Streaming sources and attribution
+# Streaming implementation and course attribution
 
-| Path | Origin | Changes |
-| --- | --- | --- |
-| `src/streaming_lab/` | [paulavrahami/streaming-course-demo](https://github.com/paulavrahami/streaming-course-demo) commit `c27b4fc1b343e5bfca1880ad3c5ae34e97f60b71`, `src/streaming_lab/` | Course base retained. SHOPIL-49 adds signed 64-bit integer/Unicode validation in `events.py` and storage/window timestamp capacity checks plus escaped JSON storage in `engine.py`; invalid records retain their payload and reason in dead letters. Other course modules remain unchanged. |
-| `tests/course/test_core.py` | Same commit, `tests/test_core.py` | None. Kept to prove the copied engine still passes its own course tests here. |
-| `.python-version` | Same commit | None (3.13.12). |
+The event-time engine, asynchronous live and microbatch runners, and the original course tests come from the pinned [course streaming laboratory](https://github.com/paulavrahami/streaming-course-demo/tree/c27b4fc1b343e5bfca1880ad3c5ae34e97f60b71). The Python distribution keeps its original `streaming_lab` module structure.
 
-Everything under `src/shopil_streaming/`, `experiments/`, `fixtures/`, `evidence/` and `tests/` (outside `tests/course/`) is our own work for the SHOPIL Streaming epic.
+| Component | Course behavior and application changes |
+| --- | --- |
+| `src/streaming_lab/events.py` and `engine.py` | The course engine owns ordering, deduplication, event-time assignment, closure, outputs and atomic checkpoint commits. Storage guards reject integers or window sums outside SQLite's integer range, invalid Unicode and timestamps that cannot be represented. Rejected payloads and reasons enter dead letters in the existing transaction. |
+| `src/streaming_lab/live.py` and `microbatch.py` | The course queue, release rules and per-event transactions are retained. The service uses compact progress reads and aggregate counters. Finite experiments retain the per-batch timing records. |
+| `src/shopil_streaming/` | The project's deterministic continuous source, read-only progress view, controls and reconciliation. |
+| `experiments/`, `fixtures/`, `tests/` | Project experiments, deterministic fixture inputs and regression tests. The course engine tests are under `tests/course/`. |
 
-ShopIL-specific behaviour (contract reporting, the continuous ShopIL source, experiment runners, reconciliation) wraps the course engine. The narrowly scoped storage validation changes above prevent poison inputs from stopping ingestion or committing unreadable evidence. The original course tests remain intact, alongside regression tests for these additions; passing them establishes covered behavior rather than proving every semantic property.
+The parity experiment loads each version in an isolated Python process. For each input offset it compares a trace digest over the disposition and complete decoded snapshot. It also includes the final demo snapshot. The three input streams have 17, 6 and 317 deliveries. At Grace 0, 10 and 120, the 1,020 offset comparisons and nine finalizations match. Storage-limit cases receive separate tests.
+
+The unmodified modules used by the comparison are in `course_reference/`. The comparison verifies their hashes before loading them and runs without a second checkout:
+
+```powershell
+uv run --locked python experiments/course_parity.py
+```

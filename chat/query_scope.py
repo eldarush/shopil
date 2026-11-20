@@ -15,8 +15,9 @@ class QueryScope:
 
 
 HISTORICAL = {
-    "paid_revenue": r"(?:מהי? |מהו )?(?:סך )?ה?הכנס(?:ה|ות) מהזמנות ששולמו|כמה (?:הכנסנו|הרווחנו|התקבל) (?:מ|עבור )ה?זמנות ששולמו|כמה כסף נכנס מהזמנות ששולמו",
-    "paid_orders": r"כמה הזמנות (?:שולמו|ששולמו|שולמו בפועל)|(?:מהו? )?מספר ההזמנות ששולמו",
+    "paid_revenue": r"(?:מהי? |מהו )?(?:סך )?ה?הכנס(?:ה|ות)(?: הכוללת)? מה?הזמנות ששולמו|כמה (?:הכנסנו|התקבל) (?:מה?הזמנות|עבור ה?זמנות) ששולמו|כמה כסף נכנס מה?הזמנות ששולמו|כמה שילמו לנו על ההזמנות|כמה כסף הכניסה החנות מה?הזמנות ששולמו",
+    "profit": r"כמה הרווחנו(?: מהזמנות ששולמו)?|מה(?:ו)? הרווח(?: הנקי)?",
+    "paid_orders": r"כמה הזמנות (?:כבר )?(?:שולמו|ששולמו|שולמו בפועל)|(?:מהו? )?מספר ההזמנות ששולמו",
     "avg_rating": r"(?:מהו? |מה )?(?:ה?דירוג הממוצע|ממוצע הדירוגים|ה?דירוג)",
     "review_count": r"כמה ביקורות (?:התקבלו|יש)|(?:מהו? )?מספר הביקורות",
     "negative_reviews": r"כמה ביקורות שליליות (?:התקבלו|יש)|(?:מהו? )?מספר הביקורות השליליות",
@@ -51,12 +52,15 @@ def _bounds(first, end, year):
 
 
 def _one(question, previous):
-    value = " ".join(unicodedata.normalize("NFKC", question).split()).rstrip("?!").rstrip()
+    value = " ".join(unicodedata.normalize("NFKC", question).split()).rstrip(".?!").rstrip()
+    value = re.sub(r"^(?:אפשר לדעת |אפשר בבקשה לדעת |תגיד לי |תוכל לומר לי )", "", value)
     followup = re.fullmatch(FOLLOW_UP + r"(?:מוצר|מוצר מספר)\s*([1-9][0-9]{0,18})(?: באותה תקופה)?", value)
     if followup and previous and (previous.metric in STREAM_PRODUCT_METRICS or
                                   previous.metric in HISTORICAL and previous.metric != "top_negative_reviews"):
         product = int(followup[1])
         return replace(previous, product_id=product) if product < 2**63 else None
+    if value.endswith(" השנה"):
+        value = value.removesuffix(" השנה") + f" בשנת {date.today().year}"
     window = re.search(WINDOW + "$", value)
     if window:
         prefix = value[:window.start()]

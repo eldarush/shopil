@@ -128,6 +128,7 @@ def run_stack(
     mode: str = "live",
     startup_timeout: float = 20,
     shutdown_timeout: float = 15,
+    demonstrate_backpressure: bool = False,
     stop_file: Path | None = None,
 ) -> None:
     """The chat command must honor stdin EOF as a graceful shutdown request.
@@ -164,8 +165,12 @@ def run_stack(
         initial_checkpoint = _checkpoint(database)
         if initial_checkpoint is None:
             raise StackError("Stream database is locked; cannot establish the starting checkpoint")
-        stream = _launch([str(stream_python), "-X", "utf8", "-m", "shopil_streaming.managed",
-                          "--db", str(database), "--mode", mode], controlled=True)
+        stream_command = [str(stream_python), "-X", "utf8", "-m", "shopil_streaming.managed",
+                          "--db", str(database), "--mode", mode]
+        if demonstrate_backpressure:
+            stream_command.extend(["--queue-size", "4", "--interval", "0.005",
+                                   "--processing-delay", "0.03"])
+        stream = _launch(stream_command, controlled=True)
         deadline = time.monotonic() + startup_timeout
         while True:
             if stop_file is not None and stop_file.exists():
@@ -219,6 +224,8 @@ def main(argv=None):
     parser.add_argument("--etl-python", type=Path, required=True)
     parser.add_argument("--batch-run-dir", type=Path, required=True)
     parser.add_argument("--mode", choices=("live", "microbatch"), default="live")
+    parser.add_argument("--demonstrate-backpressure", action="store_true",
+                        help="Use a four-item queue and a slower consumer for the pressure experiment")
     parser.add_argument("--stop-file", type=Path,
                         help="Create this initially absent file to request graceful shutdown")
     args = parser.parse_args(argv)
@@ -248,7 +255,8 @@ def main(argv=None):
     if args.thinking is not None:
         chat.append("--thinking" if args.thinking else "--no-thinking")
     try:
-        run_stack(batch, chat, stream_db=args.stream_db, mode=args.mode, stop_file=args.stop_file)
+        run_stack(batch, chat, stream_db=args.stream_db, mode=args.mode, stop_file=args.stop_file,
+                  demonstrate_backpressure=args.demonstrate_backpressure)
     except KeyboardInterrupt:
         pass  # run_stack closes both children before propagating the interrupt.
     except (StackError, OSError, subprocess.SubprocessError) as error:

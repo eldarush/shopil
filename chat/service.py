@@ -169,15 +169,25 @@ class ChatService:
                         or not evaluation.feedback.strip()):
                     raise ValueError("Critic returned an invalid evaluation")
                 feedback = evaluation.feedback
+                accepted = evaluation.is_acceptable
                 stage = "audit_attempt"
                 actor_metadata = ({"actor_output_json": draft.actor_output_json,
                                    "rendering": getattr(draft, "rendering", "deterministic_fact_references")}
                                   if hasattr(draft, "actor_output_json") else {})
                 if hasattr(draft, "normalization"):
                     actor_metadata["normalization"] = draft.normalization
+                if "query_scope" in snapshot:
+                    from .grounded import candidate_feedback
+                    validation_feedback = candidate_feedback(draft, snapshot)
+                    actor_metadata["critic_is_acceptable"] = evaluation.is_acceptable
+                    actor_metadata["critic_feedback"] = evaluation.feedback
+                    if validation_feedback:
+                        actor_metadata["validation_feedback"] = validation_feedback
+                        feedback = f"{feedback} {validation_feedback}"
+                        accepted = False
                 record("attempt", attempt=attempt, draft=draft,
-                       is_acceptable=evaluation.is_acceptable, feedback=feedback, **actor_metadata)
-                if evaluation.is_acceptable:
+                       is_acceptable=accepted, feedback=feedback, **actor_metadata)
+                if accepted:
                     with self._condition:
                         if self._closing:
                             raise asyncio.CancelledError

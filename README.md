@@ -2,6 +2,38 @@
 
 A Hebrew business assistant for Assignment 1 in AI Systems Engineering. Batch ingestion builds historical ShopIL metrics in DuckDB; a continuous producer and consumer persist event-time windows in SQLite. Each question captures fresh evidence once, and an Actor/Critic loop uses that unchanged snapshot for at most three attempts. Only approved answers enter conversation history; every attempt is audited separately.
 
+## Run the assignment from the bundled inputs
+
+Install Git, uv, Python 3.14.10 and 3.13.12, and Ollama. Start Ollama, then install the model used for the assignment:
+
+```text
+ollama pull qwen3:8b
+uv run --locked --group batch python -m integration.demo --demonstrate-backpressure
+```
+
+Run these from the repository root or the ZIP's `source/` directory. The demo prepares the pinned Batch warehouse, runs the streaming producer in its own Python environment, then opens Gradio at http://127.0.0.1:7860. Watch the terminal for live counters. Add `--mode microbatch` to run collection by size and timer. Ctrl+C drains admitted deliveries.
+
+Try **מה ההכנסה מההזמנות ששולמו?**, **ומה לגבי מוצר 5?**, **מהן עלויות המשלוח?** or **כמה אירועי הזמנה נקלטו בחלון הפתוח האחרון?**. Historical queries with an overlapping date range report the observed subset and label the coverage. Dates in the citation are start-inclusive and end-exclusive.
+
+```text
+uv run --locked --group batch python -m pytest -q
+uv run --directory streaming --locked python -m pytest -q
+uv run --locked --group batch python -m integration.smoke
+uv run --locked --group batch python -m integration.verify_batch --lab-dir course_inputs --etl-python .venv/Scripts/python.exe --output runs/batch-check
+uv run --directory streaming --locked python experiments/course_parity.py
+```
+
+On macOS and Linux use `.venv/bin/python` for the Batch command. Choose a fresh output directory for each verification. For the real-model experiments, use the `course/warehouse.duckdb` created in the demo session and a fresh output path:
+
+```text
+uv run --locked --group batch python -m experiments.ollama_assignment correction --warehouse WAREHOUSE --output runs/correction
+uv run --locked --group batch python -m experiments.ollama_assignment concurrent --warehouse WAREHOUSE --output runs/concurrent
+uv run --locked --group batch python -m experiments.ollama_assignment conversation --warehouse WAREHOUSE --output runs/conversation
+uv run --locked --group batch python -m experiments.rejection_limit --warehouse WAREHOUSE --output runs/three-rejections.json
+```
+
+The ETL course input hashes and attribution are in `course_inputs/course-manifest.json`. [Streaming attribution and local parity instructions](streaming/SOURCES.md). The sections below document standalone setup and alternate Actor modes.
+
 ## 1. Install and prepare the runtimes
 
 Install Git, [uv](https://docs.astral.sh/uv/getting-started/installation/), and the two pinned interpreters: [Python 3.14.10](https://www.python.org/downloads/release/python-31410/) for the application/ETL and [Python 3.13.12](https://www.python.org/downloads/release/python-31312/) for the isolated course streaming runtime. Use the official installer for your operating system. On Linux, use your distribution or the official release source if the exact version is unavailable as a binary.
@@ -112,7 +144,7 @@ The default chat recognizes Hebrew paraphrases for paid revenue, paid-order coun
 
 The question scope selects the predefined read-only query and its parameters before capture. Streaming questions select the most recent matching open or closed event-time window for order-event counts or amounts, product negative-review counts, or the trigger count of a product alert. Every stream read carries its committed checkpoint and watermark. Historical paid amounts and stream event amounts stay separate.
 
-The Actor writes an original Hebrew explanation with a placeholder for the measured value. Python binds the value and attaches provenance. The Critic judges that entire candidate against the same frozen snapshot. Known zero, NULL average, missing row and unsupported scope are distinct. Older modes remain available via --standard, --structured or --hybrid. [Evidence contract](docs/data-contract.md).
+The default Actor writes the Hebrew answer and supplies its citation in a structured response. The Critic sees both and may request corrections to either. The application checks both parts against the frozen evidence before publication and logs that validation separately from the model's verdict. Known zero, NULL average, missing row and unsupported scope are distinct. Older modes remain available via --standard, --structured or --hybrid. [Evidence contract](docs/data-contract.md).
 
 CLI options override environment defaults: `--warehouse`, `--history-start`, `--history-end`, `--model`, `--stream-db`, `--ollama-url`, and `--audit-dir`. `.env.example` lists their corresponding `SHOPIL_*` variables. **The file is not loaded automatically**: set variables in your shell, or use the explicit flags above. For example:
 

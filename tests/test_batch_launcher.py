@@ -17,6 +17,7 @@ def setup(tmp_path, monkeypatch):
     python = runtime / ("python.exe" if os.name == "nt" else "python")
     dbt = runtime / ("dbt.exe" if os.name == "nt" else "dbt")
     for path in (python, dbt, lab / "pipelines/02_dlt_pipeline.py", lab / "exercises/check_exercise.py",
+                 repo / "etl/dbt" / batch.MART_TEST,
                  *(repo / "etl/dbt/models" / name for name in batch.MODELS)):
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text("fixture component", encoding="utf-8")

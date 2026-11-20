@@ -1,0 +1,8 @@
+shop_il:
+  target: dev
+  outputs:
+    dev:
+      type: duckdb
+      # אותו קובץ ש-dlt טוען אליו. אפשר לדרוס עם משתנה סביבה.
+      path: "{{ env_var('WAREHOUSE_PATH', '../warehouse.duckdb') }}"
+      threads: 4

@@ -45,7 +45,9 @@ def test_reconciliation_discloses_storage_rejections_without_counting_them_as_ac
     with StreamEngine(tmp_path / "bounded.db") as engine:
         for item in data:
             engine.ingest(item.event, offset=item.offset)
-        rec = reconcile(engine.snapshot(), data)
+        snapshot = engine.snapshot()
+        rec = reconcile(snapshot, data, expected_storage_rejections=[1])
+    assert not reconcile(snapshot, data)["revenue_match"]
     assert rec["orders_match"] and rec["revenue_match"]
     assert rec["accepted_cents"] == rec["recomputed_cents"] == SQLITE_MAX_INTEGER
     assert rec["input_schema_truth"]["revenue_cents"] == SQLITE_MAX_INTEGER + 1
@@ -59,7 +61,7 @@ def test_rejected_identity_can_later_be_accepted_with_corrected_payload(tmp_path
     with StreamEngine(tmp_path / "corrected.db") as engine:
         for item in data:
             engine.ingest(item.event, offset=item.offset)
-        rec = reconcile(engine.snapshot(), data)
+        rec = reconcile(engine.snapshot(), data, expected_storage_rejections=[1])
     assert rec["orders_match"] and rec["revenue_match"]
     assert rec["recomputed_orders"] == 2
     assert rec["excluded_dead_letter_offsets"] == [1]

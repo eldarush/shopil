@@ -91,6 +91,14 @@ class OllamaModel:
         }
         if schema is not None:
             payload["format"] = schema
+            short_response = schema.get("properties", {})
+            if self.think is False and (
+                "answer" in short_response or "maxLength" in short_response.get("feedback", {})
+            ):
+                # The assignment's non-reasoning model produces one short Hebrew sentence.
+                # Cap the generation so a degenerate reply cannot occupy the worker indefinitely.
+                max_tokens = 1024 if "citation" in short_response else 384
+                payload["options"].update(num_predict=max_tokens, temperature=0.15, seed=37)
         if self.think is not None:
             payload["think"] = self.think
         try:

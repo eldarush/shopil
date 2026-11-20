@@ -3,13 +3,14 @@
 import asyncio
 from datetime import date
 import json
+import sqlite3
 from types import SimpleNamespace
 
 import duckdb
 import pytest
 
 from chat.capture import build_capture
-from chat.grounded import GroundedActor
+from chat.grounded import GroundedActor, candidate_feedback, source_lines
 from chat.model import ModelError
 from chat.query_scope import QueryScope, resolve_query
 
@@ -19,6 +20,7 @@ from test_capture import database, warehouse
 @pytest.mark.parametrize("question", [
     "מה ההכנסה מהזמנות ששולמו?", "כמה הכנסנו מהזמנות ששולמו?",
     "מהי ההכנסה מהזמנות ששולמו?", "כמה כסף נכנס מהזמנות ששולמו?",
+    "מה ההכנסה מההזמנות ששולמו?", "אפשר לדעת מה ההכנסה מההזמנות ששולמו?",
 ])
 def test_revenue_paraphrases(question):
     assert resolve_query(question, []) == QueryScope("paid_revenue")
@@ -74,27 +76,166 @@ def test_scoped_stream_chooses_state_and_product_before_reading_evidence(capture
     assert row["product_id"] == 5 and row["negative_reviews"] == 4
     assert source["checkpoint"] == 10 and payload["query_scope"]["window_state"] == "open"
     alert = asyncio.run(capture("כמה ביקורות שליליות היו בעת ההתראה למוצר5 בחלון הפתוח האחרון?", []))
-    alert_source, = alert["sources"]
+    alert_source = next(source for source in alert["sources"] if source["table"] == "review_alerts")
     assert alert_source["table"] == "review_alerts"
     assert alert_source["rows"][0]["negative_reviews_at_trigger"] == 3
     closed = asyncio.run(capture("מה סכום אירועי ההזמנה בחלון הסגור האחרון?", []))
     assert closed["sources"][0]["rows"][0]["revenue_ils"] == "123.45"
 
 
-def test_actor_authors_prose_but_cannot_supply_its_own_number(capture):
+def test_missing_alert_retains_the_matching_window(tmp_path):
+    stream = database(tmp_path)
+    with sqlite3.connect(stream) as conn:
+        conn.execute("DELETE FROM review_alerts")
+        conn.execute("UPDATE review_state SET reviews=1, negative_reviews=1 WHERE product_id=5")
+    capture = build_capture(tmp_path / "unused.duckdb", stream, start=date(2026, 7, 1),
+                            end=date(2026, 7, 4), question_scoped=True)
+    q = "כמה ביקורות שליליות היו בעת ההתראה למוצר 5 בחלון הפתוח האחרון?"
+    evidence = asyncio.run(capture(q, []))
+    assert evidence["query_scope"]["availability"] == "missing"
+    assert "לא הופעלה" in evidence["query_scope"]["reason"]
+    [window] = evidence["sources"]
+    assert window["table"] == "review_state" and window["rows"][0]["negative_reviews"] == 1
+    assert window["time_start"] in source_lines(evidence)
+
+
+def test_stream_amount_guard_rejects_payment_status_and_wrong_finality():
+    from chat.grounded import evidence_error
+
+    evidence = {"query_scope": {"availability": "available", "field": "revenue_ils", "window_state": "open"},
+                "sources": [{"rows": [{"revenue_ils": "10.00"}]}], "stream": {"checkpoint": 4}}
+    assert not evidence_error("סכום אירועי ההזמנה בחלון הפתוח הוא 10 ₪.", evidence)
+    assert evidence_error("ההכנסה מהזמנות ששולמו בחלון הפתוח היא 10 ₪.", evidence)
+    assert evidence_error("סכום אירועי ההזמנה בחלון הסגור הוא 10 ₪.", evidence)
+
+
+def test_actor_owns_numbers_and_numeric_guard_checks_only_authored_prose(capture):
+    from chat.grounded import evidence_error
+
     question = "כמה הזמנות שולמו?"
-    snapshot = json.dumps(asyncio.run(capture(question, [])))
+    evidence = asyncio.run(capture(question, []))
+    snapshot = json.dumps(evidence)
     async def complete(messages, *, schema):
         assert messages[2]["content"] == snapshot
-        assert "enum" not in schema["properties"]["answer"]
-        return json.dumps({"answer": "בסך הכול נספרו {{value}} הזמנות ששולמו בתקופה הזו."})
+        return json.dumps({"answer": "בתקופה זו שולמו 3 הזמנות.", "citation": source_lines(evidence)})
 
     answer = asyncio.run(GroundedActor(SimpleNamespace(complete=complete)).draft(question, snapshot, []))
-    assert answer.startswith("בסך הכול נספרו 3 הזמנות")
+    assert answer.startswith("בתקופה זו שולמו 3 הזמנות.")
     assert "marts.fct_orders" in answer and "2026-07-04 (לא כולל)" in answer
+    assert evidence_error(answer.split("\n\n")[0], evidence) == ""
+    assert evidence_error("בתקופה זו שולמו 300 הזמנות.", evidence)
 
-    async def ungrounded(messages, *, schema):
-        return json.dumps({"answer": "שולמו {{value}} הזמנות בסכום 123."})
 
-    with pytest.raises(ModelError, match="grounded explanation"):
-        asyncio.run(GroundedActor(SimpleNamespace(complete=ungrounded)).draft(question, snapshot, []))
+def test_known_coverage_and_profit_are_not_zero_or_revenue(capture):
+    for question in ("כמה הרווחנו מהזמנות ששולמו?", "מהן עלויות המשלוח?"):
+        result = asyncio.run(capture(question, []))
+        assert result["query_scope"]["availability"] == "missing"
+        assert result["query_scope"]["coverage_start"] == "2026-07-01"
+        assert result["query_scope"]["consulted_table"] == "marts.fct_orders"
+        assert result["sources"] == []
+    result = asyncio.run(capture("כמה הזמנות שולמו בשנת 1990?", []))
+    assert result["query_scope"]["availability"] == "missing"
+    assert not result["sources"][0]["rows"]
+
+
+def test_ordinary_paraphrases():
+    assert resolve_query("כמה שילמו לנו על ההזמנות?", []).metric == "paid_revenue"
+    current = resolve_query("כמה הזמנות שולמו השנה?", [])
+    assert current.metric == "paid_orders"
+    assert current.start == date(date.today().year, 1, 1)
+
+def test_publication_check_catches_wrong_prose_without_rewriting_critic_verdict(capture):
+    from chat.critic import Critic
+
+    question = "כמה הזמנות שולמו?"
+    evidence = json.dumps(asyncio.run(capture(question, [])), ensure_ascii=False)
+    async def approve(messages, *, schema):
+        assert messages[2]["content"] == evidence
+        return json.dumps({"is_acceptable": True, "feedback": "נבדק."})
+
+    critic = Critic(SimpleNamespace(complete=approve))
+    for wrong in ("שולמו 99 הזמנות.", "ההכנסה היא 3 ₪.", "שולמו 3 הזמנות הזמנות."):
+        candidate = wrong + "\n\n" + source_lines(json.loads(evidence))
+        checked = asyncio.run(critic.evaluate(question, evidence, candidate))
+        assert checked.is_acceptable and checked.feedback == "נבדק."
+        assert candidate_feedback(candidate, json.loads(evidence))
+
+@pytest.mark.parametrize("wording", ["כמה כסף הכניסה החנות מההזמנות ששולמו?", "מה ההכנסה הכוללת מהזמנות ששולמו?"])
+def test_business_income_wording(wording):
+    assert resolve_query(wording, []) == QueryScope("paid_revenue")
+
+
+def test_observed_source_bounds_protect_subranges_and_full_period(tmp_path):
+    from chat.grounded import source_lines
+    db = warehouse(tmp_path)
+    capture = build_capture(db, database(tmp_path), start=date(2026, 1, 1), end=date(2027, 1, 1), question_scoped=True)
+    missing = asyncio.run(capture("כמה הזמנות שולמו בין 2026-12-01 עד 2026-12-10?", []))
+    assert missing["query_scope"]["availability"] == "missing" and not missing["sources"][0]["rows"]
+    partial = asyncio.run(capture("כמה הזמנות שולמו בין 2026-07-02 עד 2026-07-20?", []))
+    scope = partial["query_scope"]
+    assert scope["availability"] == "available" and scope["partial_period"]
+    [source] = partial["sources"]
+    assert (source["time_start"], source["time_end"]) == ("2026-07-02", "2026-07-04")
+    assert "2026-07-20" in source_lines(partial)
+    year = asyncio.run(capture("כמה הזמנות שולמו בשנת 2026?", []))
+    assert year["query_scope"]["availability"] == "available"
+    assert "כיסוי הנתונים לתקופת הדיווח חלקי" in source_lines(year)
+    assert year["sources"][0]["rows"][0]["paid_orders"] == 3
+    with duckdb.connect(str(db)) as conn:
+        conn.execute("DELETE FROM marts.fct_orders")
+    empty = asyncio.run(capture("כמה הזמנות שולמו?", []))
+    assert empty["query_scope"]["availability"] == "missing"
+    assert empty["query_scope"]["observed_start"] is None
+    assert empty["sources"][0]["rows"] == []
+
+def test_profit_cannot_reuse_history_revenue_or_invent_shipping_specificity(capture):
+    from chat.grounded import evidence_error
+
+    evidence = asyncio.run(capture("כמה הרווחנו מהזמנות ששולמו?", []))
+    assert evidence_error("ההכנסה הייתה 97210.10 ₪, אך אי אפשר לחשב רווח.", evidence)
+    assert evidence_error("הרווח אינו ידוע כי נתוני עלויות המשלוח חסרים.", evidence)
+    assert not evidence_error("אי אפשר לחשב את הרווח משום שנתוני העלויות חסרים.", evidence)
+    year = asyncio.run(capture("כמה הזמנות שולמו בשנת 1990?", []))
+    assert not evidence_error("אין נתוני הזמנות לשנת 1990.", year)
+
+
+def test_actor_can_revise_its_citation(capture):
+    from chat.grounded import source_lines
+    question = "כמה הזמנות שולמו?"
+    evidence = asyncio.run(capture(question, []))
+    text = json.dumps(evidence)
+    paragraph = "שולמו 3 הזמנות."
+    for cited, good in [(source_lines(evidence), True), ("מקור: unrelated_source", False)]:
+        async def complete(messages, *, schema):
+            return json.dumps({"answer": paragraph, "citation": cited})
+        draft = asyncio.run(GroundedActor(SimpleNamespace(complete=complete)).draft(question, text, []))
+        assert draft == paragraph + "\n\n" + cited
+        assert bool(candidate_feedback(draft, evidence)) != good
+
+def test_missing_answer_prompt_prohibits_numbers_and_hides_unrelated_amounts(capture):
+    question = "כמה הרווחנו מהזמנות ששולמו?"
+    evidence = json.dumps(asyncio.run(capture(question, [])), ensure_ascii=False)
+    async def complete(messages, *, schema):
+        assert "Never supply a number" in messages[0]["content"]
+        assert "97210.10" not in messages[1]["content"]
+        assert "נתוני העלויות" in messages[-1]["content"]
+        assert "pattern" in schema["properties"]["answer"]
+        return json.dumps({"answer": "אין די נתונים על עלויות החנות לחישוב הרווח.",
+                           "citation": source_lines(json.loads(evidence))})
+    history = [{"role": "user", "content": "כמה הכנסנו?"}, {"role": "assistant", "content": "97210.10 ₪"}]
+    answer = asyncio.run(GroundedActor(SimpleNamespace(complete=complete)).draft(question, evidence, history))
+    assert "97210.10" not in answer
+    assert "marts.fct_orders" in answer
+
+@pytest.mark.parametrize("garbled", ["קיבл", "ה忚נסה", "נגمר", "ההכנסa"])
+def test_foreign_script_inside_hebrew_is_rejected(capture, garbled):
+    from chat.grounded import evidence_error
+    evidence = asyncio.run(capture("כמה הזמנות שולמו?", []))
+    assert evidence_error(f"בתקופה זו שולמו 3 הזמנות {garbled}.", evidence)
+
+def test_product_identifier_cannot_substitute_for_the_measured_value(capture):
+    from chat.grounded import evidence_error
+    q = "כמה הכנסנו מהזמנות ששולמו עבור מוצר 5?"
+    evidence = asyncio.run(capture(q, []))
+    assert evidence_error("ההכנסה ממוצר 115 הסתכמה ב־5 ₪.", evidence)
+    assert not evidence_error("ההכנסה ממוצר 5 הסתכמה ב־115.35 ₪.", evidence)

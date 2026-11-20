@@ -25,6 +25,7 @@ import time
 from typing import Any, Callable
 
 from streaming_lab import StreamEngine, run_live, run_microbatch
+from streaming_lab.events import iso_time
 
 from .runs import fresh_db, shekels
 from .source import shopil_source
@@ -34,37 +35,75 @@ DEFAULT_CONFIG = {"window_seconds": 60, "grace_seconds": 10, "out_of_order_secon
 
 def progress_line(snapshot: dict[str, Any]) -> str:
     q, s, t = snapshot["queue"], snapshot["stats"], snapshot["totals"]
+    if "open_order_windows" in snapshot:
+        open_count = snapshot["open_order_windows"]
+        amount = f"revenue=₪{shekels(t['revenue_cents'])} open_revenue=₪{shekels(t['open_revenue_cents'])}"
+    else:
+        open_count = len(snapshot["open_windows"])
+        amount = f"revenue=₪{shekels(t['revenue_cents'])}"
     line = (f"produced={q['produced']:>5} consumed={q['consumed']:>5} depth={q['depth']}/{q['maxsize']} "
             f"waits={q['backpressure_waits']} | checkpoint={snapshot['checkpoint']} wm={snapshot['watermark']} | "
-            f"orders={t['orders']} revenue=₪{shekels(t['revenue_cents'])} reviews={t['reviews']} "
-            f"dup={s['duplicates']} late={s['late']} alerts={len(snapshot['alerts'])} "
-            f"open={len(snapshot['open_windows'])} closed={len(snapshot['revenue_windows'])}")
+            f"orders={t['orders']} {amount} reviews={t['reviews']} "
+            f"dup={s['duplicates']} late={s['late']} alerts={s['alerts_emitted']} "
+            f"open={open_count} closed={s['revenue_windows_emitted']}")
     if "batch" in snapshot:
         b = snapshot["batch"]
         line += f" | batch#{b['index']} size={b['size']} reason={b['flush_reason']}"
     return line
 
 
-def throttled_printer(every_s: float, stream=sys.stdout) -> Callable[[dict[str, Any]], None]:
-    last = [0.0]
+def periodic_progress(engine: StreamEngine, every_s: float) -> Callable[[], dict[str, Any] | None]:
+    """Add each immutable closed window once, then read current open amounts per tick."""
+    next_sample = 0.0
+    last_closed = None
+    closed_revenue = 0
 
-    def callback(snapshot: dict[str, Any]) -> None:
+    def sample():
+        nonlocal next_sample, last_closed, closed_revenue
         now = time.perf_counter()
-        if now - last[0] >= every_s:
-            last[0] = now
-            print(progress_line(snapshot), file=stream, flush=True)
-    return callback
+        if now < next_sample:
+            return None
+        next_sample = now + every_s
+        db = engine.con
+        db.execute("BEGIN")
+        try:
+            checkpoint, watermark = db.execute("SELECT checkpoint,watermark_ms FROM stream_meta").fetchone()
+            stats = dict(db.execute("SELECT name,value FROM counters"))
+            open_amounts = [row[0] for row in db.execute("SELECT revenue_cents FROM order_state")]
+            query = "SELECT window_start_ms,revenue_cents FROM realtime_revenue"
+            params = ()
+            if last_closed is not None:
+                query += " WHERE window_start_ms > ?"
+                params = (last_closed,)
+            for start, amount in db.execute(query + " ORDER BY window_start_ms", params):
+                last_closed = start
+                closed_revenue += amount
+            db.commit()
+        except BaseException:
+            db.rollback()
+            raise
+        return {"checkpoint": checkpoint, "watermark": iso_time(watermark), "stats": stats,
+                "open_order_windows": len(open_amounts),
+                "totals": {"orders": stats["accepted_orders"], "reviews": stats["accepted_reviews"],
+                           "open_revenue_cents": sum(open_amounts), "revenue_cents": closed_revenue + sum(open_amounts)}}
+    return sample
+
+
+def print_progress(snapshot):
+    print(progress_line(snapshot), flush=True)
 
 
 async def run(engine: StreamEngine, *, mode: str, seconds: float | None, interval_s: float,
               queue_size: int, batch_size: int, max_wait_s: float, processing_delay_s: float,
-              finalize: bool, on_snapshot=None) -> dict[str, Any]:
+              finalize: bool, on_snapshot=None, progress_reader=None) -> dict[str, Any]:
     source = shopil_source(engine.next_offset)
     common = dict(duration_s=seconds, interval_s=interval_s, queue_maxsize=queue_size,
-                  processing_delay_s=processing_delay_s, finalize=finalize, on_snapshot=on_snapshot)
+                  processing_delay_s=processing_delay_s, finalize=finalize, on_snapshot=on_snapshot,
+                  progress_reader=progress_reader)
     if mode == "live":
         return await run_live(engine, source, **common)
-    return await run_microbatch(engine, source, max_batch_size=batch_size, max_wait_s=max_wait_s, **common)
+    return await run_microbatch(engine, source, max_batch_size=batch_size, max_wait_s=max_wait_s,
+                                record_batches=seconds is not None, **common)
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -90,7 +129,7 @@ def main(argv: list[str] | None = None) -> int:
                                     interval_s=args.interval, queue_size=args.queue_size,
                                     batch_size=args.batch_size, max_wait_s=args.max_wait,
                                     processing_delay_s=args.processing_delay, finalize=args.finalize,
-                                    on_snapshot=throttled_printer(args.print_every)))
+                                    on_snapshot=print_progress, progress_reader=periodic_progress(engine, args.print_every)))
         except KeyboardInterrupt:
             print(f"stopped by user; committed checkpoint={engine.checkpoint}", flush=True)
             return 130

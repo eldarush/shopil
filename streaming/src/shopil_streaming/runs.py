@@ -2,12 +2,12 @@
 
 Every experiment opens a NEW SQLite database (the engine refuses to reuse a DB
 with different settings, and comparisons must not share state). Databases go to
-streaming/runs/, which is git-ignored. Small, deterministic outputs go to
-streaming/evidence/<TICKET>/ and are committed as proof for the Jira task.
+streaming/runs/. Set SHOPIL_STREAM_EVIDENCE to collect reports elsewhere.
 """
 from __future__ import annotations
 
 import json
+import os
 from pathlib import Path
 from typing import Any
 
@@ -15,7 +15,7 @@ from streaming_lab.reporting import fresh_run_directory
 
 STREAMING_ROOT = Path(__file__).resolve().parents[2]
 RUNS_DIR = STREAMING_ROOT / "runs"
-EVIDENCE_DIR = STREAMING_ROOT / "evidence"
+EVIDENCE_DIR = Path(os.getenv("SHOPIL_STREAM_EVIDENCE", str(RUNS_DIR / "evidence")))
 
 
 def fresh_db(tag: str) -> Path:

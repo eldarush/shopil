@@ -52,6 +52,8 @@ async def run_microbatch(
     queue_maxsize: int = 8,
     finalize: bool = False,
     on_snapshot: Callable[[dict[str, Any]], Any] | None = None,
+    progress_reader: Callable[[], dict[str, Any] | None] | None = None,
+    record_batches: bool = True,
 ) -> dict[str, Any]:
     """Continuously admit records and process small batches without chunking a list.
 
@@ -92,7 +94,7 @@ async def run_microbatch(
     deadline = started + duration_s if duration_s is not None else None
     source = iter(deliveries) if deliveries is not None else None
     state: dict[str, Any] = {
-        "produced": 0, "consumed": 0, "batches": 0,
+        "produced": 0, "consumed": 0, "batches": 0, "batched_records": 0,
         "queue_maxsize": queue_maxsize, "max_queue_depth": 0,
         "max_batch_size": max_batch_size, "max_wait_s": max_wait_s,
         "max_buffered_records": 0, "backpressure_waits": 0, "producer_wait_s": 0.0,
@@ -179,6 +181,7 @@ async def run_microbatch(
                     engine.ingest(item.event, offset=item.offset)
                     state["consumed"] += 1
                 state["batches"] += 1
+                state["batched_records"] += len(batch)
                 details = {
                     "index": state["batches"], "size": len(batch),
                     "flush_reason": flush_reason,
@@ -186,14 +189,17 @@ async def run_microbatch(
                     "processing_s": round(time.perf_counter() - processing_started, 6),
                     "first_offset": batch[0].offset, "last_offset": batch[-1].offset,
                 }
-                state["batch_sizes"].append(len(batch))
-                state["batch_wait_s"].append(details["collection_wait_s"])
-                state["batch_details"].append(details)
+                if record_batches:
+                    state["batch_sizes"].append(len(batch))
+                    state["batch_wait_s"].append(details["collection_wait_s"])
+                    state["batch_details"].append(details)
                 state["flush_counts"][flush_reason] += 1
                 if flush_reason == "final_drain":
                     state["final_partial_batch_size"] = len(batch)
+                snapshot = None
                 if on_snapshot is not None:
-                    snapshot = engine.snapshot()
+                    snapshot = progress_reader() if progress_reader else engine.snapshot()
+                if snapshot is not None:
                     snapshot["batch"] = dict(details)
                     snapshot["queue"] = {
                         "depth": state["produced"] - state["consumed"],

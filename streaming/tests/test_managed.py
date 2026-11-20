@@ -29,7 +29,8 @@ def test_stop_with_backlog_drains_every_admitted_record_without_finalizing(tmp_p
         assert engine.checkpoint == state["consumed"] - 1
         assert engine.con.execute("SELECT finalized FROM stream_meta").fetchone()[0] == 0
         if mode == "microbatch":
-            assert sum(state["batch_sizes"]) == state["consumed"]
+            assert state["batched_records"] == state["consumed"]
+            assert not (state["batch_sizes"] or state["batch_wait_s"] or state["batch_details"])
             assert state["flush_counts"]["final_drain"] == 1
     with StreamEngine(database) as engine:
         starting = engine.checkpoint

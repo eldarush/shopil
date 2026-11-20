@@ -16,7 +16,7 @@ from data_access.streaming import read_stream_snapshot
 from data_access.scoped_batch import read_scoped_batch
 
 from .model import ModelError
-from .query_scope import STREAM, STREAM_PRODUCT_METRICS, resolve_query
+from .query_scope import HISTORICAL, STREAM, STREAM_PRODUCT_METRICS, resolve_query
 
 MAX_SOURCE_ROWS = 256
 MAX_REVIEW_TEXT_ROWS = 12
@@ -210,31 +210,57 @@ STREAM_FIELDS = {
 }
 
 
+def available_columns(warehouse, table):
+    schema, name = table.split(".")
+    with duckdb.connect(str(warehouse), read_only=True) as connection:
+        return [row[0] for row in connection.execute("""
+            SELECT column_name FROM information_schema.columns
+            WHERE table_schema = ? AND table_name = ? ORDER BY ordinal_position
+        """, [schema, name]).fetchall()]
+
+
 async def capture_question(warehouse, stream_database, default_start, default_end, question, history):
     scope = resolve_query(question, history)
     sources, state = (), None
     if scope is None:
         plan = {"availability": "unsupported", "reason": "The requested metric or scope is outside the supported questions."}
-    elif scope.metric == "shipping_cost":
-        plan = {"metric": scope.metric, "availability": "missing",
-                "reason": "The ETL and streaming queries provide no shipping cost measure; this is missing information, not zero."}
+    elif scope.metric in {"shipping_cost", "profit"}:
+        reason = ("בנתוני ההזמנות חסרות עלויות המשלוח." if scope.metric == "shipping_cost"
+                  else "ההכנסה ידועה אך נתוני העלויות חסרים, ולכן אי אפשר לחשב רווח.")
+        plan = {"metric": scope.metric, "availability": "missing", "reason": reason}
     else:
         field = STREAM_FIELDS.get(scope.metric, "negative_reviews" if scope.metric == "top_negative_reviews" else scope.metric)
         plan = {"metric": scope.metric, "field": field, "product_id": scope.product_id, "window_state": scope.window_state}
         if scope.metric in STREAM:
             stream = await capture_stream(stream_database, scope=scope)
             state = stream["stream"]
-            sources = tuple(source for source in stream["sources"]
-                            if scope.metric != "stream_alert_trigger_count" or source.table == "review_alerts")
+            review = scope.metric in STREAM_PRODUCT_METRICS
+            if scope.metric == "stream_alert_trigger_count":
+                plan["checked_window_table"] = "review_alerts"
+            elif scope.window_state == "open":
+                plan["checked_window_table"] = "review_state" if review else "order_state"
+            else:
+                plan["checked_window_table"] = "review_windows" if review else "realtime_revenue"
+            sources = stream["sources"]
+            if (scope.metric == "stream_alert_trigger_count" and sources
+                    and not any(source.table == "review_alerts" for source in sources)):
+                plan["missing_reason"] = "נמצא חלון ביקורות למוצר, אך לא הופעלה בו התראה."
         else:
             try:
-                source = await asyncio.to_thread(read_scoped_batch, warehouse, scope.metric,
-                                                 scope.start or default_start, scope.end or default_end, scope.product_id)
+                source, coverage = await asyncio.to_thread(
+                    read_scoped_batch, warehouse, scope.metric, scope.start or default_start,
+                    scope.end or default_end, scope.product_id,
+                    reporting_period=(default_start, default_end),
+                )
+                plan.update(coverage)
             except (duckdb.Error, OSError, ValueError):
                 raise ModelError("Unable to read valid historical evidence") from None
             sources = (source,)
-        values = [dict(row)[field] for source in sources for row in source.rows]
-        if not values:
+        values = [cells[field] for source in sources for row in source.rows
+                  if field in (cells := dict(row))]
+        if plan.get("missing_reason"):
+            plan.update(availability="missing", reason=plan["missing_reason"])
+        elif not values:
             plan.update(availability="missing", reason="No matching row was observed for the requested product or stream window; this is not zero.")
         elif all(value is None for value in values):
             plan.update(availability="missing", reason="The average is NULL because there are no ratings in the selected scope.")
@@ -242,6 +268,14 @@ async def capture_question(warehouse, stream_database, default_start, default_en
             plan.update(availability="available")
 
     payload = EvidencePackage(question=question, sources=sources).model_dump(mode="json")
+    if not sources and scope and scope.metric in HISTORICAL:
+        table = "staging.stg_reviews" if scope.metric in {"avg_rating", "review_count", "negative_reviews", "top_negative_reviews"} else "marts.fct_orders"
+        plan["available_columns"] = await asyncio.to_thread(available_columns, warehouse, table)
+        if not plan["available_columns"]:
+            raise ModelError("Historical source schema unavailable")
+        plan["consulted_table"] = table
+        plan["coverage_start"] = default_start.isoformat()
+        plan["coverage_end"] = default_end.isoformat()
     payload["query_scope"] = plan
     if state is not None:
         payload["stream"] = state

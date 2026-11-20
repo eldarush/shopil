@@ -1,0 +1,3888 @@
+[
+ {
+  "review_id": 1,
+  "order_id": 1090,
+  "product": {
+   "id": 7
+  },
+  "rating": 4,
+  "text": "איכות גבוהה ממה שציפיתי",
+  "created_at": "2026-07-28T17:00:00",
+  "tags": [
+   "אריזה",
+   "איכות"
+  ]
+ },
+ {
+  "review_id": 2,
+  "order_id": 1157,
+  "product": {
+   "id": 7
+  },
+  "rating": 4,
+  "text": "קל לשימוש ונראה טוב",
+  "created_at": "2026-05-18T15:00:00",
+  "tags": [
+   "מחיר",
+   "שירות"
+  ]
+ },
+ {
+  "review_id": 3,
+  "order_id": 1142,
+  "product": {
+   "id": 4
+  },
+  "rating": 4,
+  "text": "איכות גבוהה ממה שציפיתי",
+  "created_at": "2026-03-20T03:00:00",
+  "tags": [
+   "אריזה"
+  ]
+ },
+ {
+  "review_id": 4,
+  "order_id": 1149,
+  "product": {
+   "id": 3
+  },
+  "rating": 5,
+  "text": "Great product, works perfectly",
+  "created_at": "2026-05-20T08:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 5,
+  "order_id": 1122,
+  "product": {
+   "id": 3
+  },
+  "rating": 4,
+  "text": "השירות היה מצוין",
+  "created_at": "2026-05-20T09:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 6,
+  "order_id": 1424,
+  "product": {
+   "id": 7
+  },
+  "rating": 5,
+  "text": "שווה כל שקל",
+  "created_at": "2026-05-15T13:00:00",
+  "tags": [
+   "מחיר"
+  ]
+ },
+ {
+  "review_id": 7,
+  "order_id": 1110,
+  "product": {
+   "id": 3
+  },
+  "rating": 2,
+  "text": "לא תואם לתיאור באתר",
+  "created_at": "2026-04-05T01:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 8,
+  "order_id": 1274,
+  "product": {
+   "id": 4
+  },
+  "rating": 5,
+  "text": "   ",
+  "created_at": "2026-08-23T13:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 9,
+  "order_id": 1368,
+  "product": {
+   "id": 2
+  },
+  "rating": 3,
+  "text": "מוצר מעולה, הגיע מהר",
+  "created_at": "2026-09-23T21:00:00",
+  "tags": [
+   "איכות"
+  ]
+ },
+ {
+  "review_id": 10,
+  "order_id": 1481,
+  "product": {
+   "id": 6
+  },
+  "rating": 4,
+  "text": "קל לשימוש ונראה טוב",
+  "created_at": "2026-04-04T19:00:00",
+  "tags": [
+   "שירות"
+  ]
+ },
+ {
+  "review_id": 11,
+  "order_id": 1198,
+  "product": {
+   "id": 4
+  },
+  "rating": 4,
+  "text": "איכות גבוהה ממה שציפיתי",
+  "created_at": "2026-02-12T00:00:00",
+  "tags": [
+   "משלוח"
+  ]
+ },
+ {
+  "review_id": 12,
+  "order_id": 1228,
+  "product": {
+   "id": 4
+  },
+  "rating": 5,
+  "text": "Great product, works perfectly",
+  "created_at": "2026-04-11T19:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 13,
+  "order_id": 1502,
+  "product": {
+   "id": 6
+  },
+  "rating": 2,
+  "text": "האריזה הייתה פתוחה כשהגיע",
+  "created_at": "2026-07-07T04:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 14,
+  "order_id": 1390,
+  "product": {
+   "id": 6
+  },
+  "rating": 4,
+  "text": "מוצר מעולה, הגיע מהר",
+  "created_at": "2026-06-15T12:00:00",
+  "tags": [
+   "אריזה",
+   "משלוח"
+  ]
+ },
+ {
+  "review_id": 15,
+  "order_id": 1468,
+  "product": {
+   "id": 1
+  },
+  "rating": 4,
+  "text": "Great product, works perfectly",
+  "created_at": "2026-04-25T20:00:00",
+  "tags": [
+   "אריזה",
+   "שירות"
+  ]
+ },
+ {
+  "review_id": 16,
+  "order_id": 1572,
+  "product": {
+   "id": 7
+  },
+  "rating": 5,
+  "text": "מוצר מעולה, הגיע מהר",
+  "created_at": "2026-07-27T04:00:00",
+  "tags": [
+   "משלוח",
+   "איכות"
+  ]
+ },
+ {
+  "review_id": 17,
+  "order_id": 1312,
+  "product": {
+   "id": 5
+  },
+  "rating": 3,
+  "text": "המשלוח לקח שלושה שבועות",
+  "created_at": "2026-07-08T11:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 18,
+  "order_id": 1056,
+  "product": {
+   "id": 3
+  },
+  "rating": 4,
+  "text": "קל לשימוש ונראה טוב",
+  "created_at": "2026-07-09T05:00:00",
+  "tags": [
+   "שירות",
+   "משלוח"
+  ]
+ },
+ {
+  "review_id": 19,
+  "order_id": 1185,
+  "product": {
+   "id": 3
+  },
+  "rating": 5,
+  "text": "מוצר מעולה, הגיע מהר",
+  "created_at": "2026-06-15T04:00:00",
+  "tags": [
+   "מחיר"
+  ]
+ },
+ {
+  "review_id": 20,
+  "order_id": 1465,
+  "product": {
+   "id": 4
+  },
+  "rating": 4,
+  "text": "איכות גבוהה ממה שציפיתי",
+  "created_at": "2026-07-06T04:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 21,
+  "order_id": 1168,
+  "product": {
+   "id": 2
+  },
+  "rating": 3,
+  "text": "Stopped working after a week",
+  "created_at": "2026-03-04T03:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 22,
+  "order_id": 1372,
+  "product": {
+   "id": 2
+  },
+  "rating": 5,
+  "text": "השירות היה מצוין",
+  "created_at": "2026-07-29T19:00:00",
+  "tags": [
+   "שירות",
+   "איכות"
+  ]
+ },
+ {
+  "review_id": 23,
+  "order_id": 1045,
+  "product": {
+   "id": 3
+  },
+  "rating": 4,
+  "text": "Great product, works perfectly",
+  "created_at": "2026-05-26T09:00:00",
+  "tags": [
+   "איכות",
+   "אריזה"
+  ]
+ },
+ {
+  "review_id": 24,
+  "order_id": 1053,
+  "product": {
+   "id": 7
+  },
+  "rating": 5,
+  "text": "איכות גבוהה ממה שציפיתי",
+  "created_at": "2026-05-17T03:00:00",
+  "tags": [
+   "שירות"
+  ]
+ },
+ {
+  "review_id": 25,
+  "order_id": 1121,
+  "product": {
+   "id": 3
+  },
+  "rating": 3,
+  "text": "שווה כל שקל",
+  "created_at": "2026-04-11T05:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 26,
+  "order_id": 1013,
+  "product": {
+   "id": 8
+  },
+  "rating": 7,
+  "text": "שווה כל שקל",
+  "created_at": "2026-07-20T20:00:00",
+  "tags": [
+   "אריזה"
+  ]
+ },
+ {
+  "review_id": 27,
+  "order_id": 1506,
+  "product": {
+   "id": 4
+  },
+  "rating": 5,
+  "text": "קל לשימוש ונראה טוב",
+  "created_at": "2026-04-16T00:00:00",
+  "tags": [
+   "שירות",
+   "אריזה"
+  ]
+ },
+ {
+  "review_id": 28,
+  "order_id": 1007,
+  "product": {
+   "id": 4
+  },
+  "rating": 4,
+  "text": "מוצר מעולה, הגיע מהר",
+  "created_at": "2026-08-06T19:00:00",
+  "tags": [
+   "אריזה"
+  ]
+ },
+ {
+  "review_id": 29,
+  "order_id": 1051,
+  "product": {
+   "id": 3
+  },
+  "rating": 4,
+  "text": "איכות גבוהה ממה שציפיתי",
+  "created_at": "2026-03-23T14:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 30,
+  "order_id": 1149,
+  "product": {
+   "id": 1
+  },
+  "rating": 5,
+  "text": "מוצר מעולה, הגיע מהר",
+  "created_at": "2026-09-16T16:00:00",
+  "tags": [
+   "אריזה",
+   "מחיר"
+  ]
+ },
+ {
+  "review_id": 31,
+  "order_id": 1051,
+  "product": {
+   "id": 2
+  },
+  "rating": 3,
+  "text": "איכות גבוהה ממה שציפיתי",
+  "created_at": "2026-06-23T07:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 32,
+  "order_id": 1587,
+  "product": {
+   "id": 3
+  },
+  "rating": 2,
+  "text": "שירות הלקוחות לא ענה למיילים",
+  "created_at": "2026-07-06T10:00:00",
+  "tags": [
+   "אריזה",
+   "מחיר"
+  ]
+ },
+ {
+  "review_id": 33,
+  "order_id": 1307,
+  "product": {
+   "id": 6
+  },
+  "rating": 5,
+  "text": "מוצר מעולה, הגיע מהר",
+  "created_at": "2026-06-06T19:00:00",
+  "tags": [
+   "משלוח"
+  ]
+ },
+ {
+  "review_id": 34,
+  "order_id": 1067,
+  "product": {
+   "id": 5
+  },
+  "rating": 5,
+  "text": "קל לשימוש ונראה טוב",
+  "created_at": "2026-07-11T16:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 35,
+  "order_id": 1338,
+  "product": {
+   "id": 7
+  },
+  "rating": 2,
+  "text": "שירות הלקוחות לא ענה למיילים",
+  "created_at": "2026-07-30T01:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 36,
+  "order_id": 1060,
+  "product": {
+   "id": 2
+  },
+  "rating": 5,
+  "text": "קל לשימוש ונראה טוב",
+  "created_at": "2026-08-15T00:00:00",
+  "tags": [
+   "אריזה",
+   "משלוח"
+  ]
+ },
+ {
+  "review_id": 37,
+  "order_id": 1295,
+  "product": {
+   "id": 7
+  },
+  "rating": 4,
+  "text": "השירות היה מצוין",
+  "created_at": "2026-08-27T19:00:00",
+  "tags": [
+   "מחיר"
+  ]
+ },
+ {
+  "review_id": 38,
+  "order_id": 1363,
+  "product": {
+   "id": 3
+  },
+  "rating": 4,
+  "text": "קל לשימוש ונראה טוב",
+  "created_at": "2026-08-29T16:00:00",
+  "tags": [
+   "שירות",
+   "אריזה"
+  ]
+ },
+ {
+  "review_id": 39,
+  "order_id": 1239,
+  "product": {
+   "id": 5
+  },
+  "rating": 4,
+  "text": "איכות גבוהה ממה שציפיתי",
+  "created_at": "2026-04-08T01:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 40,
+  "order_id": 1121,
+  "product": {
+   "id": 4
+  },
+  "rating": 2,
+  "text": "האריזה הייתה פתוחה כשהגיע",
+  "created_at": "2026-08-30T00:00:00",
+  "tags": [
+   "שירות"
+  ]
+ },
+ {
+  "review_id": 41,
+  "order_id": 1574,
+  "product": {
+   "id": 4
+  },
+  "rating": 1,
+  "text": "Stopped working after a week",
+  "created_at": "2026-02-04T20:00:00",
+  "tags": [
+   "איכות",
+   "מחיר"
+  ]
+ },
+ {
+  "review_id": 42,
+  "order_id": 1316,
+  "product": {
+   "id": 5
+  },
+  "rating": 3,
+  "text": "איכות גבוהה ממה שציפיתי",
+  "created_at": "2026-07-23T22:00:00",
+  "tags": [
+   "מחיר",
+   "משלוח"
+  ]
+ },
+ {
+  "review_id": 43,
+  "order_id": 1350,
+  "product": {
+   "id": 7
+  },
+  "rating": 2,
+  "text": "Stopped working after a week",
+  "created_at": "2026-10-06T06:00:00",
+  "tags": [
+   "אריזה",
+   "משלוח"
+  ]
+ },
+ {
+  "review_id": 44,
+  "order_id": 1339,
+  "product": {
+   "id": 6
+  },
+  "rating": 5,
+  "text": "איכות גבוהה ממה שציפיתי",
+  "created_at": "2026-09-18T12:00:00",
+  "tags": [
+   "שירות"
+  ]
+ },
+ {
+  "review_id": 45,
+  "order_id": 1140,
+  "product": {
+   "id": 8
+  },
+  "rating": 5,
+  "text": "השירות היה מצוין",
+  "created_at": "2026-03-26T00:00:00",
+  "tags": [
+   "שירות",
+   "מחיר"
+  ]
+ },
+ {
+  "review_id": 46,
+  "order_id": 1058,
+  "product": {
+   "id": 5
+  },
+  "rating": 4,
+  "text": "Great product, works perfectly",
+  "created_at": "2026-08-12T20:00:00",
+  "tags": [
+   "מחיר",
+   "משלוח"
+  ]
+ },
+ {
+  "review_id": 47,
+  "order_id": 1340,
+  "product": {
+   "id": 6
+  },
+  "rating": 3,
+  "text": "שירות הלקוחות לא ענה למיילים",
+  "created_at": "2026-02-23T14:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 48,
+  "order_id": 1348,
+  "product": {
+   "id": 7
+  },
+  "rating": 3,
+  "text": "מוצר מעולה, הגיע מהר",
+  "created_at": "2026-09-02T20:00:00",
+  "tags": [
+   "איכות",
+   "שירות"
+  ]
+ },
+ {
+  "review_id": 49,
+  "order_id": 1316,
+  "product": {
+   "id": 6
+  },
+  "rating": 2,
+  "text": "הגיע שבור באריזה",
+  "created_at": "2026-10-01T07:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 50,
+  "order_id": 1509,
+  "product": {
+   "id": 4
+  },
+  "rating": 3,
+  "text": "איכות גבוהה ממה שציפיתי",
+  "created_at": "2026-06-07T20:00:00",
+  "tags": [
+   "מחיר"
+  ]
+ },
+ {
+  "review_id": 51,
+  "order_id": 1180,
+  "product": {
+   "id": 2
+  },
+  "rating": 3,
+  "text": "קל לשימוש ונראה טוב",
+  "created_at": "2026-06-08T17:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 52,
+  "order_id": 1455,
+  "product": {
+   "id": 1
+  },
+  "rating": 5,
+  "text": "מוצר מעולה, הגיע מהר",
+  "created_at": "2026-07-15T17:00:00",
+  "tags": [
+   "איכות",
+   "אריזה"
+  ]
+ },
+ {
+  "review_id": 53,
+  "order_id": 1537,
+  "product": {
+   "id": 5
+  },
+  "rating": 3,
+  "text": "הגיע שבור באריזה",
+  "created_at": "2026-05-23T17:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 54,
+  "order_id": 1529,
+  "product": {
+   "id": 3
+  },
+  "rating": 5,
+  "text": "מוצר מעולה, הגיע מהר",
+  "created_at": "2026-04-12T00:00:00",
+  "tags": [
+   "משלוח",
+   "שירות"
+  ]
+ },
+ {
+  "review_id": 55,
+  "order_id": 1119,
+  "product": {
+   "id": 1
+  },
+  "rating": 4,
+  "text": "קל לשימוש ונראה טוב",
+  "created_at": "2026-05-18T03:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 56,
+  "order_id": 1090,
+  "product": {
+   "id": 6
+  },
+  "rating": 5,
+  "text": "קל לשימוש ונראה טוב",
+  "created_at": "2026-07-10T08:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 57,
+  "order_id": 1024,
+  "product": {
+   "id": 5
+  },
+  "rating": 2,
+  "text": "שירות הלקוחות לא ענה למיילים",
+  "created_at": "2026-09-07T01:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 58,
+  "order_id": 1294,
+  "product": {
+   "id": 5
+  },
+  "rating": 3,
+  "text": "Great product, works perfectly",
+  "created_at": "2026-08-01T16:00:00",
+  "tags": [
+   "שירות"
+  ]
+ },
+ {
+  "review_id": 59,
+  "order_id": 1153,
+  "product": {
+   "id": 3
+  },
+  "rating": 5,
+  "text": "שווה כל שקל",
+  "created_at": "2026-05-05T09:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 60,
+  "order_id": 1212,
+  "product": {
+   "id": 6
+  },
+  "rating": 1,
+  "text": "הגיע שבור באריזה",
+  "created_at": "2026-08-07T12:00:00",
+  "tags": [
+   "מחיר"
+  ]
+ },
+ {
+  "review_id": 61,
+  "order_id": 1588,
+  "product": {
+   "id": 4
+  },
+  "rating": 2,
+  "text": "שירות הלקוחות לא ענה למיילים",
+  "created_at": "2026-03-31T11:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 62,
+  "order_id": 1554,
+  "product": {
+   "id": 8
+  },
+  "rating": 3,
+  "text": "השירות היה מצוין",
+  "created_at": "2026-02-18T07:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 63,
+  "order_id": 1109,
+  "product": {
+   "id": 7
+  },
+  "rating": 1,
+  "text": "המשלוח לקח שלושה שבועות",
+  "created_at": "2026-02-19T08:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 64,
+  "order_id": 1457,
+  "product": {
+   "id": 6
+  },
+  "rating": 4,
+  "text": "איכות גבוהה ממה שציפיתי",
+  "created_at": "2026-05-18T15:00:00",
+  "tags": [
+   "איכות"
+  ]
+ },
+ {
+  "review_id": 65,
+  "order_id": 1547,
+  "product": {
+   "id": 2
+  },
+  "rating": 5,
+  "text": "השירות היה מצוין",
+  "created_at": "2026-07-09T22:00:00",
+  "tags": [
+   "איכות",
+   "משלוח"
+  ]
+ },
+ {
+  "review_id": 66,
+  "order_id": 1480,
+  "product": {
+   "id": 2
+  },
+  "rating": 5,
+  "text": "השירות היה מצוין",
+  "created_at": "2026-07-06T12:00:00",
+  "tags": [
+   "שירות"
+  ]
+ },
+ {
+  "review_id": 67,
+  "order_id": 1148,
+  "product": {
+   "id": 5
+  },
+  "rating": 4,
+  "text": "איכות גבוהה ממה שציפיתי",
+  "created_at": "2026-06-05T01:00:00",
+  "tags": [
+   "איכות"
+  ]
+ },
+ {
+  "review_id": 68,
+  "order_id": 1339,
+  "product": {
+   "id": 6
+  },
+  "rating": 5,
+  "text": "השירות היה מצוין",
+  "created_at": "2026-07-05T17:00:00",
+  "tags": [
+   "משלוח"
+  ]
+ },
+ {
+  "review_id": 69,
+  "order_id": 1360,
+  "product": {
+   "id": 8
+  },
+  "rating": 1,
+  "text": "הגיע שבור באריזה",
+  "created_at": "2026-07-08T10:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 70,
+  "order_id": 1589,
+  "product": {
+   "id": 3
+  },
+  "rating": 3,
+  "text": "השירות היה מצוין",
+  "created_at": "2026-07-24T09:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 71,
+  "order_id": 1110,
+  "product": {
+   "id": 6
+  },
+  "rating": 4,
+  "text": "השירות היה מצוין",
+  "created_at": "2026-08-09T19:00:00",
+  "tags": [
+   "משלוח",
+   "מחיר"
+  ]
+ },
+ {
+  "review_id": 72,
+  "order_id": 1424,
+  "product": {
+   "id": 4
+  },
+  "rating": 4,
+  "text": "Great product, works perfectly",
+  "created_at": "2026-08-31T22:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 73,
+  "order_id": 1394,
+  "product": {
+   "id": 2
+  },
+  "rating": 4,
+  "text": "Great product, works perfectly",
+  "created_at": "2026-05-28T07:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 74,
+  "order_id": 1442,
+  "product": {
+   "id": 7
+  },
+  "rating": 5,
+  "text": "קל לשימוש ונראה טוב",
+  "created_at": "2026-08-13T14:00:00",
+  "tags": [
+   "אריזה"
+  ]
+ },
+ {
+  "review_id": 75,
+  "order_id": 1080,
+  "product": {
+   "id": 8
+  },
+  "rating": 5,
+  "text": "איכות גבוהה ממה שציפיתי",
+  "created_at": "2026-03-12T00:00:00",
+  "tags": [
+   "אריזה",
+   "שירות"
+  ]
+ },
+ {
+  "review_id": 76,
+  "order_id": 1456,
+  "product": {
+   "id": 3
+  },
+  "rating": 3,
+  "text": "איכות גבוהה ממה שציפיתי",
+  "created_at": "2026-05-17T03:00:00",
+  "tags": [
+   "משלוח"
+  ]
+ },
+ {
+  "review_id": 77,
+  "order_id": 1389,
+  "product": {
+   "id": 6
+  },
+  "rating": 4,
+  "text": "השירות היה מצוין",
+  "created_at": "2026-07-19T17:00:00",
+  "tags": [
+   "משלוח",
+   "אריזה"
+  ]
+ },
+ {
+  "review_id": 78,
+  "order_id": 1595,
+  "product": {
+   "id": 1
+  },
+  "rating": 3,
+  "text": "שווה כל שקל",
+  "created_at": "2026-03-23T01:00:00",
+  "tags": [
+   "איכות",
+   "שירות"
+  ]
+ },
+ {
+  "review_id": 79,
+  "order_id": 1592,
+  "product": {
+   "id": 8
+  },
+  "rating": 4,
+  "text": "Great product, works perfectly",
+  "created_at": "2026-04-08T18:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 80,
+  "order_id": 1307,
+  "product": {
+   "id": 5
+  },
+  "rating": 5,
+  "text": "שווה כל שקל",
+  "created_at": "2026-06-29T09:00:00",
+  "tags": [
+   "מחיר",
+   "משלוח"
+  ]
+ },
+ {
+  "review_id": 81,
+  "order_id": 1523,
+  "product": {
+   "id": 7
+  },
+  "rating": 4,
+  "text": "קל לשימוש ונראה טוב",
+  "created_at": "2026-03-16T12:00:00",
+  "tags": [
+   "משלוח"
+  ]
+ },
+ {
+  "review_id": 82,
+  "order_id": 1055,
+  "product": {
+   "id": 1
+  },
+  "rating": 4,
+  "text": "קל לשימוש ונראה טוב",
+  "created_at": "2026-09-29T01:00:00",
+  "tags": [
+   "מחיר",
+   "משלוח"
+  ]
+ },
+ {
+  "review_id": 83,
+  "order_id": 1241,
+  "product": {
+   "id": 7
+  },
+  "rating": 5,
+  "text": "מוצר מעולה, הגיע מהר",
+  "created_at": "2026-09-28T16:00:00",
+  "tags": [
+   "שירות",
+   "מחיר"
+  ]
+ },
+ {
+  "review_id": 84,
+  "order_id": 1391,
+  "product": {
+   "id": 7
+  },
+  "rating": 5,
+  "text": "Great product, works perfectly",
+  "created_at": "2026-08-06T01:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 85,
+  "order_id": 1143,
+  "product": {
+   "id": 4
+  },
+  "rating": 5,
+  "text": "Great product, works perfectly",
+  "created_at": "2026-08-09T14:00:00",
+  "tags": [
+   "מחיר"
+  ]
+ },
+ {
+  "review_id": 86,
+  "order_id": 1296,
+  "product": {
+   "id": 3
+  },
+  "rating": 5,
+  "text": "איכות גבוהה ממה שציפיתי",
+  "created_at": "2026-03-18T20:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 87,
+  "order_id": 1148,
+  "product": {
+   "id": 8
+  },
+  "rating": 0,
+  "text": "המשלוח לקח שלושה שבועות",
+  "created_at": "2026-09-13T13:00:00",
+  "tags": [
+   "איכות"
+  ]
+ },
+ {
+  "review_id": 88,
+  "order_id": 1467,
+  "product": {
+   "id": 7
+  },
+  "rating": 1,
+  "text": "המחיר גבוה מדי ביחס לאיכות",
+  "created_at": "2026-09-01T17:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 89,
+  "order_id": 1566,
+  "product": {
+   "id": 8
+  },
+  "rating": 4,
+  "text": "Great product, works perfectly",
+  "created_at": "2026-06-12T07:00:00",
+  "tags": [
+   "איכות"
+  ]
+ },
+ {
+  "review_id": 90,
+  "order_id": 1592,
+  "product": {
+   "id": 8
+  },
+  "rating": 2,
+  "text": "המשלוח לקח שלושה שבועות",
+  "created_at": "2026-10-08T11:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 91,
+  "order_id": 1421,
+  "product": {
+   "id": 6
+  },
+  "rating": 5,
+  "text": "שווה כל שקל",
+  "created_at": "2026-02-12T10:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 92,
+  "order_id": 1378,
+  "product": {
+   "id": 2
+  },
+  "rating": 4,
+  "text": "השירות היה מצוין",
+  "created_at": "2026-08-18T01:00:00",
+  "tags": [
+   "משלוח"
+  ]
+ },
+ {
+  "review_id": 93,
+  "order_id": 1477,
+  "product": {
+   "id": 2
+  },
+  "rating": 2,
+  "text": "שירות הלקוחות לא ענה למיילים",
+  "created_at": "2026-07-29T15:00:00",
+  "tags": [
+   "משלוח",
+   "איכות"
+  ]
+ },
+ {
+  "review_id": 94,
+  "order_id": 1080,
+  "product": {
+   "id": 5
+  },
+  "rating": 4,
+  "text": "השירות היה מצוין",
+  "created_at": "2026-08-29T06:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 95,
+  "order_id": 1012,
+  "product": {
+   "id": 8
+  },
+  "rating": 5,
+  "text": "קל לשימוש ונראה טוב",
+  "created_at": "2026-07-05T23:00:00",
+  "tags": [
+   "שירות",
+   "מחיר"
+  ]
+ },
+ {
+  "review_id": 96,
+  "order_id": 1297,
+  "product": {
+   "id": 3
+  },
+  "rating": 4,
+  "text": "שווה כל שקל",
+  "created_at": "2026-02-13T01:00:00",
+  "tags": [
+   "אריזה",
+   "מחיר"
+  ]
+ },
+ {
+  "review_id": 97,
+  "order_id": 1267,
+  "product": {
+   "id": 1
+  },
+  "rating": 5,
+  "text": "קל לשימוש ונראה טוב",
+  "created_at": "2026-09-03T19:00:00",
+  "tags": [
+   "אריזה"
+  ]
+ },
+ {
+  "review_id": 98,
+  "order_id": 1299,
+  "product": {
+   "id": 1
+  },
+  "rating": 2,
+  "text": "המשלוח לקח שלושה שבועות",
+  "created_at": "2026-05-09T21:00:00",
+  "tags": [
+   "משלוח"
+  ]
+ },
+ {
+  "review_id": 99,
+  "order_id": 1285,
+  "product": {
+   "id": 5
+  },
+  "rating": 2,
+  "text": "הגיע שבור באריזה",
+  "created_at": "2026-03-18T05:00:00",
+  "tags": [
+   "מחיר",
+   "אריזה"
+  ]
+ },
+ {
+  "review_id": 100,
+  "order_id": 1115,
+  "product": {
+   "id": 3
+  },
+  "rating": 5,
+  "text": "מוצר מעולה, הגיע מהר",
+  "created_at": "2026-08-21T23:00:00",
+  "tags": [
+   "איכות",
+   "שירות"
+  ]
+ },
+ {
+  "review_id": 101,
+  "order_id": 1268,
+  "product": {
+   "id": 4
+  },
+  "rating": 4,
+  "text": "איכות גבוהה ממה שציפיתי",
+  "created_at": "2026-07-16T12:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 102,
+  "order_id": 1352,
+  "product": {
+   "id": 2
+  },
+  "rating": 5,
+  "text": "מוצר מעולה, הגיע מהר",
+  "created_at": "2026-03-22T12:00:00",
+  "tags": [
+   "איכות",
+   "שירות"
+  ]
+ },
+ {
+  "review_id": 103,
+  "order_id": 1393,
+  "product": {
+   "id": 4
+  },
+  "rating": 5,
+  "text": "Great product, works perfectly",
+  "created_at": "2026-09-14T12:00:00",
+  "tags": [
+   "איכות"
+  ]
+ },
+ {
+  "review_id": 104,
+  "order_id": 1354,
+  "product": {
+   "id": 1
+  },
+  "rating": 3,
+  "text": "Stopped working after a week",
+  "created_at": "2026-09-08T05:00:00",
+  "tags": [
+   "משלוח"
+  ]
+ },
+ {
+  "review_id": 105,
+  "order_id": 1409,
+  "product": {
+   "id": 8
+  },
+  "rating": 1,
+  "text": "האריזה הייתה פתוחה כשהגיע",
+  "created_at": "2026-05-14T20:00:00",
+  "tags": [
+   "אריזה"
+  ]
+ },
+ {
+  "review_id": 106,
+  "order_id": 1400,
+  "product": {
+   "id": 8
+  },
+  "rating": 3,
+  "text": "שירות הלקוחות לא ענה למיילים",
+  "created_at": "2026-05-01T15:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 107,
+  "order_id": 1013,
+  "product": {
+   "id": 5
+  },
+  "rating": 4,
+  "text": "Great product, works perfectly",
+  "created_at": "2026-07-04T04:00:00",
+  "tags": [
+   "מחיר"
+  ]
+ },
+ {
+  "review_id": 108,
+  "order_id": 1043,
+  "product": {
+   "id": 2
+  },
+  "rating": 5,
+  "text": "השירות היה מצוין",
+  "created_at": "2026-08-01T08:00:00",
+  "tags": [
+   "מחיר",
+   "שירות"
+  ]
+ },
+ {
+  "review_id": 109,
+  "order_id": 1280,
+  "product": {
+   "id": 6
+  },
+  "rating": 4,
+  "text": "השירות היה מצוין",
+  "created_at": "2026-05-04T06:00:00",
+  "tags": [
+   "משלוח"
+  ]
+ },
+ {
+  "review_id": 110,
+  "order_id": 1401,
+  "product": {
+   "id": 8
+  },
+  "rating": 3,
+  "text": "לא תואם לתיאור באתר",
+  "created_at": "2026-09-19T11:00:00",
+  "tags": [
+   "איכות",
+   "אריזה"
+  ]
+ },
+ {
+  "review_id": 111,
+  "order_id": 1185,
+  "product": {
+   "id": 6
+  },
+  "rating": 4,
+  "text": "השירות היה מצוין",
+  "created_at": "2026-08-06T22:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 112,
+  "order_id": 1013,
+  "product": {
+   "id": 7
+  },
+  "rating": 5,
+  "text": "מוצר מעולה, הגיע מהר",
+  "created_at": "2026-03-06T08:00:00",
+  "tags": [
+   "משלוח",
+   "שירות"
+  ]
+ },
+ {
+  "review_id": 113,
+  "order_id": 1291,
+  "product": {
+   "id": 5
+  },
+  "rating": 4,
+  "text": "השירות היה מצוין",
+  "created_at": "2026-04-07T21:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 114,
+  "order_id": 1059,
+  "product": {
+   "id": 4
+  },
+  "rating": 1,
+  "text": "הגיע שבור באריזה",
+  "created_at": "2026-08-24T14:00:00",
+  "tags": [
+   "משלוח",
+   "אריזה"
+  ]
+ },
+ {
+  "review_id": 115,
+  "order_id": 1385,
+  "product": {
+   "id": 3
+  },
+  "rating": 1,
+  "text": "הסוללה מחזיקה רק שעתיים",
+  "created_at": "2026-03-10T20:00:00",
+  "tags": [
+   "איכות",
+   "מחיר"
+  ]
+ },
+ {
+  "review_id": 116,
+  "order_id": 1078,
+  "product": {
+   "id": 8
+  },
+  "rating": 3,
+  "text": "שירות הלקוחות לא ענה למיילים",
+  "created_at": "2026-05-06T08:00:00",
+  "tags": [
+   "מחיר"
+  ]
+ },
+ {
+  "review_id": 117,
+  "order_id": 1076,
+  "product": {
+   "id": 5
+  },
+  "rating": 3,
+  "text": "המחיר גבוה מדי ביחס לאיכות",
+  "created_at": "2026-02-22T07:00:00",
+  "tags": [
+   "שירות"
+  ]
+ },
+ {
+  "review_id": 118,
+  "order_id": 1265,
+  "product": {
+   "id": 5
+  },
+  "rating": 3,
+  "text": "מוצר מעולה, הגיע מהר",
+  "created_at": "2026-04-02T17:00:00",
+  "tags": [
+   "משלוח"
+  ]
+ },
+ {
+  "review_id": 119,
+  "order_id": 1403,
+  "product": {
+   "id": 3
+  },
+  "rating": 4,
+  "text": "איכות גבוהה ממה שציפיתי",
+  "created_at": "2026-09-09T07:00:00",
+  "tags": [
+   "משלוח"
+  ]
+ },
+ {
+  "review_id": 120,
+  "order_id": 1224,
+  "product": {
+   "id": 2
+  },
+  "rating": 2,
+  "text": "המחיר גבוה מדי ביחס לאיכות",
+  "created_at": "2026-07-01T17:00:00",
+  "tags": [
+   "מחיר",
+   "משלוח"
+  ]
+ },
+ {
+  "review_id": 121,
+  "order_id": 1586,
+  "product": {
+   "id": 5
+  },
+  "rating": 1,
+  "text": "הגיע שבור באריזה",
+  "created_at": "2026-07-03T04:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 122,
+  "order_id": 1001,
+  "product": {
+   "id": 1
+  },
+  "rating": 5,
+  "text": "איכות גבוהה ממה שציפיתי",
+  "created_at": "2026-09-15T20:00:00",
+  "tags": [
+   "מחיר"
+  ]
+ },
+ {
+  "review_id": 123,
+  "order_id": 1401,
+  "product": {
+   "id": 1
+  },
+  "rating": 2,
+  "text": "Stopped working after a week",
+  "created_at": "2026-07-26T22:00:00",
+  "tags": [
+   "שירות",
+   "אריזה"
+  ]
+ },
+ {
+  "review_id": 124,
+  "order_id": 1072,
+  "product": {
+   "id": 4
+  },
+  "rating": 4,
+  "text": "השירות היה מצוין",
+  "created_at": "2026-02-02T03:00:00",
+  "tags": [
+   "שירות"
+  ]
+ },
+ {
+  "review_id": 125,
+  "order_id": 1342,
+  "product": {
+   "id": 5
+  },
+  "rating": 2,
+  "text": "Stopped working after a week",
+  "created_at": "2026-06-17T17:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 126,
+  "order_id": 1093,
+  "product": {
+   "id": 6
+  },
+  "rating": 4,
+  "text": "השירות היה מצוין",
+  "created_at": "2026-08-02T11:00:00",
+  "tags": [
+   "משלוח"
+  ]
+ },
+ {
+  "review_id": 127,
+  "order_id": 1208,
+  "product": {
+   "id": 3
+  },
+  "rating": 5,
+  "text": "שווה כל שקל",
+  "created_at": "2026-08-09T06:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 128,
+  "order_id": 1196,
+  "product": {
+   "id": 5
+  },
+  "rating": 5,
+  "text": "השירות היה מצוין",
+  "created_at": "2026-09-26T12:00:00",
+  "tags": [
+   "משלוח"
+  ]
+ },
+ {
+  "review_id": 129,
+  "order_id": 1499,
+  "product": {
+   "id": 2
+  },
+  "rating": 4,
+  "text": "שווה כל שקל",
+  "created_at": "2026-09-04T23:00:00",
+  "tags": [
+   "איכות"
+  ]
+ },
+ {
+  "review_id": 130,
+  "order_id": 1026,
+  "product": {
+   "id": 4
+  },
+  "rating": 2,
+  "text": "לא תואם לתיאור באתר",
+  "created_at": "2026-07-17T23:00:00",
+  "tags": [
+   "משלוח"
+  ]
+ },
+ {
+  "review_id": 131,
+  "order_id": 1316,
+  "product": {
+   "id": 8
+  },
+  "rating": 5,
+  "text": "השירות היה מצוין",
+  "created_at": "2026-08-02T06:00:00",
+  "tags": [
+   "משלוח"
+  ]
+ },
+ {
+  "review_id": 132,
+  "order_id": 1346,
+  "product": {
+   "id": 1
+  },
+  "rating": 1,
+  "text": "המשלוח לקח שלושה שבועות",
+  "created_at": "2026-06-19T09:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 133,
+  "order_id": 1536,
+  "product": {
+   "id": 8
+  },
+  "rating": 3,
+  "text": "שירות הלקוחות לא ענה למיילים",
+  "created_at": "2026-09-20T10:00:00",
+  "tags": [
+   "איכות",
+   "אריזה"
+  ]
+ },
+ {
+  "review_id": 134,
+  "order_id": 1145,
+  "product": {
+   "id": 8
+  },
+  "rating": 0,
+  "text": "מוצר מעולה, הגיע מהר",
+  "created_at": "2026-09-12T04:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 135,
+  "order_id": 1047,
+  "product": {
+   "id": 4
+  },
+  "rating": 0,
+  "text": "קל לשימוש ונראה טוב",
+  "created_at": "2026-09-28T09:00:00",
+  "tags": [
+   "איכות",
+   "משלוח"
+  ]
+ },
+ {
+  "review_id": 136,
+  "order_id": 1315,
+  "product": {
+   "id": 2
+  },
+  "rating": 2,
+  "text": "המשלוח לקח שלושה שבועות",
+  "created_at": "2026-07-06T17:00:00",
+  "tags": [
+   "איכות",
+   "משלוח"
+  ]
+ },
+ {
+  "review_id": 137,
+  "order_id": 1117,
+  "product": {
+   "id": 8
+  },
+  "rating": 5,
+  "text": "מוצר מעולה, הגיע מהר",
+  "created_at": "2026-08-23T02:00:00",
+  "tags": [
+   "איכות",
+   "משלוח"
+  ]
+ },
+ {
+  "review_id": 138,
+  "order_id": 1346,
+  "product": {
+   "id": 7
+  },
+  "rating": 5,
+  "text": "Great product, works perfectly",
+  "created_at": "2026-05-22T16:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 139,
+  "order_id": 1559,
+  "product": {
+   "id": 3
+  },
+  "rating": 5,
+  "text": "קל לשימוש ונראה טוב",
+  "created_at": "2026-05-21T18:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 140,
+  "order_id": 1178,
+  "product": {
+   "id": 6
+  },
+  "rating": 5,
+  "text": "קל לשימוש ונראה טוב",
+  "created_at": "2026-02-22T13:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 141,
+  "order_id": 1426,
+  "product": {
+   "id": 3
+  },
+  "rating": 3,
+  "text": "המחיר גבוה מדי ביחס לאיכות",
+  "created_at": "2026-09-26T16:00:00",
+  "tags": [
+   "אריזה"
+  ]
+ },
+ {
+  "review_id": 142,
+  "order_id": 1596,
+  "product": {
+   "id": 1
+  },
+  "rating": 2,
+  "text": "לא תואם לתיאור באתר",
+  "created_at": "2026-03-18T12:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 143,
+  "order_id": 1386,
+  "product": {
+   "id": 3
+  },
+  "rating": 5,
+  "text": "השירות היה מצוין",
+  "created_at": "2026-02-06T08:00:00",
+  "tags": [
+   "משלוח"
+  ]
+ },
+ {
+  "review_id": 144,
+  "order_id": 1092,
+  "product": {
+   "id": 5
+  },
+  "rating": 1,
+  "text": "הסוללה מחזיקה רק שעתיים",
+  "created_at": "2026-06-23T01:00:00",
+  "tags": [
+   "שירות",
+   "איכות"
+  ]
+ },
+ {
+  "review_id": 145,
+  "order_id": 1278,
+  "product": {
+   "id": 8
+  },
+  "rating": 3,
+  "text": "שירות הלקוחות לא ענה למיילים",
+  "created_at": "2026-06-21T15:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 146,
+  "order_id": 1039,
+  "product": {
+   "id": 3
+  },
+  "rating": 5,
+  "text": "קל לשימוש ונראה טוב",
+  "created_at": "2026-10-03T19:00:00",
+  "tags": [
+   "אריזה"
+  ]
+ },
+ {
+  "review_id": 147,
+  "order_id": 1309,
+  "product": {
+   "id": 6
+  },
+  "rating": 5,
+  "text": "השירות היה מצוין",
+  "created_at": "2026-06-23T22:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 148,
+  "order_id": 1121,
+  "product": {
+   "id": 2
+  },
+  "rating": 4,
+  "text": "איכות גבוהה ממה שציפיתי",
+  "created_at": "2026-08-31T06:00:00",
+  "tags": [
+   "אריזה"
+  ]
+ },
+ {
+  "review_id": 149,
+  "order_id": 1214,
+  "product": {
+   "id": 5
+  },
+  "rating": 4,
+  "text": "Great product, works perfectly",
+  "created_at": "2026-02-19T02:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 150,
+  "order_id": 1486,
+  "product": {
+   "id": 8
+  },
+  "rating": 2,
+  "text": "הסוללה מחזיקה רק שעתיים",
+  "created_at": "2026-04-02T04:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 151,
+  "order_id": 1056,
+  "product": {
+   "id": 6
+  },
+  "rating": 5,
+  "text": "מוצר מעולה, הגיע מהר",
+  "created_at": "2026-05-09T07:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 152,
+  "order_id": 1465,
+  "product": {
+   "id": 1
+  },
+  "rating": 4,
+  "text": "שווה כל שקל",
+  "created_at": "2026-03-08T15:00:00",
+  "tags": [
+   "משלוח",
+   "איכות"
+  ]
+ },
+ {
+  "review_id": 153,
+  "order_id": 1497,
+  "product": {
+   "id": 2
+  },
+  "rating": 2,
+  "text": "המשלוח לקח שלושה שבועות",
+  "created_at": "2026-02-25T04:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 154,
+  "order_id": 1594,
+  "product": {
+   "id": 6
+  },
+  "rating": 5,
+  "text": "קל לשימוש ונראה טוב",
+  "created_at": "2026-06-24T00:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 155,
+  "order_id": 1236,
+  "product": {
+   "id": 2
+  },
+  "rating": 5,
+  "text": "שווה כל שקל",
+  "created_at": "2026-05-23T07:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 156,
+  "order_id": 1205,
+  "product": {
+   "id": 7
+  },
+  "rating": 1,
+  "text": "המחיר גבוה מדי ביחס לאיכות",
+  "created_at": "2026-04-17T07:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 157,
+  "order_id": 1056,
+  "product": {
+   "id": 7
+  },
+  "rating": 4,
+  "text": "Great product, works perfectly",
+  "created_at": "2026-03-22T11:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 158,
+  "order_id": 1183,
+  "product": {
+   "id": 7
+  },
+  "rating": 5,
+  "text": "Great product, works perfectly",
+  "created_at": "2026-06-08T11:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 159,
+  "order_id": 1368,
+  "product": {
+   "id": 5
+  },
+  "rating": 4,
+  "text": "איכות גבוהה ממה שציפיתי",
+  "created_at": "2026-04-11T00:00:00",
+  "tags": [
+   "איכות"
+  ]
+ },
+ {
+  "review_id": 160,
+  "order_id": 1288,
+  "product": {
+   "id": 3
+  },
+  "rating": 1,
+  "text": "המשלוח לקח שלושה שבועות",
+  "created_at": "2026-03-10T22:00:00",
+  "tags": [
+   "שירות"
+  ]
+ },
+ {
+  "review_id": 161,
+  "order_id": 1226,
+  "product": {
+   "id": 5
+  },
+  "rating": 4,
+  "text": "שווה כל שקל",
+  "created_at": "2026-08-26T00:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 162,
+  "order_id": 1175,
+  "product": {
+   "id": 4
+  },
+  "rating": 5,
+  "text": "השירות היה מצוין",
+  "created_at": "2026-03-02T12:00:00",
+  "tags": [
+   "אריזה"
+  ]
+ },
+ {
+  "review_id": 163,
+  "order_id": 1485,
+  "product": {
+   "id": 8
+  },
+  "rating": 4,
+  "text": "איכות גבוהה ממה שציפיתי",
+  "created_at": "2026-05-07T06:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 164,
+  "order_id": 1253,
+  "product": {
+   "id": 4
+  },
+  "rating": 5,
+  "text": "השירות היה מצוין",
+  "created_at": "2026-05-23T17:00:00",
+  "tags": [
+   "אריזה"
+  ]
+ },
+ {
+  "review_id": 165,
+  "order_id": 1153,
+  "product": {
+   "id": 1
+  },
+  "rating": 3,
+  "text": "לא תואם לתיאור באתר",
+  "created_at": "2026-06-23T14:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 166,
+  "order_id": 1517,
+  "product": {
+   "id": 1
+  },
+  "rating": 1,
+  "text": "האריזה הייתה פתוחה כשהגיע",
+  "created_at": "2026-06-26T07:00:00",
+  "tags": [
+   "שירות",
+   "אריזה"
+  ]
+ },
+ {
+  "review_id": 167,
+  "order_id": 1101,
+  "product": {
+   "id": 8
+  },
+  "rating": 5,
+  "text": "השירות היה מצוין",
+  "created_at": "2026-07-20T01:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 168,
+  "order_id": 1417,
+  "product": {
+   "id": 4
+  },
+  "rating": 1,
+  "text": "המשלוח לקח שלושה שבועות",
+  "created_at": "2026-03-18T07:00:00",
+  "tags": [
+   "מחיר"
+  ]
+ },
+ {
+  "review_id": 169,
+  "order_id": 1017,
+  "product": {
+   "id": 8
+  },
+  "rating": 3,
+  "text": "איכות גבוהה ממה שציפיתי",
+  "created_at": "2026-09-17T08:00:00",
+  "tags": [
+   "איכות"
+  ]
+ },
+ {
+  "review_id": 170,
+  "order_id": 1598,
+  "product": {
+   "id": 1
+  },
+  "rating": 5,
+  "text": "קל לשימוש ונראה טוב",
+  "created_at": "2026-07-06T06:00:00",
+  "tags": [
+   "איכות"
+  ]
+ },
+ {
+  "review_id": 171,
+  "order_id": 1190,
+  "product": {
+   "id": 6
+  },
+  "rating": 5,
+  "text": "Great product, works perfectly",
+  "created_at": "2026-09-02T22:00:00",
+  "tags": [
+   "משלוח"
+  ]
+ },
+ {
+  "review_id": 172,
+  "order_id": 1395,
+  "product": {
+   "id": 6
+  },
+  "rating": 5,
+  "text": "מוצר מעולה, הגיע מהר",
+  "created_at": "2026-08-01T05:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 173,
+  "order_id": 1277,
+  "product": {
+   "id": 4
+  },
+  "rating": 3,
+  "text": "המחיר גבוה מדי ביחס לאיכות",
+  "created_at": "2026-09-22T16:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 174,
+  "order_id": 1057,
+  "product": {
+   "id": 6
+  },
+  "rating": 4,
+  "text": "שווה כל שקל",
+  "created_at": "2026-02-18T14:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 175,
+  "order_id": 1042,
+  "product": {
+   "id": 6
+  },
+  "rating": 4,
+  "text": "Great product, works perfectly",
+  "created_at": "2026-06-06T01:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 176,
+  "order_id": 1069,
+  "product": {
+   "id": 4
+  },
+  "rating": 4,
+  "text": "השירות היה מצוין",
+  "created_at": "2026-03-20T05:00:00",
+  "tags": [
+   "איכות"
+  ]
+ },
+ {
+  "review_id": 177,
+  "order_id": 1490,
+  "product": {
+   "id": 4
+  },
+  "rating": 4,
+  "text": "השירות היה מצוין",
+  "created_at": "2026-04-18T22:00:00",
+  "tags": [
+   "מחיר"
+  ]
+ },
+ {
+  "review_id": 178,
+  "order_id": 1434,
+  "product": {
+   "id": 5
+  },
+  "rating": 5,
+  "text": "קל לשימוש ונראה טוב",
+  "created_at": "2026-02-19T14:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 179,
+  "order_id": 1498,
+  "product": {
+   "id": 2
+  },
+  "rating": 4,
+  "text": "Great product, works perfectly",
+  "created_at": "2026-07-11T11:00:00",
+  "tags": [
+   "אריזה",
+   "מחיר"
+  ]
+ },
+ {
+  "review_id": 180,
+  "order_id": 1068,
+  "product": {
+   "id": 4
+  },
+  "rating": 4,
+  "text": "שווה כל שקל",
+  "created_at": "2026-07-07T06:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 181,
+  "order_id": 1296,
+  "product": {
+   "id": 2
+  },
+  "rating": 1,
+  "text": "הסוללה מחזיקה רק שעתיים",
+  "created_at": "2026-03-10T07:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 182,
+  "order_id": 1152,
+  "product": {
+   "id": 8
+  },
+  "rating": 3,
+  "text": "Stopped working after a week",
+  "created_at": "2026-03-24T08:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 183,
+  "order_id": 1024,
+  "product": {
+   "id": 5
+  },
+  "rating": 4,
+  "text": "השירות היה מצוין",
+  "created_at": "2026-06-23T04:00:00",
+  "tags": [
+   "אריזה",
+   "איכות"
+  ]
+ },
+ {
+  "review_id": 184,
+  "order_id": 1455,
+  "product": {
+   "id": 1
+  },
+  "rating": 4,
+  "text": "Great product, works perfectly",
+  "created_at": "2026-05-11T12:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 185,
+  "order_id": 1533,
+  "product": {
+   "id": 6
+  },
+  "rating": 1,
+  "text": "לא תואם לתיאור באתר",
+  "created_at": "2026-06-21T12:00:00",
+  "tags": [
+   "מחיר",
+   "אריזה"
+  ]
+ },
+ {
+  "review_id": 186,
+  "order_id": 1543,
+  "product": {
+   "id": 8
+  },
+  "rating": 4,
+  "text": "השירות היה מצוין",
+  "created_at": "2026-07-07T07:00:00",
+  "tags": [
+   "אריזה"
+  ]
+ },
+ {
+  "review_id": 187,
+  "order_id": 1176,
+  "product": {
+   "id": 5
+  },
+  "rating": 2,
+  "text": "שירות הלקוחות לא ענה למיילים",
+  "created_at": "2026-04-19T09:00:00",
+  "tags": [
+   "מחיר"
+  ]
+ },
+ {
+  "review_id": 188,
+  "order_id": 1152,
+  "product": {
+   "id": 6
+  },
+  "rating": 5,
+  "text": "מוצר מעולה, הגיע מהר",
+  "created_at": "2026-05-09T01:00:00",
+  "tags": [
+   "איכות"
+  ]
+ },
+ {
+  "review_id": 189,
+  "order_id": 1549,
+  "product": {
+   "id": 5
+  },
+  "rating": 4,
+  "text": "איכות גבוהה ממה שציפיתי",
+  "created_at": "2026-04-04T05:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 190,
+  "order_id": 1158,
+  "product": {
+   "id": 3
+  },
+  "rating": 5,
+  "text": "השירות היה מצוין",
+  "created_at": "2026-04-23T04:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 191,
+  "order_id": 1589,
+  "product": {
+   "id": 3
+  },
+  "rating": 1,
+  "text": "Stopped working after a week",
+  "created_at": "2026-07-01T11:00:00",
+  "tags": [
+   "מחיר"
+  ]
+ },
+ {
+  "review_id": 192,
+  "order_id": 1325,
+  "product": {
+   "id": 6
+  },
+  "rating": 2,
+  "text": "המשלוח לקח שלושה שבועות",
+  "created_at": "2026-03-23T11:00:00",
+  "tags": [
+   "שירות"
+  ]
+ },
+ {
+  "review_id": 193,
+  "order_id": 1547,
+  "product": {
+   "id": 5
+  },
+  "rating": 4,
+  "text": "איכות גבוהה ממה שציפיתי",
+  "created_at": "2026-03-14T11:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 194,
+  "order_id": 1149,
+  "product": {
+   "id": 8
+  },
+  "rating": 4,
+  "text": "Great product, works perfectly",
+  "created_at": "2026-05-21T07:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 195,
+  "order_id": 1303,
+  "product": {
+   "id": 8
+  },
+  "rating": 1,
+  "text": "Stopped working after a week",
+  "created_at": "2026-05-10T22:00:00",
+  "tags": [
+   "איכות",
+   "שירות"
+  ]
+ },
+ {
+  "review_id": 196,
+  "order_id": 1491,
+  "product": {
+   "id": 1
+  },
+  "rating": 3,
+  "text": "איכות גבוהה ממה שציפיתי",
+  "created_at": "2026-03-20T14:00:00",
+  "tags": [
+   "אריזה",
+   "משלוח"
+  ]
+ },
+ {
+  "review_id": 197,
+  "order_id": 1226,
+  "product": {
+   "id": 8
+  },
+  "rating": 3,
+  "text": "המשלוח לקח שלושה שבועות",
+  "created_at": "2026-06-02T23:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 198,
+  "order_id": 1200,
+  "product": {
+   "id": 4
+  },
+  "rating": 3,
+  "text": "לא תואם לתיאור באתר",
+  "created_at": "2026-05-06T20:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 199,
+  "order_id": 1090,
+  "product": {
+   "id": 7
+  },
+  "rating": 1,
+  "text": "האריזה הייתה פתוחה כשהגיע",
+  "created_at": "2026-04-08T08:00:00",
+  "tags": [
+   "מחיר"
+  ]
+ },
+ {
+  "review_id": 200,
+  "order_id": 1058,
+  "product": {
+   "id": 6
+  },
+  "rating": 4,
+  "text": "קל לשימוש ונראה טוב",
+  "created_at": "2026-06-16T16:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 201,
+  "order_id": 1379,
+  "product": {
+   "id": 7
+  },
+  "rating": 5,
+  "text": "Great product, works perfectly",
+  "created_at": "2026-06-08T06:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 202,
+  "order_id": 1316,
+  "product": {
+   "id": 8
+  },
+  "rating": 3,
+  "text": "השירות היה מצוין",
+  "created_at": "2026-08-11T11:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 203,
+  "order_id": 1426,
+  "product": {
+   "id": 8
+  },
+  "rating": 3,
+  "text": "הגיע שבור באריזה",
+  "created_at": "2026-05-10T12:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 204,
+  "order_id": 1425,
+  "product": {
+   "id": 3
+  },
+  "rating": 5,
+  "text": "Great product, works perfectly",
+  "created_at": "2026-08-20T10:00:00",
+  "tags": [
+   "משלוח",
+   "איכות"
+  ]
+ },
+ {
+  "review_id": 205,
+  "order_id": 1538,
+  "product": {
+   "id": 6
+  },
+  "rating": 3,
+  "text": "הגיע שבור באריזה",
+  "created_at": "2026-02-23T13:00:00",
+  "tags": [
+   "שירות",
+   "משלוח"
+  ]
+ },
+ {
+  "review_id": 206,
+  "order_id": 1425,
+  "product": {
+   "id": 3
+  },
+  "rating": 0,
+  "text": "שירות הלקוחות לא ענה למיילים",
+  "created_at": "2026-08-09T17:00:00",
+  "tags": [
+   "אריזה"
+  ]
+ },
+ {
+  "review_id": 207,
+  "order_id": 1205,
+  "product": {
+   "id": 3
+  },
+  "rating": 5,
+  "text": "איכות גבוהה ממה שציפיתי",
+  "created_at": "2026-06-11T07:00:00",
+  "tags": [
+   "אריזה"
+  ]
+ },
+ {
+  "review_id": 208,
+  "order_id": 1600,
+  "product": {
+   "id": 5
+  },
+  "rating": 4,
+  "text": "שווה כל שקל",
+  "created_at": "2026-07-19T15:00:00",
+  "tags": [
+   "שירות",
+   "איכות"
+  ]
+ },
+ {
+  "review_id": 209,
+  "order_id": 1158,
+  "product": {
+   "id": 5
+  },
+  "rating": 1,
+  "text": "המשלוח לקח שלושה שבועות",
+  "created_at": "2026-05-14T10:00:00",
+  "tags": [
+   "שירות",
+   "משלוח"
+  ]
+ },
+ {
+  "review_id": 210,
+  "order_id": 1428,
+  "product": {
+   "id": 3
+  },
+  "rating": 5,
+  "text": "שווה כל שקל",
+  "created_at": "2026-07-18T21:00:00",
+  "tags": [
+   "איכות",
+   "משלוח"
+  ]
+ },
+ {
+  "review_id": 211,
+  "order_id": 1505,
+  "product": {
+   "id": 2
+  },
+  "rating": 2,
+  "text": "שירות הלקוחות לא ענה למיילים",
+  "created_at": "2026-08-24T10:00:00",
+  "tags": [
+   "מחיר",
+   "שירות"
+  ]
+ },
+ {
+  "review_id": 212,
+  "order_id": 1488,
+  "product": {
+   "id": 2
+  },
+  "rating": 4,
+  "text": "שווה כל שקל",
+  "created_at": "2026-06-08T09:00:00",
+  "tags": [
+   "אריזה",
+   "משלוח"
+  ]
+ },
+ {
+  "review_id": 213,
+  "order_id": 1596,
+  "product": {
+   "id": 1
+  },
+  "rating": 5,
+  "text": "איכות גבוהה ממה שציפיתי",
+  "created_at": "2026-03-22T21:00:00",
+  "tags": [
+   "שירות"
+  ]
+ },
+ {
+  "review_id": 214,
+  "order_id": 1366,
+  "product": {
+   "id": 3
+  },
+  "rating": 5,
+  "text": "איכות גבוהה ממה שציפיתי",
+  "created_at": "2026-02-19T01:00:00",
+  "tags": [
+   "מחיר"
+  ]
+ },
+ {
+  "review_id": 215,
+  "order_id": 1050,
+  "product": {
+   "id": 5
+  },
+  "rating": 4,
+  "text": "שווה כל שקל",
+  "created_at": "2026-05-11T13:00:00",
+  "tags": [
+   "משלוח",
+   "איכות"
+  ]
+ },
+ {
+  "review_id": 216,
+  "order_id": 1097,
+  "product": {
+   "id": 3
+  },
+  "rating": 5,
+  "text": "איכות גבוהה ממה שציפיתי",
+  "created_at": "2026-08-05T14:00:00",
+  "tags": [
+   "מחיר"
+  ]
+ },
+ {
+  "review_id": 217,
+  "order_id": 1309,
+  "product": {
+   "id": 5
+  },
+  "rating": 5,
+  "text": "השירות היה מצוין",
+  "created_at": "2026-09-22T23:00:00",
+  "tags": [
+   "מחיר",
+   "משלוח"
+  ]
+ },
+ {
+  "review_id": 218,
+  "order_id": 1148,
+  "product": {
+   "id": 1
+  },
+  "rating": 4,
+  "text": "שווה כל שקל",
+  "created_at": "2026-03-19T17:00:00",
+  "tags": [
+   "מחיר",
+   "אריזה"
+  ]
+ },
+ {
+  "review_id": 219,
+  "order_id": 1349,
+  "product": {
+   "id": 3
+  },
+  "rating": 5,
+  "text": "Great product, works perfectly",
+  "created_at": "2026-03-07T23:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 220,
+  "order_id": 1193,
+  "product": {
+   "id": 2
+  },
+  "rating": null,
+  "text": "לא תואם לתיאור באתר",
+  "created_at": "2026-06-23T10:00:00",
+  "tags": [
+   "משלוח"
+  ]
+ },
+ {
+  "review_id": 221,
+  "order_id": 1018,
+  "product": {
+   "id": 8
+  },
+  "rating": 2,
+  "text": "הסוללה מחזיקה רק שעתיים",
+  "created_at": "2026-05-30T20:00:00",
+  "tags": [
+   "מחיר"
+  ]
+ },
+ {
+  "review_id": 222,
+  "order_id": 1536,
+  "product": {
+   "id": 6
+  },
+  "rating": 2,
+  "text": "האריזה הייתה פתוחה כשהגיע",
+  "created_at": "2026-03-31T18:00:00",
+  "tags": [
+   "מחיר",
+   "משלוח"
+  ]
+ },
+ {
+  "review_id": 223,
+  "order_id": 1228,
+  "product": {
+   "id": 3
+  },
+  "rating": 5,
+  "text": "   ",
+  "created_at": "2026-09-25T23:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 224,
+  "order_id": 1129,
+  "product": {
+   "id": 4
+  },
+  "rating": 5,
+  "text": "שווה כל שקל",
+  "created_at": "2026-03-17T10:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 225,
+  "order_id": 1080,
+  "product": {
+   "id": 1
+  },
+  "rating": 4,
+  "text": "מוצר מעולה, הגיע מהר",
+  "created_at": "2026-07-16T07:00:00",
+  "tags": [
+   "משלוח"
+  ]
+ },
+ {
+  "review_id": 226,
+  "order_id": 1526,
+  "product": {
+   "id": 1
+  },
+  "rating": 2,
+  "text": "המשלוח לקח שלושה שבועות",
+  "created_at": "2026-07-11T02:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 227,
+  "order_id": 1068,
+  "product": {
+   "id": 5
+  },
+  "rating": 5,
+  "text": "מוצר מעולה, הגיע מהר",
+  "created_at": "2026-09-16T20:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 228,
+  "order_id": 1211,
+  "product": {
+   "id": 4
+  },
+  "rating": 5,
+  "text": "מוצר מעולה, הגיע מהר",
+  "created_at": "2026-04-05T01:00:00",
+  "tags": [
+   "מחיר",
+   "משלוח"
+  ]
+ },
+ {
+  "review_id": 229,
+  "order_id": 1594,
+  "product": {
+   "id": 6
+  },
+  "rating": 1,
+  "text": "שירות הלקוחות לא ענה למיילים",
+  "created_at": "2026-06-01T05:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 230,
+  "order_id": 1248,
+  "product": {
+   "id": 2
+  },
+  "rating": 5,
+  "text": "השירות היה מצוין",
+  "created_at": "2026-03-06T19:00:00",
+  "tags": [
+   "משלוח",
+   "איכות"
+  ]
+ },
+ {
+  "review_id": 231,
+  "order_id": 1176,
+  "product": {
+   "id": 1
+  },
+  "rating": 5,
+  "text": "שווה כל שקל",
+  "created_at": "2026-10-06T14:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 232,
+  "order_id": 1487,
+  "product": {
+   "id": 6
+  },
+  "rating": 5,
+  "text": "קל לשימוש ונראה טוב",
+  "created_at": "2026-09-27T07:00:00",
+  "tags": [
+   "איכות",
+   "שירות"
+  ]
+ },
+ {
+  "review_id": 233,
+  "order_id": 1186,
+  "product": {
+   "id": 6
+  },
+  "rating": 5,
+  "text": "   ",
+  "created_at": "2026-06-10T13:00:00",
+  "tags": [
+   "איכות"
+  ]
+ },
+ {
+  "review_id": 234,
+  "order_id": 1116,
+  "product": {
+   "id": 6
+  },
+  "rating": 4,
+  "text": "Great product, works perfectly",
+  "created_at": "2026-03-15T04:00:00",
+  "tags": [
+   "משלוח"
+  ]
+ },
+ {
+  "review_id": 235,
+  "order_id": 1370,
+  "product": {
+   "id": 5
+  },
+  "rating": 4,
+  "text": "Great product, works perfectly",
+  "created_at": "2026-08-10T04:00:00",
+  "tags": [
+   "משלוח",
+   "אריזה"
+  ]
+ },
+ {
+  "review_id": 236,
+  "order_id": 1395,
+  "product": {
+   "id": 5
+  },
+  "rating": 3,
+  "text": "איכות גבוהה ממה שציפיתי",
+  "created_at": "2026-07-06T23:00:00",
+  "tags": [
+   "מחיר",
+   "שירות"
+  ]
+ },
+ {
+  "review_id": 237,
+  "order_id": 1298,
+  "product": {
+   "id": 7
+  },
+  "rating": 3,
+  "text": "המשלוח לקח שלושה שבועות",
+  "created_at": "2026-04-06T10:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 238,
+  "order_id": 1377,
+  "product": {
+   "id": 3
+  },
+  "rating": 5,
+  "text": "Great product, works perfectly",
+  "created_at": "2026-02-05T08:00:00",
+  "tags": [
+   "שירות",
+   "משלוח"
+  ]
+ },
+ {
+  "review_id": 239,
+  "order_id": 1088,
+  "product": {
+   "id": 2
+  },
+  "rating": 4,
+  "text": "קל לשימוש ונראה טוב",
+  "created_at": "2026-03-21T22:00:00",
+  "tags": [
+   "שירות"
+  ]
+ },
+ {
+  "review_id": 240,
+  "order_id": 1173,
+  "product": {
+   "id": 2
+  },
+  "rating": 5,
+  "text": "מוצר מעולה, הגיע מהר",
+  "created_at": "2026-06-05T03:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 241,
+  "order_id": 1414,
+  "product": {
+   "id": 2
+  },
+  "rating": 3,
+  "text": "לא תואם לתיאור באתר",
+  "created_at": "2026-04-21T11:00:00",
+  "tags": [
+   "שירות"
+  ]
+ },
+ {
+  "review_id": 242,
+  "order_id": 1596,
+  "product": {
+   "id": 5
+  },
+  "rating": 3,
+  "text": "Stopped working after a week",
+  "created_at": "2026-09-08T18:00:00",
+  "tags": [
+   "מחיר"
+  ]
+ },
+ {
+  "review_id": 243,
+  "order_id": 1415,
+  "product": {
+   "id": 8
+  },
+  "rating": 4,
+  "text": "קל לשימוש ונראה טוב",
+  "created_at": "2026-07-25T13:00:00",
+  "tags": [
+   "איכות"
+  ]
+ },
+ {
+  "review_id": 244,
+  "order_id": 1126,
+  "product": {
+   "id": 5
+  },
+  "rating": 5,
+  "text": "מוצר מעולה, הגיע מהר",
+  "created_at": "2026-07-18T00:00:00",
+  "tags": [
+   "איכות"
+  ]
+ },
+ {
+  "review_id": 245,
+  "order_id": 1031,
+  "product": {
+   "id": 2
+  },
+  "rating": 4,
+  "text": "איכות גבוהה ממה שציפיתי",
+  "created_at": "2026-02-19T00:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 246,
+  "order_id": 1184,
+  "product": {
+   "id": 7
+  },
+  "rating": 4,
+  "text": "מוצר מעולה, הגיע מהר",
+  "created_at": "2026-08-26T08:00:00",
+  "tags": [
+   "מחיר",
+   "איכות"
+  ]
+ },
+ {
+  "review_id": 247,
+  "order_id": 1099,
+  "product": {
+   "id": 2
+  },
+  "rating": 3,
+  "text": "לא תואם לתיאור באתר",
+  "created_at": "2026-09-14T15:00:00",
+  "tags": [
+   "שירות",
+   "אריזה"
+  ]
+ },
+ {
+  "review_id": 248,
+  "order_id": 1510,
+  "product": {
+   "id": 8
+  },
+  "rating": 3,
+  "text": "שירות הלקוחות לא ענה למיילים",
+  "created_at": "2026-07-23T07:00:00",
+  "tags": [
+   "אריזה"
+  ]
+ },
+ {
+  "review_id": 249,
+  "order_id": 1554,
+  "product": {
+   "id": 1
+  },
+  "rating": 3,
+  "text": "האריזה הייתה פתוחה כשהגיע",
+  "created_at": "2026-02-11T18:00:00",
+  "tags": [
+   "משלוח"
+  ]
+ },
+ {
+  "review_id": 250,
+  "order_id": 1386,
+  "product": {
+   "id": 8
+  },
+  "rating": 4,
+  "text": "שווה כל שקל",
+  "created_at": "2026-07-07T21:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 251,
+  "order_id": 1169,
+  "product": {
+   "id": 8
+  },
+  "rating": 1,
+  "text": "שירות הלקוחות לא ענה למיילים",
+  "created_at": "2026-06-28T00:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 252,
+  "order_id": 1500,
+  "product": {
+   "id": 2
+  },
+  "rating": 3,
+  "text": "המשלוח לקח שלושה שבועות",
+  "created_at": "2026-08-14T04:00:00",
+  "tags": [
+   "שירות",
+   "אריזה"
+  ]
+ },
+ {
+  "review_id": 253,
+  "order_id": 1519,
+  "product": {
+   "id": 1
+  },
+  "rating": 4,
+  "text": "איכות גבוהה ממה שציפיתי",
+  "created_at": "2026-06-14T14:00:00",
+  "tags": [
+   "שירות"
+  ]
+ },
+ {
+  "review_id": 254,
+  "order_id": 1362,
+  "product": {
+   "id": 5
+  },
+  "rating": 4,
+  "text": "   ",
+  "created_at": "2026-05-21T09:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 255,
+  "order_id": 1132,
+  "product": {
+   "id": 6
+  },
+  "rating": 1,
+  "text": "המשלוח לקח שלושה שבועות",
+  "created_at": "2026-05-31T01:00:00",
+  "tags": [
+   "אריזה",
+   "משלוח"
+  ]
+ },
+ {
+  "review_id": 256,
+  "order_id": 1350,
+  "product": {
+   "id": 7
+  },
+  "rating": 5,
+  "text": "השירות היה מצוין",
+  "created_at": "2026-03-06T05:00:00",
+  "tags": [
+   "מחיר"
+  ]
+ },
+ {
+  "review_id": 257,
+  "order_id": 1360,
+  "product": {
+   "id": 1
+  },
+  "rating": 5,
+  "text": "Great product, works perfectly",
+  "created_at": "2026-09-14T16:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 258,
+  "order_id": 1320,
+  "product": {
+   "id": 2
+  },
+  "rating": 3,
+  "text": "שירות הלקוחות לא ענה למיילים",
+  "created_at": "2026-09-23T20:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 259,
+  "order_id": 1346,
+  "product": {
+   "id": 3
+  },
+  "rating": 5,
+  "text": "מוצר מעולה, הגיע מהר",
+  "created_at": "2026-02-07T17:00:00",
+  "tags": [
+   "מחיר",
+   "משלוח"
+  ]
+ },
+ {
+  "review_id": 260,
+  "order_id": 1582,
+  "product": {
+   "id": 7
+  },
+  "rating": 4,
+  "text": "Great product, works perfectly",
+  "created_at": "2026-05-03T00:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 261,
+  "order_id": 1023,
+  "product": {
+   "id": 6
+  },
+  "rating": 5,
+  "text": "קל לשימוש ונראה טוב",
+  "created_at": "2026-06-09T22:00:00",
+  "tags": [
+   "שירות",
+   "מחיר"
+  ]
+ },
+ {
+  "review_id": 262,
+  "order_id": 1103,
+  "product": {
+   "id": 4
+  },
+  "rating": 4,
+  "text": "Great product, works perfectly",
+  "created_at": "2026-05-26T16:00:00",
+  "tags": [
+   "אריזה"
+  ]
+ },
+ {
+  "review_id": 263,
+  "order_id": 1348,
+  "product": {
+   "id": 3
+  },
+  "rating": 5,
+  "text": "השירות היה מצוין",
+  "created_at": "2026-08-29T20:00:00",
+  "tags": [
+   "מחיר"
+  ]
+ },
+ {
+  "review_id": 264,
+  "order_id": 1509,
+  "product": {
+   "id": 2
+  },
+  "rating": 5,
+  "text": "איכות גבוהה ממה שציפיתי",
+  "created_at": "2026-08-02T21:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 265,
+  "order_id": 1305,
+  "product": {
+   "id": 7
+  },
+  "rating": 3,
+  "text": "מוצר מעולה, הגיע מהר",
+  "created_at": "2026-04-19T02:00:00",
+  "tags": [
+   "משלוח",
+   "אריזה"
+  ]
+ },
+ {
+  "review_id": 266,
+  "order_id": 1069,
+  "product": {
+   "id": 8
+  },
+  "rating": 4,
+  "text": "שווה כל שקל",
+  "created_at": "2026-06-26T18:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 267,
+  "order_id": 1310,
+  "product": {
+   "id": 5
+  },
+  "rating": 3,
+  "text": "איכות גבוהה ממה שציפיתי",
+  "created_at": "2026-06-28T18:00:00",
+  "tags": [
+   "אריזה",
+   "מחיר"
+  ]
+ },
+ {
+  "review_id": 268,
+  "order_id": 1258,
+  "product": {
+   "id": 8
+  },
+  "rating": 3,
+  "text": "המשלוח לקח שלושה שבועות",
+  "created_at": "2026-09-18T05:00:00",
+  "tags": [
+   "איכות",
+   "משלוח"
+  ]
+ },
+ {
+  "review_id": 269,
+  "order_id": 1192,
+  "product": {
+   "id": 8
+  },
+  "rating": 4,
+  "text": "קל לשימוש ונראה טוב",
+  "created_at": "2026-04-14T16:00:00",
+  "tags": [
+   "שירות",
+   "מחיר"
+  ]
+ },
+ {
+  "review_id": 270,
+  "order_id": 1445,
+  "product": {
+   "id": 1
+  },
+  "rating": 5,
+  "text": "   ",
+  "created_at": "2026-07-29T06:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 271,
+  "order_id": 1247,
+  "product": {
+   "id": 3
+  },
+  "rating": 4,
+  "text": "איכות גבוהה ממה שציפיתי",
+  "created_at": "2026-09-22T22:00:00",
+  "tags": [
+   "שירות"
+  ]
+ },
+ {
+  "review_id": 272,
+  "order_id": 1209,
+  "product": {
+   "id": 7
+  },
+  "rating": 4,
+  "text": "מוצר מעולה, הגיע מהר",
+  "created_at": "2026-05-03T02:00:00",
+  "tags": [
+   "איכות"
+  ]
+ },
+ {
+  "review_id": 273,
+  "order_id": 1242,
+  "product": {
+   "id": 7
+  },
+  "rating": 3,
+  "text": "לא תואם לתיאור באתר",
+  "created_at": "2026-04-23T09:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 274,
+  "order_id": 1252,
+  "product": {
+   "id": 5
+  },
+  "rating": 2,
+  "text": "המשלוח לקח שלושה שבועות",
+  "created_at": "2026-07-09T10:00:00",
+  "tags": [
+   "אריזה"
+  ]
+ },
+ {
+  "review_id": 275,
+  "order_id": 1038,
+  "product": {
+   "id": 4
+  },
+  "rating": 5,
+  "text": "Great product, works perfectly",
+  "created_at": "2026-03-27T09:00:00",
+  "tags": [
+   "איכות"
+  ]
+ },
+ {
+  "review_id": 276,
+  "order_id": 1564,
+  "product": {
+   "id": 3
+  },
+  "rating": 1,
+  "text": "שירות הלקוחות לא ענה למיילים",
+  "created_at": "2026-09-08T22:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 277,
+  "order_id": 1021,
+  "product": {
+   "id": 1
+  },
+  "rating": 5,
+  "text": "Great product, works perfectly",
+  "created_at": "2026-03-01T15:00:00",
+  "tags": [
+   "אריזה"
+  ]
+ },
+ {
+  "review_id": 278,
+  "order_id": 1417,
+  "product": {
+   "id": 6
+  },
+  "rating": 3,
+  "text": "איכות גבוהה ממה שציפיתי",
+  "created_at": "2026-09-18T06:00:00",
+  "tags": [
+   "משלוח",
+   "שירות"
+  ]
+ },
+ {
+  "review_id": 279,
+  "order_id": 1144,
+  "product": {
+   "id": 4
+  },
+  "rating": 5,
+  "text": "השירות היה מצוין",
+  "created_at": "2026-03-11T04:00:00",
+  "tags": [
+   "אריזה",
+   "משלוח"
+  ]
+ },
+ {
+  "review_id": 280,
+  "order_id": 1538,
+  "product": {
+   "id": 5
+  },
+  "rating": 4,
+  "text": "קל לשימוש ונראה טוב",
+  "created_at": "2026-07-20T10:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 281,
+  "order_id": 1321,
+  "product": {
+   "id": 6
+  },
+  "rating": 3,
+  "text": "איכות גבוהה ממה שציפיתי",
+  "created_at": "2026-08-19T10:00:00",
+  "tags": [
+   "שירות",
+   "איכות"
+  ]
+ },
+ {
+  "review_id": 282,
+  "order_id": 1148,
+  "product": {
+   "id": 2
+  },
+  "rating": 5,
+  "text": "איכות גבוהה ממה שציפיתי",
+  "created_at": "2026-04-01T18:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 283,
+  "order_id": 1419,
+  "product": {
+   "id": 5
+  },
+  "rating": 5,
+  "text": "Great product, works perfectly",
+  "created_at": "2026-08-21T05:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 284,
+  "order_id": 1116,
+  "product": {
+   "id": 6
+  },
+  "rating": 4,
+  "text": "שווה כל שקל",
+  "created_at": "2026-08-06T06:00:00",
+  "tags": [
+   "שירות"
+  ]
+ },
+ {
+  "review_id": 285,
+  "order_id": 1149,
+  "product": {
+   "id": 6
+  },
+  "rating": 5,
+  "text": "שווה כל שקל",
+  "created_at": "2026-07-13T05:00:00",
+  "tags": [
+   "מחיר",
+   "אריזה"
+  ]
+ },
+ {
+  "review_id": 286,
+  "order_id": 1056,
+  "product": {
+   "id": 4
+  },
+  "rating": 1,
+  "text": "המשלוח לקח שלושה שבועות",
+  "created_at": "2026-04-28T08:00:00",
+  "tags": [
+   "שירות",
+   "מחיר"
+  ]
+ },
+ {
+  "review_id": 287,
+  "order_id": 1372,
+  "product": {
+   "id": 2
+  },
+  "rating": 4,
+  "text": "השירות היה מצוין",
+  "created_at": "2026-08-02T13:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 288,
+  "order_id": 1009,
+  "product": {
+   "id": 7
+  },
+  "rating": 5,
+  "text": "Great product, works perfectly",
+  "created_at": "2026-04-29T05:00:00",
+  "tags": [
+   "משלוח"
+  ]
+ },
+ {
+  "review_id": 289,
+  "order_id": 1305,
+  "product": {
+   "id": 4
+  },
+  "rating": 5,
+  "text": "איכות גבוהה ממה שציפיתי",
+  "created_at": "2026-03-27T16:00:00",
+  "tags": [
+   "מחיר"
+  ]
+ },
+ {
+  "review_id": 290,
+  "order_id": 1417,
+  "product": {
+   "id": 1
+  },
+  "rating": 5,
+  "text": "השירות היה מצוין",
+  "created_at": "2026-05-05T12:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 291,
+  "order_id": 1483,
+  "product": {
+   "id": 7
+  },
+  "rating": 5,
+  "text": "Great product, works perfectly",
+  "created_at": "2026-05-25T13:00:00",
+  "tags": [
+   "שירות",
+   "משלוח"
+  ]
+ },
+ {
+  "review_id": 292,
+  "order_id": 1268,
+  "product": {
+   "id": 2
+  },
+  "rating": 5,
+  "text": "השירות היה מצוין",
+  "created_at": "2026-06-01T02:00:00",
+  "tags": [
+   "אריזה"
+  ]
+ },
+ {
+  "review_id": 293,
+  "order_id": 1335,
+  "product": {
+   "id": 8
+  },
+  "rating": 5,
+  "text": "קל לשימוש ונראה טוב",
+  "created_at": "2026-09-26T07:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 294,
+  "order_id": 1189,
+  "product": {
+   "id": 8
+  },
+  "rating": 5,
+  "text": "השירות היה מצוין",
+  "created_at": "2026-09-07T19:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 295,
+  "order_id": 1313,
+  "product": {
+   "id": 6
+  },
+  "rating": 1,
+  "text": "לא תואם לתיאור באתר",
+  "created_at": "2026-08-16T13:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 296,
+  "order_id": 1529,
+  "product": {
+   "id": 3
+  },
+  "rating": 2,
+  "text": "לא תואם לתיאור באתר",
+  "created_at": "2026-08-22T18:00:00",
+  "tags": [
+   "שירות",
+   "מחיר"
+  ]
+ },
+ {
+  "review_id": 297,
+  "order_id": 1137,
+  "product": {
+   "id": 5
+  },
+  "rating": 4,
+  "text": "השירות היה מצוין",
+  "created_at": "2026-04-01T05:00:00",
+  "tags": [
+   "אריזה",
+   "מחיר"
+  ]
+ },
+ {
+  "review_id": 298,
+  "order_id": 1087,
+  "product": {
+   "id": 7
+  },
+  "rating": 5,
+  "text": "איכות גבוהה ממה שציפיתי",
+  "created_at": "2026-06-06T11:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 299,
+  "order_id": 1585,
+  "product": {
+   "id": 4
+  },
+  "rating": 4,
+  "text": "Great product, works perfectly",
+  "created_at": "2026-02-08T01:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 300,
+  "order_id": 1235,
+  "product": {
+   "id": 2
+  },
+  "rating": 5,
+  "text": "השירות היה מצוין",
+  "created_at": "2026-07-08T20:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 61,
+  "order_id": 1588,
+  "product": {
+   "id": 4
+  },
+  "rating": 2,
+  "text": "שירות הלקוחות לא ענה למיילים",
+  "created_at": "2026-03-31T11:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 115,
+  "order_id": 1385,
+  "product": {
+   "id": 3
+  },
+  "rating": 1,
+  "text": "הסוללה מחזיקה רק שעתיים",
+  "created_at": "2026-03-10T20:00:00",
+  "tags": [
+   "איכות",
+   "מחיר"
+  ]
+ },
+ {
+  "review_id": 105,
+  "order_id": 1409,
+  "product": {
+   "id": 8
+  },
+  "rating": 1,
+  "text": "האריזה הייתה פתוחה כשהגיע",
+  "created_at": "2026-05-14T20:00:00",
+  "tags": [
+   "אריזה"
+  ]
+ },
+ {
+  "review_id": 98,
+  "order_id": 1299,
+  "product": {
+   "id": 1
+  },
+  "rating": 2,
+  "text": "המשלוח לקח שלושה שבועות",
+  "created_at": "2026-05-09T21:00:00",
+  "tags": [
+   "משלוח"
+  ]
+ },
+ {
+  "review_id": 137,
+  "order_id": 1117,
+  "product": {
+   "id": 8
+  },
+  "rating": 5,
+  "text": "מוצר מעולה, הגיע מהר",
+  "created_at": "2026-08-23T02:00:00",
+  "tags": [
+   "איכות",
+   "משלוח"
+  ]
+ },
+ {
+  "review_id": 148,
+  "order_id": 1121,
+  "product": {
+   "id": 2
+  },
+  "rating": 4,
+  "text": "איכות גבוהה ממה שציפיתי",
+  "created_at": "2026-08-31T06:00:00",
+  "tags": [
+   "אריזה"
+  ]
+ },
+ {
+  "review_id": 254,
+  "order_id": 1362,
+  "product": {
+   "id": 5
+  },
+  "rating": 4,
+  "text": "   ",
+  "created_at": "2026-05-21T09:00:00",
+  "tags": []
+ },
+ {
+  "review_id": 196,
+  "order_id": 1491,
+  "product": {
+   "id": 1
+  },
+  "rating": 3,
+  "text": "איכות גבוהה ממה שציפיתי",
+  "created_at": "2026-03-20T14:00:00",
+  "tags": [
+   "אריזה",
+   "משלוח"
+  ]
+ },
+ {
+  "review_id": 67,
+  "order_id": 1148,
+  "product": {
+   "id": 5
+  },
+  "rating": 4,
+  "text": "איכות גבוהה ממה שציפיתי",
+  "created_at": "2026-06-05T01:00:00",
+  "tags": [
+   "איכות"
+  ]
+ },
+ {
+  "review_id": 221,
+  "order_id": 1018,
+  "product": {
+   "id": 8
+  },
+  "rating": 2,
+  "text": "הסוללה מחזיקה רק שעתיים",
+  "created_at": "2026-05-30T20:00:00",
+  "tags": [
+   "מחיר"
+  ]
+ }
+]

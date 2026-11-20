@@ -11,7 +11,7 @@ from threading import Event, Thread
 
 from streaming_lab import StreamEngine, run_live, run_microbatch
 
-from .service import DEFAULT_CONFIG, throttled_printer
+from .service import DEFAULT_CONFIG, periodic_progress, print_progress
 from .source import shopil_source
 
 
@@ -26,6 +26,7 @@ async def run_managed(
     max_wait_s: float = 0.2,
     processing_delay_s: float = 0,
     on_snapshot=None,
+    progress_reader=None,
 ) -> dict:
     if mode not in {"live", "microbatch"}:
         raise ValueError("mode must be live or microbatch")
@@ -37,12 +38,12 @@ async def run_managed(
 
     options = dict(duration_s=None, interval_s=interval_s, queue_maxsize=queue_size,
                    processing_delay_s=processing_delay_s, finalize=False,
-                   on_snapshot=on_snapshot)
+                   on_snapshot=on_snapshot, progress_reader=progress_reader)
     if mode == "live":
         state = await run_live(engine, deliveries(), **options)
     else:
         state = await run_microbatch(engine, deliveries(), max_batch_size=batch_size,
-                                     max_wait_s=max_wait_s, **options)
+                                     max_wait_s=max_wait_s, record_batches=False, **options)
     if state["produced"] != state["consumed"]:
         raise RuntimeError("Stream stopped without draining admitted deliveries")
     return state
@@ -56,6 +57,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--queue-size", type=int, default=8)
     parser.add_argument("--batch-size", type=int, default=5)
     parser.add_argument("--max-wait", type=float, default=0.2)
+    parser.add_argument("--processing-delay", type=float, default=0, help="Seconds per delivery for a slow-sink demonstration")
     args = parser.parse_args(argv)
     stdin_stopped = Event()
     signal_stopped = False
@@ -81,7 +83,8 @@ def main(argv: list[str] | None = None) -> int:
                 engine, lambda: signal_stopped or stdin_stopped.is_set(), mode=args.mode,
                 interval_s=args.interval, queue_size=args.queue_size,
                 batch_size=args.batch_size, max_wait_s=args.max_wait,
-                on_snapshot=throttled_printer(0.5),
+                processing_delay_s=args.processing_delay, on_snapshot=print_progress,
+                progress_reader=periodic_progress(engine, 0.5),
             ))
         print(json.dumps({key: state[key] for key in ("produced", "consumed", "stop_reason")}),
               flush=True)

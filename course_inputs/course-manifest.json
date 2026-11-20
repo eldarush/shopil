@@ -1,0 +1,25 @@
+{
+  "revision": "6788526695bbb20ac40f46a947413fff3545b86a",
+  "sha256": {
+    "data/raw/customers.csv": "3944918fae705f81f45f88c538c6b5ab479d4e5541a9030d8b22035712daa9ff",
+    "data/raw/github_issues_sample.json": "ea63eb82f3b645b17cd776ea8411cf4ba03ba177ae98e24900db3e3673b856c0",
+    "data/raw/orders.csv": "eebf981396074bd8c6d5234faea8da47cb64ade045761ce27fb7e1fbf497af58",
+    "data/raw/products.csv": "39bddce415f19f0c2ddb43ce2b87c0204f4a8ef9bdb19f5485f5cae4aba066f7",
+    "data/raw/reviews.json": "cfee6ecd6ef45dddc8fa843dddac8874a8ea4140a5abc77fae058e900ae6b8e1",
+    "dbt_project/dbt_project.yml": "f7abdf607008603f2ee8a89f4c993e99eb0268a10472f084b30ba2fbeb6a35db",
+    "dbt_project/macros/generate_schema_name.sql": "302b022388e089ed1f4f064dc911b554f111b6797804d3ec628b10ddc5f07131",
+    "dbt_project/models/marts/_marts.yml": "6a5672db150f0cbac9b068bda1719bc66995630f4816d2bb5dd15272e0a6e41f",
+    "dbt_project/models/marts/dim_customers.sql": "8a7ed1df4ff06e4bd66be0e2e0d2745d796d55a510c315c2813f173b71597ff1",
+    "dbt_project/models/marts/fct_orders.sql": "dd531a2031f714caa8eaeb2c2c6fb858273a5dc9b0a6d494bd452ffad4503c6e",
+    "dbt_project/models/marts/mart_daily_revenue.sql": "a0024159685a602334960bed06453098a70f18317d3e90ef4b086c469969066c",
+    "dbt_project/models/staging/_sources.yml": "a7f59ccc3fc86ef6c049eec7edb6e9a692528e7cd5e06482cbb072f622788fe2",
+    "dbt_project/models/staging/_staging.yml": "2d9be2db789cb58b0d31ca598489964815eab97fadff1b02c2f9f443fb4ac4e1",
+    "dbt_project/models/staging/stg_customers.sql": "ac5541d33407fa50715107b33263867a9dcc5e5e65a7880ca17add967e8857ad",
+    "dbt_project/models/staging/stg_orders.sql": "4d1cd61818f5b8ab67d2dd2394608666c897c5f9d6e1ad310a4506e8ebc2428b",
+    "dbt_project/models/staging/stg_products.sql": "6baa31b9a4a8e25989be88bb3bde5bdda5308316fcd355d7d8eda1cc2f30d7cd",
+    "dbt_project/profiles.yml": "b5f9c9eed91af884aaf751e2c9ee6777ab45b93119bac50a6f54d1e5f2f3d790",
+    "dbt_project/tests/assert_no_negative_revenue.sql": "db5701a5dd4145ac9516020e7f0c78b251fb6adbf12e8e01d08dfb84a49e17ae",
+    "exercises/check_exercise.py": "efc2812696b4d4dd00af1e423c22b4289853509dc7408d4168368588ac18cf91",
+    "pipelines/02_dlt_pipeline.py": "ef10220c90835d8e1f2bab0f06a14bf6046a09ba2e78487a9b60cfd601037f1a"
+  }
+}

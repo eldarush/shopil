@@ -12,7 +12,7 @@ import sys
 from chat.audit import JsonlAudit
 from chat.capture import build_capture
 from chat.critic import Critic
-from chat.grounded import GroundedActor
+from chat.grounded import GroundedActor, candidate_feedback, source_lines
 from chat.model import ModelError
 from chat.service import ChatService
 from chat.transport import OllamaModel
@@ -76,7 +76,9 @@ class InjectedDraft:
 
     async def draft(self, question, evidence_json, history, previous_draft=None, feedback=None):
         if previous_draft is None:
-            return BAD_DRAFT
+            citation = source_lines(json.loads(evidence_json))
+            wrong_citation = citation.replace("marts.fct_orders", "raw.orders").replace("2026-09-28", "2026-12-31")
+            return f"{BAD_DRAFT}\n\n{wrong_citation}"
         return await self.actor.draft(question, evidence_json, history, previous_draft, feedback)
 
 
@@ -141,7 +143,9 @@ async def run(args):
     questions = [PAID_QUESTION] if args.case == "correction" else [STREAM_QUESTION, STREAM_QUESTION]
     if args.case == "conversation":
         questions = [PAID_QUESTION, "ומה לגבי מוצר 5?", "מהן עלויות המשלוח?",
-                     "כמה הזמנות שולמו?", "לאיזה מוצר יש הכי הרבה ביקורות שליליות?"]
+                     "כמה הזמנות שולמו?", "לאיזה מוצר יש הכי הרבה ביקורות שליליות?",
+                     "כמה הרווחנו מהזמנות ששולמו?", "כמה הזמנות שולמו בשנת 1990?",
+                     "מה ההכנסה מההזמנות ששולמו?"]
 
     turns = []
     history = []
@@ -151,7 +155,8 @@ async def run(args):
         history = reply.history
 
     expected = {
-        "correction": {"decisions": [False, True], "paid_revenue": "97210.10"},
+        "correction": {"initial_model_rejection": True, "paid_revenue": "97210.10",
+                       "actor_repaired_source_and_bounds": True},
         "concurrent": {"counts": [1, 2], "checkpoints": [0, 1], "actor_pending_after_update": True},
         "conversation": {"paid_revenue": "97210.10", "product_5_revenue": "8925.00", "paid_orders": 402,
                          "missing_shipping": True, "top_negative_product_id": 6},
@@ -161,16 +166,22 @@ async def run(args):
     known_hashes = {hashlib.sha256(event["evidence_json"].encode()).hexdigest() for event in snapshots}
     calls_match_snapshots = len(known_hashes) == len(questions) and {call["evidence_sha256"] for call in model.calls} == known_hashes
     if args.case == "correction":
-        decisions = [event["is_acceptable"] for events in read_audits(output) for event in events if event["event"] == "attempt"]
-        observed = {"decisions": decisions, "paid_revenue": evidence_value(output, turns[0]["snapshot_id"], "paid_revenue")}
-        approved &= expected["paid_revenue"] in (turns[0]["answer"] or "")
+        attempts = [event for events in read_audits(output) for event in events if event["event"] == "attempt"]
+        final = attempts[-1]
+        actual_citation = json.loads(final.get("actor_output_json", "{}")).get("citation")
+        correct_citation = source_lines(json.loads(snapshots[0]["evidence_json"]))
+        observed = {"initial_model_rejection": attempts[0].get("critic_is_acceptable") is False,
+                    "paid_revenue": evidence_value(output, turns[0]["snapshot_id"], "paid_revenue"),
+                    "actor_repaired_source_and_bounds": (
+                        actual_citation == correct_citation and "raw.orders" in attempts[0]["draft"])}
+
     elif stream:
         observed = {"counts": [evidence_value(output, turn["snapshot_id"], "orders") for turn in turns],
                     "checkpoints": [json.loads(next(event["evidence_json"] for event in snapshots
                                                    if event["snapshot_id"] == turn["snapshot_id"]))["stream"]["checkpoint"]
                                     for turn in turns],
                     "actor_pending_after_update": model.calls[0].get("actor_pending_after_update", False)}
-        approved &= all(f" {count}" in (turn["answer"] or "") for count, turn in zip(expected["counts"], turns))
+
     else:
         missing_snapshot = next((event for event in snapshots if event["snapshot_id"] == turns[2]["snapshot_id"]), None)
         observed = {"paid_revenue": evidence_value(output, turns[0]["snapshot_id"], "paid_revenue"),
@@ -179,12 +190,20 @@ async def run(args):
                     "missing_shipping": bool(missing_snapshot and
                                              json.loads(missing_snapshot["evidence_json"])["query_scope"]["availability"] == "missing"),
                     "top_negative_product_id": evidence_value(output, turns[4]["snapshot_id"], "product_id")}
-        approved &= all(str(expected[key]) in (turn["answer"] or "") for key, turn in
-                        zip(("paid_revenue", "product_5_revenue", "paid_orders"), (turns[0], turns[1], turns[3])))
-    passed = approved and calls_match_snapshots and observed == expected
-    save(output / "results.json", {"case": args.case, "model": args.model, "thinking": False, "expected": expected,
+
+    authored_checks = []
+    for turn in turns:
+        snapshot = next(json.loads(event["evidence_json"]) for event in snapshots if event["snapshot_id"] == turn["snapshot_id"])
+        prose = (turn["answer"] or "").split("\n\n", 1)[0]
+        error = candidate_feedback(turn["answer"] or "", snapshot)
+        if not error and snapshot["query_scope"]["availability"] != "available":
+            if not any(word in prose for word in ("חסר", "לא", "אין", "אינ", "אי אפשר", "מחוץ", "חורג")):
+                error = "Missing-data explanation absent from the Actor paragraph."
+        authored_checks.append({"question": turn["question"], "paragraph": prose, "error": error})
+    passed = approved and calls_match_snapshots and observed == expected and not any(check["error"] for check in authored_checks)
+    save(output / "results.json", {"case": args.case, "model": args.model, "thinking": False, "expected": expected, "authored_checks": authored_checks,
                                   "observed": observed, "turns": turns, "calls_match_frozen_snapshots": calls_match_snapshots,
-                                  "injected_first_draft": BAD_DRAFT if args.case == "correction" else None, "passed": passed})
+                                  "injected_first_draft": attempts[0]["draft"] if args.case == "correction" else None, "passed": passed})
     if not passed:
         raise SystemExit(f"Model experiment failed. Inspect {output / 'results.json'}")
     print(f"PASS {args.case}: {output / 'results.json'}")
@@ -195,7 +214,7 @@ def main():
     parser.add_argument("case", choices=("correction", "concurrent", "conversation"))
     parser.add_argument("--warehouse", type=Path, required=True, help="Completed pinned course Batch warehouse")
     parser.add_argument("--output", type=Path, required=True, help="New output directory")
-    parser.add_argument("--model", default="qwen3:4b-instruct")
+    parser.add_argument("--model", default="qwen3:8b")
     parser.add_argument("--ollama-url", default="http://127.0.0.1:11434")
     asyncio.run(run(parser.parse_args()))
 

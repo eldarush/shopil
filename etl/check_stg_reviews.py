@@ -1,10 +1,34 @@
 """Verify the course fixture's cleaning counts and every retained row."""
 import argparse
+from collections import Counter
 import json
 from datetime import UTC, datetime
 from pathlib import Path
 
 import duckdb
+
+
+def source_time(value):
+    stamp = datetime.fromisoformat(value)
+    return stamp.replace(tzinfo=UTC) if stamp.tzinfo is None else stamp.astimezone(UTC)
+
+
+def verify_review_load(db, raw):
+    """Compare multisets so two copies of a duplicate must survive the load."""
+    source = Counter((r["review_id"], r["order_id"], r["product"]["id"], r["rating"], r["text"],
+                      source_time(r["created_at"]), tuple(r.get("tags") or [])) for r in raw)
+    flattened = db.execute("""
+        SELECT r.review_id, r.order_id, r.product__id, r.rating, r.text, r.created_at,
+               (SELECT list(t.value ORDER BY t._dlt_list_idx)
+                FROM raw.reviews__tags t WHERE t._dlt_parent_id=r._dlt_id)
+        FROM raw.reviews r
+    """).fetchall()
+    actual = Counter((*row[:-1], tuple(row[-1] or [])) for row in flattened)
+    expected_tags = sum(len(r.get("tags") or []) for r in raw)
+    actual_tags = db.execute("SELECT count(*) FROM raw.reviews__tags").fetchone()[0]
+    if actual != source or actual_tags != expected_tags:
+        raise SystemExit("Raw reviews, normalized product IDs, or ordered parent/child tags differ from source")
+    print(f"Verified {len(raw)} source review rows including duplicates, product links, and {actual_tags} tags")
 
 
 def main() -> None:
@@ -18,7 +42,7 @@ def main() -> None:
         (
             row["review_id"], row["order_id"], row["product"]["id"],
             row["rating"], row["text"].strip(),
-            datetime.fromisoformat(row["created_at"]).replace(tzinfo=UTC),
+            source_time(row["created_at"]),
         )
         for row in valid_text
     ]
@@ -27,6 +51,7 @@ def main() -> None:
         expected_by_id.setdefault(row[0], row)
 
     with duckdb.connect(str(lab_dir / "warehouse.duckdb"), read_only=True) as db:
+        verify_review_load(db, raw)
         raw_count, rating_count, text_count = db.execute(
             r"""
             select

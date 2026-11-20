@@ -1,0 +1,17 @@
+version: 2
+
+models:
+  - name: fct_orders
+    columns:
+      - name: order_id
+        data_tests: [unique, not_null]
+      - name: amount
+        data_tests: [not_null]
+  - name: dim_customers
+    columns:
+      - name: customer_id
+        data_tests: [unique, not_null]
+  - name: mart_daily_revenue
+    columns:
+      - name: order_date
+        data_tests: [unique, not_null]
