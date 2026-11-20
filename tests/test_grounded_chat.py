@@ -3,6 +3,7 @@
 import asyncio
 from datetime import date
 import json
+import re
 import sqlite3
 from types import SimpleNamespace
 
@@ -116,6 +117,22 @@ def test_stream_count_revision_explains_the_correct_singular_grammar():
                 "sources": [{"rows": [{"orders": 1}]}], "stream": {"checkpoint": 0}}
     assert "נקלט אירוע הזמנה אחד" in evidence_error("נקלט אחד אירועי הזמנה.", evidence)
     assert not evidence_error("בחלון נקלט אירוע אחד של הזמנה.", evidence)
+
+
+def test_stream_actor_uses_the_frozen_count_as_digits(capture):
+    q = "כמה אירועי הזמנה נקלטו בחלון הסגור האחרון?"
+    evidence = asyncio.run(capture(q, []))
+    evidence["sources"][0]["rows"][0]["orders"] = 2
+    correct = "בחלון הסגור נקלטו 2 אירועי הזמנה."
+
+    async def complete(messages, *, schema):
+        pattern = schema["properties"]["answer"]["pattern"]
+        assert re.fullmatch(pattern, correct)
+        assert not re.fullmatch(pattern, "בחלון הסגור נקלטו 5 אירועי הזמנה.")
+        return json.dumps({"answer": correct, "citation": source_lines(evidence)})
+
+    answer = asyncio.run(GroundedActor(SimpleNamespace(complete=complete)).draft(q, json.dumps(evidence), []))
+    assert not candidate_feedback(answer, evidence)
 
 
 def test_actor_owns_numbers_and_numeric_guard_checks_only_authored_prose(capture):

@@ -174,17 +174,21 @@ class GroundedActor:
             "profit": "הסבירו שחסרים נתוני העלויות של החנות לחישוב הרווח. אין סכום רווח בצילום הזה.",
             "top_negative_reviews": "ציינו איזה מוצר קיבל את מספר הביקורות השליליות הגבוה ביותר וכמה היו.",
         }.get(evidence["query_scope"].get("metric"))
+        order_count = None
         if (evidence["query_scope"].get("metric") == "stream_order_count"
                 and evidence["query_scope"]["availability"] == "available"):
-            count = evidence["sources"][0]["rows"][0]["orders"]
-            guidance = f"בצילום הנוכחי נקלטו {count} אירועי הזמנה. השתמשו במספר הזה וציינו את מצב החלון."
-            if count == 1:
+            order_count = evidence["sources"][0]["rows"][0]["orders"]
+            guidance = f"הציגו את הכמות בספרות וציינו את מצב החלון. ניסוח לדוגמה: בחלון נקלטו {order_count} אירועי הזמנה."
+            if order_count == 1:
                 guidance = "בצילום הנוכחי המספר הוא 1. כתבו בלשון יחיד: נקלט אירוע הזמנה אחד. ציינו את מצב החלון."
         instructions = INSTRUCTIONS
         citation = source_lines(evidence)
         schema = Explanation.model_json_schema()
         schema["properties"]["citation"]["enum"] = [citation]
         schema["properties"]["answer"]["pattern"] = """^[א-תA-Za-z0-9 .,!?;:₪״׳־()/%+'"-]+$"""
+        if order_count is not None and order_count != 1:
+            non_digits = "[א-ת .,!?״׳־()-]*"
+            schema["properties"]["answer"]["pattern"] = f"^{non_digits}{order_count}{non_digits}$"
         if evidence["query_scope"]["availability"] != "available":
             instructions = """You are a Hebrew shop analyst answering a question with missing information.
 Write one natural Hebrew sentence explaining the exact limitation in query_scope.reason.
