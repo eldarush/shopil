@@ -128,9 +128,12 @@ async def run_correction(service, model, output, model_name):
         attempts = [event for event in events if event["event"] == "attempt"]
         if reply.status != "approved":
             break
-        if len(attempts) < 2:
-            continue
         frozen = events[0]["evidence_json"]
+        evidence = json.loads(frozen)
+        if len(attempts) < 2:
+            if candidate_feedback(reply.answer, evidence):
+                break
+            continue
         calls = [call for call in model.calls if call["messages"][2]["content"] == frozen]
         actor_calls = [call for call in calls if call["role"] == "actor"]
         critic_calls = [call for call in calls if call["role"] == "critic"]
@@ -141,7 +144,6 @@ async def run_correction(service, model, output, model_name):
             }
             for actor, critic, attempt in zip(actor_calls, critic_calls, attempts)
         )
-        evidence = json.loads(frozen)
         initial_issue = candidate_feedback(attempts[0]["draft"], evidence)
         final_issue = candidate_feedback(attempts[-1]["draft"], evidence)
         result.update(snapshot_id=reply.snapshot_id, attempts=attempts,

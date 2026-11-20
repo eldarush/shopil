@@ -372,3 +372,14 @@ def test_measured_citation_requires_the_correct_product_id(capture):
     assert candidate_feedback(f"{prose}\n\n{incomplete}", evidence)
     wrong = citation.replace("מזהי המוצרים: 5", "מזהי המוצרים: 9")
     assert candidate_feedback(f"{prose}\n\n{wrong}", evidence)
+
+
+def test_schema_only_citation_reports_absent_units_and_bounds(capture):
+    question = "כמה הרווחנו מהזמנות ששולמו?"
+    evidence = asyncio.run(capture(question, []))
+    prose = "אי אפשר לחשב את הרווח בלי נתוני הוצאות."
+    citation = source_lines(evidence)
+    assert not candidate_feedback(f"{prose}\n\n{citation}", evidence)
+    invented = citation.replace("יחידות וטווח תצפיות: אינם זמינים למדד המבוקש.",
+                                "units: orders; time range: 2025")
+    assert candidate_feedback(f"{prose}\n\n{invented}", evidence)

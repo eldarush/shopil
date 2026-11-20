@@ -209,24 +209,39 @@ def candidate_feedback(draft, evidence):
         citation, re.IGNORECASE,
     )
     cited_ids = {identifier for refs in product_refs for identifier in re.findall(r"\d+", refs)}
-    if product_ids and cited_ids != product_ids:
+    if cited_ids != product_ids:
         problems.append("מזהי המוצרים בציטוט אינם תואמים לראיות.")
     if scope.get("consulted_table"):
         required.append(scope["consulted_table"])
         if scope.get("requested_start"):
-            required.extend([scope["requested_start"], scope["requested_end"]])
+            for field, boundary in (("requested_start", r"כולל"), ("requested_end", r"לא\s*כולל")):
+                if not re.search(re.escape(scope[field]) + r"[^\w\n]*" + boundary, citation):
+                    problems.append("חסר גבול כולל או לא כולל לתקופה המבוקשת.")
+                    break
         if not re.search(r"סכמ|schema|consulted_table", citation, re.IGNORECASE):
             problems.append("הציטוט אינו מזהה את המקור כבדיקת סכמה.")
-        if re.search(r"₪|\bILS\b|שקלים|שקל|אגור", citation, re.IGNORECASE):
-            problems.append("הציטוט מייחס יחידות כספיות למדד חסר.")
-        if not re.search(r"יחידות|\bunits\b", citation, re.IGNORECASE):
-            problems.append("חסר ציון לגבי יחידות המדידה.")
-        if not re.search(r"טווח|interval|time_(?:start|end)|bounds", citation, re.IGNORECASE):
-            problems.append("חסר ציון לגבי טווח התצפית.")
+        clauses = re.split(r"[,;\n]+", citation)
+        unavailable = r"\b(?:null|missing|unavailable|not available)\b|(?:אינ\w*|לא) זמי\w*|אין|חסר"
+        for label, description in (
+            (r"יחידות|\bunits\b", "יחידות המדידה"),
+            (r"טווח\s+ה?תצפי(?:ת|ות)|טווח זמן|interval|time range|time_(?:start|end)|bounds", "טווח התצפית"),
+        ):
+            matching = [part for part in clauses if re.search(label, part, re.IGNORECASE)]
+            if not matching or any(not re.search(unavailable, part, re.IGNORECASE) for part in matching):
+                problems.append(f"הציטוט אינו מציג את {description} כחסר.")
+        remaining = citation.replace(evidence["captured_at"], "")
+        for field in ("requested_start", "requested_end"):
+            if scope.get(field):
+                remaining = remaining.replace(scope[field], "")
+        if re.search(r"₪|\bILS\b|שקלים|שקל|אגור|\b\d{4}-\d{2}-\d{2}\b", remaining, re.IGNORECASE):
+            problems.append("ציטוט הסכמה מייחס יחידה או טווח תצפית למדד חסר.")
     if stream := evidence.get("stream"):
         if stream["watermark"] is not None:
             required.append(stream["watermark"])
-        if not re.search(rf"(?<!\d){stream['checkpoint']}(?!\d)", citation):
+        if not re.search(
+            rf"(?:checkpoint|נקודת (?:התקדמות|המשך))\s*[:=]?\s*{stream['checkpoint']}(?!\d)",
+            citation, re.IGNORECASE,
+        ):
             problems.append("נקודת ההתקדמות חסרה בציטוט.")
         if evidence["sources"] and scope.get("window_state"):
             required.append("פתוח" if scope["window_state"] == "open" else "סגור")
