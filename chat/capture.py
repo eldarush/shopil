@@ -225,9 +225,8 @@ async def capture_question(warehouse, stream_database, default_start, default_en
     if scope is None:
         plan = {"availability": "unsupported", "reason": "The requested metric or scope is outside the supported questions."}
     elif scope.metric in {"shipping_cost", "profit"}:
-        reason = ("בנתוני ההזמנות חסרות עלויות המשלוח." if scope.metric == "shipping_cost"
-                  else "חסרים נתוני עלויות לחישוב הרווח.")
-        plan = {"metric": scope.metric, "availability": "missing", "reason": reason,
+        plan = {"metric": scope.metric, "availability": "missing",
+                "reason": "shipping_cost_not_recorded" if scope.metric == "shipping_cost" else "operating_costs_not_recorded",
                 "product_id": scope.product_id}
         if scope.start is not None:
             plan.update(requested_start=scope.start.isoformat(), requested_end=scope.end.isoformat())
@@ -247,7 +246,7 @@ async def capture_question(warehouse, stream_database, default_start, default_en
             sources = stream["sources"]
             if (scope.metric == "stream_alert_trigger_count" and sources
                     and not any(source.table == "review_alerts" for source in sources)):
-                plan["missing_reason"] = "נמצא חלון ביקורות למוצר, אך לא הופעלה בו התראה."
+                plan["missing_reason"] = "no_alert_in_matching_window"
         else:
             try:
                 source, coverage = await asyncio.to_thread(
@@ -280,8 +279,7 @@ async def capture_question(warehouse, stream_database, default_start, default_en
         if not plan["available_columns"]:
             raise ModelError("Historical source schema unavailable")
         plan["consulted_table"] = table
-        plan["coverage_start"] = default_start.isoformat()
-        plan["coverage_end"] = default_end.isoformat()
+        plan.update(units=None, time_start=None, time_end=None)
     payload["query_scope"] = plan
     if state is not None:
         payload["stream"] = state

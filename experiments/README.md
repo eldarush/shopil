@@ -1,101 +1,28 @@
-# Chat evaluation
+# Ollama assignment experiments
 
-Run the deterministic mechanics tests after syncing both Python environments:
-
-```sh
-uv run python -m pytest tests/test_chat_evaluation.py -q
-```
-
-For the required real rejection/correction cycle, install and authenticate Codex CLI, then run:
-
-```sh
-uv run python -m experiments.codex_teaching
-```
-
-This optional experiment uses the CLI's configured live model and normal authentication/rules/hooks. It sends only fixed, public numeric teaching data and the project's actual Actor/Critic prompts. It accepts no arbitrary user questions or review text and is not the chat application's model backend. Read-only mode is not a complete tool sandbox: the experiment requests no tools and fails verification if a tool call appears in its log. CLI host warnings remain visible in the saved stderr/events.
-
-Each run creates a new ignored `runs/chat-evaluation-*` directory. The fixture's normalized UTF-8/LF hash is checked against its committed manifest before processing. The streaming interpreter processes the 17 deliveries in source order using 60-second windows, zero out-of-order allowance and 10-second grace. It finalizes only this finite fixture. SQL reads the resulting windows, late events, identifiers, actual configuration and checkpoint in one transaction; it verifies 12,200 accepted cents, 1,300 late cents and checkpoint 16 before calling a model. Results record the CLI version, Git revision, dirty-tree flag and experiment-file hashes. The configured model is used; its resolved identifier is explicitly unknown when the CLI does not expose it.
-
-The deliberately injected first draft incorrectly says 135 ILS. The real Critic must reject it; the real Actor then receives that draft, feedback and the identical evidence; a real Critic evaluates the correction. `result.json` reports `cycle_passed=false` if the bad draft is approved, the Actor repeats it unchanged, or no correction is approved within three attempts. This checks the cycle, not factual correctness. A separate case explicitly mocks both roles and checks exactly three rejections with no published answer/history.
-
-Review `snapshot.json`, `audit/*.jsonl`, the model responses and `result.json` manually. Match every numerical/source/time claim to the SQL-derived rows. An approved JSON schema or passing loop check is not proof of semantic correctness. Preserve the required output in the submission bundle, rather than committing generated databases or logs. Model responses can vary between runs.
-
-For another live provider, pass its `ChatModel` implementation to `rejection_experiment(model, snapshot, audit_directory)`; the production Actor, Critic and ChatService are unchanged.
-
-## Integrated live-model rehearsal
-
-The opt-in runner below starts the actual Batch preparation, continuous stream supervisor,
-production evidence capture, Gradio page and Actor/Critic service. It uses an already
-authenticated Codex CLI for three fixed public-data questions. The regular application
-still uses the configured Ollama endpoint. This runner is a controlled experiment, not a
-general-purpose Codex chat backend.
-
-Complete the root/streaming environment setup and isolated ETL dependencies from the main
-README first. Supply a local checkout of the public course repository; the runner clones
-it into a **new** run directory and checks out the pinned course revision, so local data
-edits and previous warehouse state are excluded. The model flag must select a model
-available to your authenticated CLI; check your installed CLI configuration/help.
-
-```powershell
-uv run --locked python -m experiments.integrated_codex launch `
-  --course-checkout ../etl-course-demo --etl-python "$etlPython" `
-  --run-dir runs/integrated-live-review --model YOUR_AVAILABLE_CODEX_MODEL --port 7860
-```
-
-Use the `$etlPython` variable set by the main README's platform-specific setup block.
-On macOS/Linux use ordinary shell line continuation. Open
-`http://127.0.0.1:7860` and ask these questions **in order**, in the same conversation:
-
-1. `מה ההכנסה מהזמנות ששולמו?`
-2. `ומה לגבי מוצר 5?`
-3. `מהן עלויות המשלוח?`
-
-Each run permits one conversation. Clearing the UI, opening another session or
-retrying after a failed question requires a fresh run directory/restart. Later
-questions must exactly match the history durably approved in the service audit;
-rejected drafts and Critic approvals without a successful terminal audit do not qualify.
-
-The first candidate deliberately fabricates 999999 ILS and combines historical and
-streaming revenue. It is explicitly recorded in `call-1.injection.json`, not labeled a
-real response. Its rejection, the corrected draft and subsequent evaluations must come
-from real model calls. A model accepting the faulty candidate is a failed experiment:
-inspect the audits; do not count the UI's approval alone as success. Other questions or
-forged assistant history are rejected before reaching the CLI. Normal CLI rules, trusted
-hooks, authentication and configuration stay active. Read-only mode does not disable
-all tools: requests instruct the model not to use tools, and any observed tool activity
-fails verification. Use only this fixed public course dataset.
-
-Each question saves its production snapshot. `call-*.request.json`, `.txt`, `.events.jsonl`
-and `.stderr.txt` preserve the prompt, actual response and host warnings.
-`call-*.progress.json` records stream checkpoints around each real call; verify they
-advance while all attempts use the saved snapshot checkpoint. Verify later questions
-have newer snapshots. Calls have a 180-second deadline and owned process-tree cleanup
-on cancellation/error. Ctrl+C gracefully stops chat and drains the stream; `--managed`
-also allows launcher stdin newline/EOF for automated testing.
-
-`environment.json` records the requested model, CLI version, pinned course revision,
-source commit/dirty state and file hashes. Server-side model routing remains unknown.
-Manually compare at least two accepted answers to SQL, source names, units and time
-ranges. Capture the **running** Gradio answer and streaming output, then package these
-files with the audit JSONL and Batch results. Keep any failed attempts and distinguish
-them from the successful run. These generated artifacts remain outside Git; this
-command neither packages nor submits to Moodle.
-
-The runner's deterministic boundary and real-process cleanup tests require no model:
+Complete the pinned Batch warehouse and sync both environments from the source README. Start
+local Ollama with `qwen3:8b` installed. The runner disables model thinking and uses a new output
+directory for each command.
 
 ```text
-uv run --locked python -m pytest tests/test_integrated_codex.py -q
+uv run --locked --group batch python -m experiments.ollama_assignment correction --model qwen3:8b --warehouse WAREHOUSE --output runs/correction
+uv run --locked --group batch python -m experiments.ollama_assignment concurrent --model qwen3:8b --warehouse WAREHOUSE --output runs/concurrent
+uv run --locked --group batch python -m experiments.ollama_assignment conversation --model qwen3:8b --warehouse WAREHOUSE --output runs/conversation
+uv run --locked --group batch python -m experiments.rejection_limit --warehouse WAREHOUSE --output runs/three-rejections.json
+uv run --locked --group batch python -m experiments.verify_model_evidence --warehouse WAREHOUSE --evidence ../evidence/chat
 ```
 
+- **Correction.** Ask about profit on paid orders. If needed, ask whether a remembered revenue figure can be reported as profit when shipping costs are missing. Every draft comes from the live Actor. The Critic's verdict alone decides publication,
+  and its feedback is passed verbatim. Look for a first draft with a factual or provenance error,
+  a Critic rejection, and a later factually correct approval on that same snapshot. A first-pass
+  approval or three rejections may occur naturally. Keep looking in a fresh run if no qualifying
+  correction occurred. Check that the first draft actually contains an error and the revision fixes it.
+- **Concurrent update.** Commit a second unique order during the first model call. The first question
+  retains count 1 and checkpoint 0. The next question reads count 2 and checkpoint 1.
+- **Conversation.** Check paid revenue, a product follow-up, a missing measure, and historical date
+  coverage against the SQL-derived source rows and citations.
+- **MOCKED three-rejection control.** Prove that three rejections produce no published draft or history.
+  This control uses a scripted Actor and Critic.
 
-## Ollama assignment experiments
-
-From the source root, prepare the pinned course warehouse and both uv environments. Start Ollama and install the tested model with `ollama pull qwen3:4b-instruct`. Set `--ollama-url` if the local server uses a different port. Use a new output directory for each run.
-
-```text
-uv run --locked python -m experiments.ollama_assignment correction --warehouse ../etl-course-demo/warehouse.duckdb --output runs/ollama-correction
-uv run --locked python -m experiments.ollama_assignment concurrent --warehouse ../etl-course-demo/warehouse.duckdb --output runs/ollama-concurrent
-uv run --locked python -m experiments.ollama_assignment conversation --warehouse ../etl-course-demo/warehouse.duckdb --output runs/ollama-conversation
-```
-
-All three use the default grounded Actor/Critic and frozen capture. The correction injects a deliberately wrong ILS 1.00 draft, then requires real Critic rejection, real Actor correction, and real approval of ILS 97,210.10. The concurrent case uses a fresh SQLite file, UTC event time, 60-second windows, Grace 10 and out-of-order allowance 0. It inserts a second unique order while the real Actor response is pending. The first turn must keep count 1/checkpoint 0 and the second report count 2/checkpoint 1. The conversation checks a paraphrased overall paid-revenue question, a product follow-up, missing shipping data, paid-order count and the product with the most negative reviews. Each result file records expected and observed values. Raw messages, schemas, responses, SHA-256 of the frozen evidence, and per-question audit records are retained for independent checking.
+The archive index identifies the selected results, raw `call-*.json` files and per-question
+`audit/*.jsonl` files. Keep measured results and any model errors separate from expectations.

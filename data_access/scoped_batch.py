@@ -42,12 +42,12 @@ def read_scoped_batch(database: Path, metric, start, end, product_id, *, reporti
         }
         unavailable = None
         if first is None:
-            unavailable = "אין רשומות במקור ולכן אין כיסוי לתקופה המבוקשת."
+            unavailable = "no_observed_rows"
         else:
             start = max(requested_start, first, reporting_period[0])
             end = min(requested_end, observed_end, reporting_period[1])
             if start >= end:
-                unavailable = "התקופה המבוקשת חורגת מכיסוי הנתונים."
+                unavailable = "requested_period_outside_observed_coverage"
                 start, end = first, observed_end
             elif (start, end) != (requested_start, requested_end):
                 coverage["partial_period"] = True
