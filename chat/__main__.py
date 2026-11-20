@@ -21,6 +21,10 @@ def add_arguments(parser):
                         help="Override thinking for models that support it; otherwise keep the model default")
     parser.add_argument("--audit-dir", type=Path, default=os.environ.get("SHOPIL_AUDIT_DIR", "runs/audit"))
     parser.add_argument("--latest-windows", type=int, default=3)
+    modes = parser.add_mutually_exclusive_group()
+    modes.add_argument("--standard", action="store_true", help="Original unconstrained Actor")
+    modes.add_argument("--hybrid", action="store_true", help="Original finite sentence grammar")
+    modes.add_argument("--structured", action="store_true", help="Deterministic fact-reference answers")
     parser.add_argument("--port", type=int, default=7860)
 
 
@@ -36,13 +40,15 @@ def main(argv=None):
             parser.error(f"Database does not exist: {path}")
     try:
         model = OllamaModel(args.model, args.ollama_url, think=args.thinking)
+        grounded = not (args.standard or args.hybrid or args.structured)
         capture = build_capture(args.warehouse, args.stream_db, start=args.history_start,
-                                end=args.history_end, latest_windows=args.latest_windows)
+                                end=args.history_end, latest_windows=args.latest_windows, question_scoped=grounded)
         if not 1 <= args.port <= 65535:
             raise ValueError("port must be between 1 and 65535")
     except ValueError as error:
         parser.error(str(error))
-    run_app(capture, model, args.audit_dir, managed=args.managed, port=args.port)
+    run_app(capture, model, args.audit_dir, managed=args.managed, port=args.port,
+            structured=args.structured, hybrid=args.hybrid, grounded=grounded)
 
 
 if __name__ == "__main__":

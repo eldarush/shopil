@@ -13,7 +13,10 @@ from data_access.batch import read_batch_sources
 from data_access.evidence import EvidencePackage, EvidenceSource
 from data_access.streaming import read_stream_snapshot
 
+from data_access.scoped_batch import read_scoped_batch
+
 from .model import ModelError
+from .query_scope import STREAM, STREAM_PRODUCT_METRICS, resolve_query
 
 MAX_SOURCE_ROWS = 256
 MAX_REVIEW_TEXT_ROWS = 12
@@ -24,7 +27,7 @@ def _time(milliseconds):
     return None if milliseconds is None else _EPOCH + timedelta(milliseconds=milliseconds)
 
 
-async def capture_stream(database: Path, *, latest_windows: int = 3) -> dict:
+async def capture_stream(database: Path, *, latest_windows: int = 3, scope=None) -> dict:
     """Read once and return ``sources`` plus ``stream`` metadata for composition.
 
     Scope is the latest N distinct event-time window starts across all five
@@ -39,7 +42,18 @@ async def capture_stream(database: Path, *, latest_windows: int = 3) -> dict:
     if type(latest_windows) is not int or latest_windows < 1:
         raise ValueError("latest_windows must be a positive integer")
     try:
-        snapshot = await asyncio.to_thread(read_stream_snapshot, Path(database))
+        if scope is None:
+            snapshot = await asyncio.to_thread(read_stream_snapshot, Path(database))
+        else:
+            review = scope.metric in STREAM_PRODUCT_METRICS
+            if scope.window_state == "open":
+                table = "review_state" if review else "order_state"
+            else:
+                table = "review_windows" if review else "realtime_revenue"
+            snapshot = await asyncio.to_thread(
+                read_stream_snapshot, Path(database), window_table=table,
+                product_id=scope.product_id, alert=scope.metric == "stream_alert_trigger_count",
+            )
         width = snapshot["config"]["window_seconds"]
         if type(width) is not int or width <= 0:
             raise ValueError("Invalid window width")
@@ -52,7 +66,8 @@ async def capture_stream(database: Path, *, latest_windows: int = 3) -> dict:
             raise ModelError("Selected streaming windows exceed the evidence row limit; reduce latest_windows")
         watermark = _time(snapshot["watermark_ms"])
         sources = []
-        scope = f"latest {latest_windows} distinct event-time windows across stream tables; all products retained"
+        scope_label = (f"latest {latest_windows} distinct event-time windows across stream tables; all products retained"
+                       if scope is None else "latest matching event-time window for the requested metric and product")
 
         def add(table, values, state, metric, units, identifiers):
             if not values:
@@ -72,7 +87,7 @@ async def capture_stream(database: Path, *, latest_windows: int = 3) -> dict:
                     row["negative_reviews_at_trigger"] = row.pop("negative_reviews")
                 normalized.append(row)
             sources.append(EvidenceSource(
-                table=table, metric=f"{metric}; scope: {scope}", units=units,
+                table=table, metric=f"{metric}; scope: {scope_label}", units=units,
                 identifiers=identifiers,
                 time_start=_time(min(row["window_start_ms"] for row in normalized)),
                 time_end=_time(max(row["window_end_ms"] for row in normalized)),
@@ -103,7 +118,7 @@ async def capture_stream(database: Path, *, latest_windows: int = 3) -> dict:
             "checkpoint": snapshot["checkpoint"], "watermark": watermark.isoformat() if watermark else None,
             "config": snapshot["config"], "finalized": snapshot["finalized"],
             "counters": snapshot["counters"], "counters_scope": "all-time engine counters, not selected-window totals",
-            "scope": scope, "selected_window_starts": [_time(start).isoformat() for start in sorted(selected)],
+            "scope": scope_label, "selected_window_starts": [_time(start).isoformat() for start in sorted(selected)],
             "omitted_window_count": len(starts) - len(selected),
             "empty_tables_in_scope": [table for table, values in rows.items() if not values],
         }}
@@ -118,6 +133,7 @@ def build_capture(
     start: date,
     end: date,
     latest_windows: int = 3,
+    question_scoped: bool = False,
 ) -> Callable[[str, list[dict[str, str]]], Awaitable[dict]]:
     """Build a per-question capture for a completed, no-longer-written warehouse.
 
@@ -140,6 +156,8 @@ def build_capture(
     warehouse, stream_database = Path(warehouse).resolve(), Path(stream_database).resolve()
 
     async def capture(question: str, history: list[dict[str, str]]) -> dict:
+        if question_scoped:
+            return await capture_question(warehouse, stream_database, start, end, question, history)
         try:
             historical = await asyncio.to_thread(read_batch_sources, warehouse, start=start, end=end)
             batch_sources = []
@@ -168,6 +186,10 @@ def build_capture(
         stream = await capture_stream(stream_database, latest_windows=latest_windows)
         package = EvidencePackage(question=question, sources=tuple(batch_sources) + stream["sources"])
         payload = package.model_dump(mode="json")
+        from .availability import build_metric_manifest
+        manifest = build_metric_manifest(payload["sources"])
+        if manifest is not None:
+            payload["metric_availability"] = manifest
         payload["stream"] = stream["stream"]
         payload["batch"] = {
             "time_start": start.isoformat(), "time_end": end.isoformat(),
@@ -178,3 +200,49 @@ def build_capture(
         return payload
 
     return capture
+
+
+STREAM_FIELDS = {
+    "stream_order_amount": "revenue_ils",
+    "stream_order_count": "orders",
+    "stream_negative_reviews": "negative_reviews",
+    "stream_alert_trigger_count": "negative_reviews_at_trigger",
+}
+
+
+async def capture_question(warehouse, stream_database, default_start, default_end, question, history):
+    scope = resolve_query(question, history)
+    sources, state = (), None
+    if scope is None:
+        plan = {"availability": "unsupported", "reason": "The requested metric or scope is outside the supported questions."}
+    elif scope.metric == "shipping_cost":
+        plan = {"metric": scope.metric, "availability": "missing",
+                "reason": "The ETL and streaming queries provide no shipping cost measure; this is missing information, not zero."}
+    else:
+        field = STREAM_FIELDS.get(scope.metric, "negative_reviews" if scope.metric == "top_negative_reviews" else scope.metric)
+        plan = {"metric": scope.metric, "field": field, "product_id": scope.product_id, "window_state": scope.window_state}
+        if scope.metric in STREAM:
+            stream = await capture_stream(stream_database, scope=scope)
+            state = stream["stream"]
+            sources = tuple(source for source in stream["sources"]
+                            if scope.metric != "stream_alert_trigger_count" or source.table == "review_alerts")
+        else:
+            try:
+                source = await asyncio.to_thread(read_scoped_batch, warehouse, scope.metric,
+                                                 scope.start or default_start, scope.end or default_end, scope.product_id)
+            except (duckdb.Error, OSError, ValueError):
+                raise ModelError("Unable to read valid historical evidence") from None
+            sources = (source,)
+        values = [dict(row)[field] for source in sources for row in source.rows]
+        if not values:
+            plan.update(availability="missing", reason="No matching row was observed for the requested product or stream window; this is not zero.")
+        elif all(value is None for value in values):
+            plan.update(availability="missing", reason="The average is NULL because there are no ratings in the selected scope.")
+        else:
+            plan.update(availability="available")
+
+    payload = EvidencePackage(question=question, sources=sources).model_dump(mode="json")
+    payload["query_scope"] = plan
+    if state is not None:
+        payload["stream"] = state
+    return payload

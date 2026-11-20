@@ -20,7 +20,7 @@ uv sync --project streaming --locked
 uv run --locked python -m integration.smoke
 ```
 
-Run all remaining commands from this repository root. Check that each command succeeds before continuing. This is a checkout-based application: the root is not a pip-installable library or wheel. `uv sync` installs its locked dependencies, and `python -m ...` runs the source from this directory. The streaming subproject is separately installable. The application uses Python **3.14.10** and the course streaming package uses isolated Python **3.13.12**. The smoke test exercises both streaming modes using temporary databases; it needs no model service.
+If you started from the submission ZIP, run these commands inside its source/ folder and skip the clone and cd lines. Run all remaining commands from this source root. Check that each command succeeds before continuing. This is a checkout-based application: the root is not a pip-installable library or wheel. `uv sync` installs its locked dependencies, and `python -m ...` runs the source from this directory. The streaming subproject is separately installable. The application uses Python **3.14.10** and the course streaming package uses isolated Python **3.13.12**. The smoke test exercises both streaming modes using temporary databases; it needs no model service.
 
 Prepare the pinned course checkout and a third environment for ETL. Use unused sibling paths on first setup; if they already exist, verify their contents and revision before reusing them.
 
@@ -104,15 +104,15 @@ Ctrl+C in the supervisor closes chat and drains the stream. Enter controls a man
 
 For terminals that terminate the whole process tree on Ctrl+C, add `--stop-file runs/stop-session-1.request` to the coordinated command. The file must initially be absent. Create it from another terminal (`New-Item runs/stop-session-1.request -ItemType File` in PowerShell) to close chat and drain streaming cooperatively. A request during Batch waits for Batch to finish before stopping; it does not interrupt warehouse writes. Use a new stop path for each session and wait for the launch command to exit successfully.
 
-Chat stops accepting questions during shutdown and waits up to five seconds for active questions to record a cancellation/error terminal event before closing the server. A terminal publication already in progress finishes before shutdown takes ownership; its audit and reply are serialized with shutdown. The deadline includes waiting for that publication, and a failed audit or shutdown deadline makes the process fail. A failed or blank question leaves the last approved answer's source and snapshot fields unchanged.
+Chat stops accepting questions during shutdown and waits up to ten seconds for active questions to record a cancellation/error terminal event. The interrupted attempt and its terminal event share one durable append before closing the server. A terminal publication already in progress finishes before shutdown takes ownership; its audit and reply are serialized with shutdown. The deadline includes waiting for that publication, and a failed audit or shutdown deadline makes the process fail. A failed or blank question leaves the last approved answer's source and snapshot fields unchanged.
 
 ## Evidence scope and configuration
 
-The examples use the fixed half-open calendar range **[2026-01-01, 2027-01-01)**, which covers the pinned fixture's order dates and review timestamps. It controls paid-order totals and cleaned review text. Product mart metrics retain their independently reported full-history coverage. Questions and follow-ups do not generate SQL or silently alter the configured date range.
+The default chat recognizes Hebrew paraphrases for paid revenue, paid-order count, historical review count, average rating, negative-review count and the product with the most negative reviews. A product ID can appear in a question or an approved follow-up. Historical questions use the configured half-open default range; specify a year or a date span such as **בין 2026-07-01 ל-2026-08-01** to override it. The first date is included and the second excluded.
 
-When the catalog has products but there are no historical orders or reviews, their known zero counts and null averages remain available. The mart source explicitly reports `no_observed_history` with null time bounds instead of inventing coverage dates.
+The question scope selects the predefined read-only query and its parameters before capture. Streaming questions select the most recent matching open or closed event-time window for order-event counts or amounts, product negative-review counts, or the trigger count of a product alert. Every stream read carries its committed checkpoint and watermark. Historical paid amounts and stream event amounts stay separate.
 
-Every question reads fresh data. All product metrics are included; review text is the **latest 12 cleaned reviews across all products**, with available/selected/omitted counts. It is a global sample, not a complete or balanced review list. Streaming evidence defaults to the **latest three distinct event-time windows**, keeping all products in those windows and explicitly reporting omissions. Open/closed windows and alert trigger counts remain distinct. Historical paid ILS and streaming cents are never added together; the cross-source product mapping is marked unverified. Missing data is not presented as zero. [Evidence contract](data_access/README.md).
+The Actor writes an original Hebrew explanation with a placeholder for the measured value. Python binds the value and attaches provenance. The Critic judges that entire candidate against the same frozen snapshot. Known zero, NULL average, missing row and unsupported scope are distinct. Older modes remain available via --standard, --structured or --hybrid. [Evidence contract](docs/data-contract.md).
 
 CLI options override environment defaults: `--warehouse`, `--history-start`, `--history-end`, `--model`, `--stream-db`, `--ollama-url`, and `--audit-dir`. `.env.example` lists their corresponding `SHOPIL_*` variables. **The file is not loaded automatically**: set variables in your shell, or use the explicit flags above. For example:
 
@@ -126,14 +126,11 @@ $env:SHOPIL_MODEL = 'YOUR_INSTALLED_MODEL'
 export SHOPIL_MODEL='YOUR_INSTALLED_MODEL'
 ```
 
-`--port` (default 7860) and `--latest-windows` (default 3) are CLI-only options. Audit JSONL files default to `runs/audit`, one per question, containing the frozen evidence, drafts, Critic feedback and terminal result. UI history contains only approved turns. Keep audits, credentials, databases and environments out of Git.
+`--port` (default 7860) is a CLI-only option. The legacy modes accept `--latest-windows` (default 3). Audit JSONL files default to `runs/audit`, one per question, containing the frozen evidence, drafts, Critic feedback and terminal result. UI history contains only approved turns. Keep audits, credentials, databases and environments out of Git.
 
 ## Tests and validation
 
-For a controlled full-stack demonstration using an already authenticated Codex CLI,
-see the [integrated live-model rehearsal](experiments/README.md#integrated-live-model-rehearsal).
-It runs the real Gradio/Batch/streaming stack with fixed public course questions and
-records actual model output separately from the deliberately faulty first draft.
+Run the [assignment experiments](experiments/README.md#ollama-assignment-experiments) against the tested local Ollama model. They record the real correction, streamed update during an active model call, and independent conversation examples.
 
 ```text
 uv run --locked python -m pytest -q
@@ -145,9 +142,9 @@ CI runs application tests, streaming tests, smoke checks and complete Batch prep
 
 Server tests use explicitly scripted models and HTTP contract tests use mocked transport. They do not establish that a real Ollama endpoint is installed or functioning. The separate [teaching experiments](experiments/README.md) document real Actor/Critic correction and manual SQL comparisons; they are not a fallback backend for the application.
 
-The [architecture report](docs/report.md) explains loading policies, event-time processing, transaction and snapshot boundaries, Actor/Critic feedback, and verified results with their limits. Its two-page explanation is followed by separate architecture and results appendices in the generated submission PDF.
+The submission ZIP includes an architecture report under evidence/ that explains loading policies, event-time processing, transaction and snapshot boundaries, Actor/Critic feedback, and verified results with their limits. Its two-page explanation is followed by separate architecture and results appendices in the generated submission PDF.
 
-Use the [submission guide](docs/submission.md) to select the required logs, screenshots and report, then package them with an exact committed source revision. Review the evidence and its real-model limitations before submission; the packaging command only checks files and hashes and does not upload anything.
+Use the README at the root of the submission ZIP to locate the required logs, screenshots and report, then package them with an exact committed source revision. Review the evidence and its real-model limitations before submission; the packaging command only checks files and hashes and does not upload anything.
 
 ## Project layout
 

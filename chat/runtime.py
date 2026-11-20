@@ -20,6 +20,9 @@ def run_app(
     *,
     managed: bool = False,
     port: int = 7860,
+    structured: bool = False,
+    hybrid: bool = False,
+    grounded: bool = False,
 ) -> None:
     """Serve on loopback until Ctrl+C, or stdin newline/EOF in managed mode.
 
@@ -31,7 +34,13 @@ def run_app(
         raise ValueError("port must be an integer between 1 and 65535")
     if type(managed) is not bool:
         raise ValueError("managed must be a boolean")
-    service = ChatService(Actor(model), Critic(model), capture, JsonlAudit(audit_directory))
+    from .structured import StructuredActor
+    from .hybrid import HybridActor
+    from .grounded import GroundedActor
+    if sum((structured, hybrid, grounded)) > 1:
+        raise ValueError("Choose one Actor mode")
+    actor = GroundedActor if grounded else HybridActor if hybrid else StructuredActor if structured else Actor
+    service = ChatService(actor(model), Critic(model), capture, JsonlAudit(audit_directory))
     app = build_app(service)
     try:
         app.launch(server_name="127.0.0.1", server_port=port, share=False,

@@ -78,7 +78,7 @@ class ChatService:
         self._closing = False
         self._shutdown_audit_failed = False
 
-    def shutdown(self, timeout: float = 5) -> None:
+    def shutdown(self, timeout: float = 10) -> None:
         """Stop admission and await cancellation audits from the server's main thread.
 
         Call outside the event loops handling answers, before closing the server.
@@ -129,10 +129,12 @@ class ChatService:
         draft = feedback = None
         stage = "capture"
 
+        def audit_event(event: str, **fields) -> dict:
+            return {"event": event, "request_id": request_id, "snapshot_id": snapshot_id,
+                    "recorded_at": datetime.now(timezone.utc).isoformat(), **fields}
+
         def record(event: str, **fields) -> None:
-            self.audit({"event": event, "request_id": request_id,
-                        "snapshot_id": snapshot_id,
-                        "recorded_at": datetime.now(timezone.utc).isoformat(), **fields})
+            self.audit(audit_event(event, **fields))
 
         def reply(status, answer, message, result_history=approved):
             return Reply(status, answer, message, snapshot_id, captured_at,
@@ -168,8 +170,13 @@ class ChatService:
                     raise ValueError("Critic returned an invalid evaluation")
                 feedback = evaluation.feedback
                 stage = "audit_attempt"
+                actor_metadata = ({"actor_output_json": draft.actor_output_json,
+                                   "rendering": getattr(draft, "rendering", "deterministic_fact_references")}
+                                  if hasattr(draft, "actor_output_json") else {})
+                if hasattr(draft, "normalization"):
+                    actor_metadata["normalization"] = draft.normalization
                 record("attempt", attempt=attempt, draft=draft,
-                       is_acceptable=evaluation.is_acceptable, feedback=feedback)
+                       is_acceptable=evaluation.is_acceptable, feedback=feedback, **actor_metadata)
                 if evaluation.is_acceptable:
                     with self._condition:
                         if self._closing:
@@ -186,19 +193,27 @@ class ChatService:
                 record("terminal", status="rejected", attempts=attempt)
                 return reply("rejected", None, "לא התקבלה תשובה מאושרת לאחר שלושה ניסיונות.")
         except asyncio.CancelledError:
-            failed = False
+            interrupted = []
             if stage in ("actor", "critic"):
+                interrupted.append(audit_event("attempt", attempt=attempt, draft=draft,
+                                               is_acceptable=None, feedback=None,
+                                               error_type="CancelledError", error_stage=stage))
+            interrupted.append(audit_event("terminal", status="error", attempts=attempt,
+                                           error_type="CancelledError", error_stage=stage))
+            failed = False
+            write_many = getattr(self.audit, "write_many", None)
+            if write_many is not None:
+                # A single durable write leaves no fsync gap between interruption and its terminal record.
                 try:
-                    record("attempt", attempt=attempt, draft=draft,
-                           is_acceptable=None, feedback=None,
-                           error_type="CancelledError", error_stage=stage)
+                    write_many(interrupted)
                 except (OSError, ValueError):
                     failed = True
-            try:
-                record("terminal", status="error", attempts=attempt,
-                       error_type="CancelledError", error_stage=stage)
-            except (OSError, ValueError):
-                failed = True
+            else:
+                for event in interrupted:
+                    try:
+                        self.audit(event)
+                    except (OSError, ValueError):
+                        failed = True
             if failed:
                 with self._condition:
                     self._shutdown_audit_failed = True
@@ -206,9 +221,12 @@ class ChatService:
         except (ModelError, TimeoutError, ValueError, OSError) as exc:
             try:
                 if stage in ("actor", "critic"):
+                    actor_metadata = ({"actor_output_json": exc.actor_output_json,
+                                       "rendering": exc.rendering}
+                                      if stage == "actor" and hasattr(exc, "actor_output_json") else {})
                     record("attempt", attempt=attempt, draft=draft,
                            is_acceptable=None, feedback=None,
-                           error_type=type(exc).__name__, error_stage=stage)
+                           error_type=type(exc).__name__, error_stage=stage, **actor_metadata)
                 record("terminal", status="error", attempts=attempt,
                        error_type=type(exc).__name__, error_stage=stage)
             except (OSError, ValueError):

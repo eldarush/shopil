@@ -115,3 +115,17 @@ def test_blank_question_fails_before_model_call():
     with pytest.raises(ValueError, match="Question"):
         asyncio.run(Actor(model).draft("  ", EVIDENCE, []))
     assert model.calls == []
+
+
+def test_actor_receives_natural_hebrew_provenance_labels_without_changing_evidence():
+    model = RecordingModel("תשובה לדוגמה")
+    evidence = '{"snapshot_id":"snap-42","captured_at":"2026-11-20T10:00:00Z"}'
+    asyncio.run(Actor(model).draft("מה ההכנסה?", evidence, []))
+    messages, _ = model.calls[0]
+    instructions = messages[0]["content"]
+    for label in ("מזהה צילום הנתונים", "מועד צילום הנתונים",
+                  "נקודת התקדמות בזרם", "סף זמן האירוע (watermark)"):
+        assert label in instructions
+    assert "Copy the corresponding identifier/time" in instructions
+    assert messages[3]["content"] == evidence
+    # Prompt contract only: a fake response does not prove real-model Hebrew quality.

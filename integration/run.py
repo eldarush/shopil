@@ -239,6 +239,12 @@ def main(argv=None):
             "--history-end", args.history_end.isoformat(), "--model", args.model,
             "--ollama-url", args.ollama_url, "--audit-dir", str(args.audit_dir.resolve()),
             "--latest-windows", str(args.latest_windows), "--port", str(args.port)]
+    if args.standard:
+        chat.append("--standard")
+    if args.hybrid:
+        chat.append("--hybrid")
+    if args.structured:
+        chat.append("--structured")
     if args.thinking is not None:
         chat.append("--thinking" if args.thinking else "--no-thinking")
     try:

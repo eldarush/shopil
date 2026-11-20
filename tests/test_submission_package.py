@@ -37,16 +37,19 @@ def inputs(tmp_path):
 def test_exact_committed_source_selected_evidence_hashes_and_reproducibility(inputs):
     repo, evidence, output, selection = inputs
     (evidence / "unselected-private.txt").write_text("must not be included")
-    manifest = package_submission(repo, evidence, output)
+    readme = evidence / "guide.md"
+    readme.write_text("# Assignment evidence\n", encoding="utf-8")
+    manifest = package_submission(repo, evidence, output, readme=readme)
     with ZipFile(output) as archive:
         assert archive.testzip() is None
+        assert archive.read("README.md") == b"# Assignment evidence\n"
         assert archive.read("source/README.md") == (repo / "README.md").read_bytes()
         assert not any("unselected" in name or ".git/" in name for name in archive.namelist())
         assert json.loads(archive.read("manifest.json")) == manifest
         for name, expected in manifest["sha256"].items():
             assert hashlib.sha256(archive.read(name)).hexdigest() == expected
     second = output.with_name("second.zip")
-    package_submission(repo, evidence, second)
+    package_submission(repo, evidence, second, readme=readme)
     assert output.read_bytes() == second.read_bytes()
     with pytest.raises(FileExistsError):
         package_submission(repo, evidence, output)
