@@ -11,26 +11,42 @@ from decimal import Decimal
 import duckdb
 
 from chat.grounded import candidate_feedback
+from experiments.ollama_assignment import CONVERSATION_QUESTIONS, PROFIT_FOLLOWUP, PROFIT_QUESTION, STREAM_QUESTION
 
 
 def read(path):
     return json.loads(path.read_text(encoding="utf-8"))
 
 
-def verify_case(directory):
+def verify_case(directory, expected_case):
     result = read(directory / "results.json")
-    assert result["passed"], directory
-    correction = result["case"] == "correction"
-    turns = {turn["snapshot_id"]: turn for turn in result["turns"]}
+    assert result["passed"] and result["case"] == expected_case, directory
+    correction = expected_case == "correction"
+    ids = [turn["snapshot_id"] for turn in result["turns"]]
+    assert ids and len(ids) == len(set(ids)), "Each experiment turn must have a distinct snapshot"
+    questions = tuple(turn["question"] for turn in result["turns"])
+    if correction:
+        assert questions in ((PROFIT_QUESTION,), (PROFIT_QUESTION, PROFIT_FOLLOWUP))
+        assert result["snapshot_id"] == ids[-1]
+    elif expected_case == "concurrent":
+        assert questions == (STREAM_QUESTION, STREAM_QUESTION)
+    else:
+        assert questions in (CONVERSATION_QUESTIONS, CONVERSATION_QUESTIONS[:2])
+    turns = dict(zip(ids, result["turns"]))
     snapshots, attempts = {}, {}
     for path in (directory / "audit").glob("*.jsonl"):
         events = [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines()]
         stamp, terminal = events[0], events[-1]
         sid = stamp["snapshot_id"]
+        assert sid not in snapshots and stamp["event"] == "snapshot" and terminal["event"] == "terminal"
         assert all(event["snapshot_id"] == sid for event in events)
         snapshots[sid] = stamp["evidence_json"]
         attempts[sid] = [event for event in events if event["event"] == "attempt"]
         assert terminal["status"] == turns[sid]["status"] == "approved"
+        count = len(attempts[sid])
+        assert 1 <= count <= 3 and terminal["attempts"] == count
+        assert [record["attempt"] for record in attempts[sid]] == list(range(1, count + 1))
+        assert all(attempt["is_acceptable"] is False for attempt in attempts[sid][:-1])
         last = attempts[sid][-1]
         assert last["is_acceptable"] and last["draft"] == turns[sid]["answer"]
         actor = json.loads(last["actor_output_json"])
@@ -53,7 +69,7 @@ def verify_case(directory):
             assert update["result"]["status"] == "accepted" and call["actor_pending_after_update"]
             assert call["role"] == "actor"
             stream_updates.append((sid, update["result"]["offset"], update["result"]["checkpoint"]))
-    if result["case"] == "concurrent":
+    if expected_case == "concurrent":
         before, after = [turn["snapshot_id"] for turn in result["turns"]]
         assert stream_updates == [(before, 1, 1)]
         evidence = [json.loads(snapshots[sid]) for sid in (before, after)]
@@ -108,7 +124,7 @@ def main():
     parser.add_argument("--evidence", type=Path, required=True)
     args = parser.parse_args()
     for case in ("correction", "concurrent", "conversation"):
-        result, frozen = verify_case(args.evidence / case)
+        result, frozen = verify_case(args.evidence / case, case)
         if case == "correction":
             correction = frozen
         count = sum(turn["status"] == "approved" for turn in result["turns"])

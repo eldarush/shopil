@@ -445,3 +445,15 @@ def test_each_stream_citation_groups_its_units_with_its_table(capture):
     swapped = citation.replace("מקור: review_state", "PLACEHOLDER")
     swapped = swapped.replace("מקור: review_alerts", "מקור: review_state").replace("PLACEHOLDER", "מקור: review_alerts")
     assert candidate_feedback(f"{prose}\n\n{swapped}", evidence)
+
+
+def test_empty_source_citation_discloses_unavailable_observation_bounds(tmp_path):
+    capture = build_capture(warehouse(tmp_path, empty=True), database(tmp_path),
+                            start=date(2026, 7, 1), end=date(2026, 7, 4), question_scoped=True)
+    evidence = asyncio.run(capture("כמה הזמנות שולמו?", []))
+    assert evidence["sources"][0]["time_start"] is None
+    prose = "אין נתונים על מספר ההזמנות ששולמו."
+    citation = source_lines(evidence).replace("מקור: marts.fct_orders", "טבלת המקור: marts.fct_orders")
+    assert not candidate_feedback(f"{prose}\n\n{citation}", evidence)
+    missing_bounds = "\n".join(line for line in citation.splitlines() if "טווח המקור" not in line)
+    assert candidate_feedback(f"{prose}\n\n{missing_bounds}", evidence)

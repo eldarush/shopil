@@ -218,6 +218,14 @@ def cited_values(citation, label):
     ]
 
 
+UNAVAILABLE_CITATION = (
+    r"\b(?:null|missing|unavailable|not available|not recorded|"
+    r"no (?:measurement units|units|observed (?:time )?(?:bounds|range|interval|dates)))\b"
+    r"|(?:אינ\w*|לא) (?:זמי\w*|נקבע\w*|נמדד\w*)|אין|חסר"
+)
+OBSERVATION_LABEL = r"טווח\s+(?:ה?תצפי(?:ת|ות)|המקור|זמן)|interval|time range|time_(?:start|end)|bounds|observed dates"
+
+
 def candidate_feedback(draft, evidence):
     prose, separator, citation = draft.partition("\n\n")
     problems = []
@@ -232,7 +240,7 @@ def candidate_feedback(draft, evidence):
     elif not tables and "stream" in evidence:
         tables.add(scope.get("checked_window_table", "stream_meta"))
     source_labels = list(re.finditer(
-        r"""(?<!\w)(?:מקור|טבלה|source|table|consulted_table|schema(?: checked)?|סכמה(?: שנבדקה)?)["']?"""
+        r"""(?<!\w)(?:טבלת המקור|מקור|טבלה|source table|source|table|consulted_table|schema(?: checked)?|סכמה(?: שנבדקה)?)["']?"""
         r"""\s*[:=]\s*(?:סכמת\s+)?[`"']?([A-Za-z_]\w*(?:\.[A-Za-z_]\w*)*)""",
         citation, re.IGNORECASE,
     ))
@@ -260,6 +268,12 @@ def candidate_feedback(draft, evidence):
             expected_ranges.add(bounds)
             if bounds not in range_pattern.findall(block):
                 problems.append(f"טווח התצפית של {source['table']} חסר או שגוי.")
+        elif not any(
+            re.search(OBSERVATION_LABEL, clause, re.IGNORECASE)
+            and re.search(UNAVAILABLE_CITATION, clause, re.IGNORECASE)
+            for clause in re.split(r"[,;\n]+", block)
+        ):
+            problems.append(f"יש לציין שלטבלה {source['table']} אין טווח תצפית.")
     product_ids = {str(row["product_id"]) for source in evidence["sources"] for row in source["rows"]
                    if "product_id" in row}
     if scope.get("product_id") is not None:
@@ -282,17 +296,12 @@ def candidate_feedback(draft, evidence):
         if not re.search(r"סכמ|schema|consulted_table", citation, re.IGNORECASE):
             problems.append("הציטוט אינו מזהה את המקור כבדיקת סכמה.")
         clauses = re.split(r"[,;\n]+", citation)
-        unavailable = (
-            r"\b(?:null|missing|unavailable|not available|not recorded|"
-            r"no (?:measurement units|units|observed (?:time )?(?:bounds|range|interval|dates)))\b"
-            r"|(?:אינ\w*|לא) (?:זמי\w*|נקבע\w*|נמדד\w*)|אין|חסר"
-        )
         for label, description in (
             (r"יחידות|\bunits\b", "יחידות המדידה"),
-            (r"טווח\s+ה?תצפי(?:ת|ות)|טווח זמן|interval|time range|time_(?:start|end)|bounds|observed dates", "טווח התצפית"),
+            (OBSERVATION_LABEL, "טווח התצפית"),
         ):
             matching = [part for part in clauses if re.search(label, part, re.IGNORECASE)]
-            if not matching or any(not re.search(unavailable, part, re.IGNORECASE) for part in matching):
+            if not matching or any(not re.search(UNAVAILABLE_CITATION, part, re.IGNORECASE) for part in matching):
                 problems.append(f"הציטוט אינו מציג את {description} כחסר.")
         remaining = citation.replace(evidence["captured_at"], "")
         for field in ("requested_start", "requested_end"):
